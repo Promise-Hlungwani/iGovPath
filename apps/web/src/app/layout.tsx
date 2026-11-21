@@ -16,8 +16,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body className={`${roboto.variable} antialiased min-h-screen flex flex-col`}>
+    // suppressHydrationWarning: browser extensions (e.g. Grammarly) add attributes to <html>/<body>
+    // before React loads. This only silences that mismatch on these two tags, not on the page content.
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${roboto.variable} antialiased min-h-screen flex flex-col`} suppressHydrationWarning>
         <Suspense fallback={null}>
           <NavProgress />
           <FlashToast />
