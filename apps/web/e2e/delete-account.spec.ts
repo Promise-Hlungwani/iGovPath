@@ -45,7 +45,8 @@ test("an applicant can delete their account and everything linked to it", async 
   await expect(btn).toBeDisabled();
   await page.getByLabel("Type DELETE to confirm").fill("DELETE");
   await btn.click();
-  await expect(page.getByRole("heading", { name: "Account deleted" })).toBeVisible();
+  await expect(page.getByTestId("toast")).toContainText("Your account and all your data have been deleted.");
+  await expect(page).toHaveURL(/localhost:3000\/$/);
 
   // Nothing left, and signed out.
   expect(await leftovers(id, mail)).toEqual({ users: 0, sessions: 0, logins: 0, roles: 0, profiles: 0, saved: 0, notifications: 0, audit: 0 });
@@ -71,7 +72,8 @@ test("a deleted officer's approved records stay published without their name", a
   await page.getByRole("menuitem", { name: "Delete account" }).click();
   await page.getByLabel("Type DELETE to confirm").fill("DELETE");
   await page.getByRole("button", { name: "Delete my account permanently" }).click();
-  await expect(page.getByRole("heading", { name: "Account deleted" })).toBeVisible();
+  await expect(page.getByTestId("toast")).toContainText("Your account and all your data have been deleted.");
+  await expect(page).toHaveURL(/localhost:3000\/$/);
 
   const [after] = await sql<{ approved_by: string | null; opp: number; named: number; anon: number }>(
     `select (select approved_by from opportunity_versions where id=$1) approved_by,

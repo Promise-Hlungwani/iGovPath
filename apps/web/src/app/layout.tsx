@@ -3,6 +3,7 @@ import { Roboto } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { NavProgress } from "@/components/nav-progress";
+import { FlashToast } from "@/components/flash-toast";
 import { Suspense } from "react";
 
 const roboto = Roboto({ variable: "--font-roboto", subsets: ["latin"], weight: ["400", "500", "700"] });
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className={`${roboto.variable} antialiased min-h-screen flex flex-col`}>
         <Suspense fallback={null}>
           <NavProgress />
+          <FlashToast />
         </Suspense>
         <SiteHeader />
         <main className="flex-1 w-full max-w-6xl mx-auto px-4 py-8">{children}</main>

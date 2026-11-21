@@ -102,5 +102,5 @@ export async function deleteMyAccount(formData: FormData) {
   const { cookies } = await import("next/headers");
   const jar = await cookies();
   for (const c of jar.getAll()) if (c.name.includes("better-auth")) jar.delete(c.name);
-  redirect("/account-deleted");
+  redirect("/?flash=deleted");
 }
