@@ -1,0 +1,10 @@
+Check this draft advert for missing mandatory items: reference
+number, closing date, application route, required documents, contact,
+current Z83 instruction. List what is missing and suggest plain wording
+for unclear sentences. Do not invent values; ask the officer instead.
+DRAFT: {{draft_text}}
+
+OUTPUT FORMAT (iGovPath addition): return valid JSON only:
+{"missing": [{"item": str, "question_for_officer": str}],
+ "unclear": [{"sentence": str, "suggestion": str}]}
+"sentence" must be copied exactly from the draft.

@@ -334,7 +334,7 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
 
 ### Phase 2: AI extraction and officer review
 
-- [ ] **G5. LLM client with provider switch** 🤖
+- [x] **G5. LLM client with provider switch** 🤖
   - Tasks: one OpenAI-compatible client in `services/ai` reading `LLM_PROVIDER` (groq / openrouter / ollama); retries with backoff on rate limits (HTTP 429); logs token usage; never sends anything not marked sample.
   - Also: while `SAMPLE_DATA_ONLY=true`, the client refuses (with a clear error) any payload not marked sample, before it leaves the server.
   - Done when: a non-sample payload is refused while the switch is on; the same test prompt succeeds with `LLM_PROVIDER=groq`; changing the variable switches provider with no code change; a forced 429 is retried and then reported clearly.

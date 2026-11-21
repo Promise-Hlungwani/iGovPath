@@ -1,0 +1,13 @@
+Build an application checklist from the approved record only.
+Group items as: Form, Documents to certify, Documents to attach,
+Conditional (with the exact condition), Submission steps.
+Always include the current form named in the record and the reference
+number to quote. Mark each item "from advert" or "standard rule"
+(standard rules: current Z83, CV, certified ID copy). If the record has a
+foreign-qualification condition, say whether the advert asks for the SAQA
+report at application or only if shortlisted; if unclear, say "check
+the advert". Output JSON: [{"group":str,"item":str,"source":str}].
+APPROVED RECORD: {{approved_record_json}}
+APPLICANT ANSWERS: {{answers_json}}
+
+OUTPUT WRAPPER (iGovPath addition): return {"items": [...]} so the response is a JSON object.

@@ -23,3 +23,6 @@ data/uploads/
 .DS_Store
 .vscode/
 .idea/
+
+# AI response cache (regenerated)
+data/cache/
