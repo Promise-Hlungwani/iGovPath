@@ -101,3 +101,13 @@ def draft_check(req: DraftCheckRequest) -> DraftCheckResponse:
 def assistant(req: AssistantRequest) -> AssistantResponse:
     ans = generate.answer_question(req.question, req.listings, is_sample=req.is_sample)
     return AssistantResponse(**ans.model_dump(), model=llm.provider_info()["model"])
+
+
+class FormDetailsRequest(BaseModel):
+    text: str
+    is_sample: bool
+
+
+@app.post("/form-details")
+def form_details(req: FormDetailsRequest) -> dict:
+    return {**generate.form_details(req.text, is_sample=req.is_sample), "model": llm.provider_info()["model"]}

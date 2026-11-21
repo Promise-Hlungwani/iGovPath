@@ -225,3 +225,23 @@ def answer_question(question: str, listings: list[dict], *, is_sample: bool) -> 
     if ans.known and not ans.listing_ids:
         ans.known = False
     return ans
+
+
+# ───────────── Form details ─────────────
+
+def form_details(text: str, *, is_sample: bool) -> dict:
+    from rules import _dates_in, quote_in_source
+    raw = llm.chat_json(llm.load_prompt("form_details"), f"<form>{text[:8000]}</form>", is_sample=is_sample, task="form_details")
+    src = norm(text)
+    out: dict = {"flags": []}
+    ev = raw.get("evidence") or {}
+    for f in ("name", "code", "version", "effective_date"):
+        v = raw.get(f)
+        if not v:
+            out[f] = None
+            continue
+        ok = (f == "effective_date" and v in _dates_in(text)) or (ev.get(f) and quote_in_source(str(ev[f]), src)) or norm(str(v)) in src
+        out[f] = v if ok else None
+        if not ok:
+            out["flags"].append({"field": f, "level": "error", "message": "Not found in the form; blanked."})
+    return out

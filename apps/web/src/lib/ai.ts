@@ -79,6 +79,9 @@ export const ai = {
   draftCheck: (text: string, isSample: boolean) =>
     call<{ missing: { item: string; question_for_officer: string }[]; unclear: { sentence: string; suggestion: string }[]; model: string }>(
       "/draft-check", { text, is_sample: isSample }),
+  formDetails: (text: string, isSample: boolean) =>
+    call<{ name: string | null; code: string | null; version: string | null; effective_date: string | null; flags: Flag[]; model: string }>(
+      "/form-details", { text, is_sample: isSample }),
   assistant: (question: string, listings: unknown[], isSample: boolean) =>
     call<{ known: boolean; answer: string; listing_ids: string[]; model: string }>("/assistant", { question, listings, is_sample: isSample }),
 };

@@ -52,6 +52,27 @@ export async function seed() {
       .returning();
   }
 
+  // A fictional sample department form (version 1), clearly labelled, to demo form versioning (G16).
+  const lp = deptIds["lp-dard"];
+  const [saf] = await db.select().from(schema.forms).where(eq(schema.forms.code, "LDARD-SAF"));
+  if (!saf && lp) {
+    const file = path.join(ROOT, "data/sources/sample-form-ldard-saf-v1.pdf");
+    const bytes = fs.readFileSync(file);
+    const sha = crypto.createHash("sha256").update(bytes).digest("hex");
+    const [existingDoc] = await db.select().from(schema.sourceDocuments).where(eq(schema.sourceDocuments.sha256, sha));
+    const doc =
+      existingDoc ??
+      (await db
+        .insert(schema.sourceDocuments)
+        .values({ departmentId: lp, kind: "form", title: "LDARD Supplementary Application Form v1 (fictional sample)", fileName: "sample-form-ldard-saf-v1.pdf", filePath: "data/sources/sample-form-ldard-saf-v1.pdf", sha256: sha, pageCount: 1, documentDate: "2025-04-01", isSample: true })
+        .returning())[0];
+    await db.insert(schema.forms).values({
+      code: "LDARD-SAF", name: "Supplementary Application Form for Entry-Level Posts (fictional sample)", version: "1",
+      effectiveDate: "2025-04-01", isCentral: false, ownerDepartmentId: lp, sourceDocumentId: doc.id, status: "current",
+      notes: "Fictional sample form for the demo. Not an official document.",
+    });
+  }
+
   // Source documents
   const docIds: Record<string, string> = {};
   for (const d of sel.documents) {
