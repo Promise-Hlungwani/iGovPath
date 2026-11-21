@@ -324,7 +324,7 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
   - Tasks: Drizzle schema for every table in §4; migrations run against Neon using `DATABASE_URL`; app uses `DATABASE_URL_POOLED`; pgvector enabled; Postgres full-text index on opportunities.
   - Done when: `pnpm db:migrate` creates all tables on a fresh Neon branch; running it twice changes nothing.
 
-- [ ] **G3. Accounts, roles and user management** 🤖
+- [x] **G3. Accounts, roles and user management** 🤖
   - Tasks: Better Auth email + password (no verification); `user_roles` table; sign-up → applicant/active; "request officer access" (department + job title) → officer/pending; first sign-up with `ADMIN_EMAIL` → admin; `/admin/users` approve / reject / deactivate / assign department; middleware guarding `/portal/*` (active officer) and `/admin/*` (admin); officers limited to their own department's records; role changes written to `audit_log`.
   - Done when: an applicant cannot open `/portal` (redirected); a pending officer sees "awaiting approval"; after admin approval the officer can open `/portal`; an officer from department A cannot see or approve department B's records; the admin's approval appears in the audit log with names.
 

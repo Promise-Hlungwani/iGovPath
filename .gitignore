@@ -26,3 +26,6 @@ data/uploads/
 
 # AI response cache (regenerated)
 data/cache/
+
+# Playwright output
+.e2e-results/
