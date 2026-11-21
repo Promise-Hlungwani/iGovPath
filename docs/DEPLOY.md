@@ -50,6 +50,7 @@ Don't know the website's address yet? Vercel shows it after the first deploy. Pu
 
 ## Good to know
 
+- Vercel uses Next.js's standard `.next` build folder. Local production builds use `.next-build` to avoid overwriting a running development server.
 - **Same database:** the live site uses the same Neon database as your laptop, so jobs and accounts are shared.
 - **Database changes:** when the code adds new tables, run `pnpm db:migrate` on your laptop once. The live site picks them up straight away.
 - **Upload size:** PDFs and CVs must be under 4 MB. For a whole vacancy circular, upload only your department's annexure pages.

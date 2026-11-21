@@ -6,8 +6,10 @@ import { config } from "dotenv";
 config({ path: path.resolve(__dirname, "../../.env"), quiet: true });
 
 const nextConfig: NextConfig = {
-  // Keep production output separate so builds cannot overwrite a running dev server's chunks.
-  distDir: process.env.NEXT_DIST_DIR || (process.env.NODE_ENV === "production" ? ".next-build" : ".next"),
+  // Vercel's Next.js builder expects .next; local production builds stay separate from `pnpm dev`.
+  distDir: process.env.VERCEL
+    ? ".next"
+    : process.env.NEXT_DIST_DIR || (process.env.NODE_ENV === "production" ? ".next-build" : ".next"),
   devIndicators: false,
   serverExternalPackages: ["pg"],
   // Webpack only (production builds and `next dev` without --turbopack): don't reload when test
