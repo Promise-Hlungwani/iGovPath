@@ -24,9 +24,9 @@ export function Avatar({ name, size = 36 }: { name: string; size?: number }) {
   );
 }
 
-type Props = { name: string; email: string; roleLabel: string; isOfficer: boolean; unread: number };
+type Props = { name: string; email: string; roleLabel: string; isOfficer: boolean; unread: number; queue?: number; officerRequests?: number };
 
-export function AccountMenu({ name, email, roleLabel, isOfficer, unread }: Props) {
+export function AccountMenu({ name, email, roleLabel, isOfficer, unread, queue = 0, officerRequests = 0 }: Props) {
   const [open, setOpen] = useState(false);
   const [dialog, setDialog] = useState<null | "signout" | "delete">(null);
   const root = useRef<HTMLDivElement>(null);
@@ -58,6 +58,12 @@ export function AccountMenu({ name, email, roleLabel, isOfficer, unread }: Props
         className="relative rounded-full ring-offset-2 hover:ring-2 hover:ring-black/15 focus-visible:ring-2 focus-visible:ring-black outline-none"
       >
         <Avatar name={name} />
+        {unread === 0 && queue + officerRequests > 0 && (
+          <span className="absolute -right-0.5 -top-0.5 flex h-3 w-3" aria-hidden>
+            <span className="absolute inline-flex h-full w-full rounded-full bg-[#b42318] opacity-75 motion-safe:animate-ping" />
+            <span className="relative inline-flex h-3 w-3 rounded-full bg-[#b42318] ring-2 ring-white" />
+          </span>
+        )}
         {unread > 0 && (
           <span data-testid="unread" className="absolute -right-1 -top-1 min-w-5 rounded-full bg-black px-1 text-center text-[11px] font-bold leading-5 text-white ring-2 ring-white">{unread}</span>
         )}
@@ -82,7 +88,16 @@ export function AccountMenu({ name, email, roleLabel, isOfficer, unread }: Props
           <Link role="menuitem" href="/notifications" className={item} onClick={() => setOpen(false)}>
             Messages {unread > 0 && <span className="rounded-full bg-black px-2 text-xs font-bold leading-5 text-white">{unread}</span>}
           </Link>
-          {isOfficer && <Link role="menuitem" href="/portal" className={item} onClick={() => setOpen(false)}>Officer portal</Link>}
+          {isOfficer && (
+            <Link role="menuitem" href="/portal" className={item} onClick={() => setOpen(false)}>
+              Review queue {queue > 0 && <span className="rounded-full bg-black px-2 text-xs font-bold leading-5 text-white">{queue} waiting</span>}
+            </Link>
+          )}
+          {officerRequests > 0 && (
+            <Link role="menuitem" href="/admin/users" className={item} onClick={() => setOpen(false)}>
+              Officer requests <span className="rounded-full bg-black px-2 text-xs font-bold leading-5 text-white">{officerRequests}</span>
+            </Link>
+          )}
           <div className="my-1 h-px bg-black/10" />
           <button role="menuitem" type="button" className={item} onClick={() => { setOpen(false); setDialog("signout"); }}>Sign out</button>
           <button role="menuitem" type="button" className={`${item} text-[#b42318] hover:bg-[#b42318]/[0.06]`} onClick={() => { setOpen(false); setDialog("delete"); }}>

@@ -2,12 +2,16 @@ import Link from "next/link";
 import { getCurrentUser, isActiveOfficer, isAdmin } from "@/lib/session";
 import { remindersAndUnread } from "@/lib/notify";
 import { AccountMenu } from "@/components/account-menu";
+import { CountBadge } from "@/components/count-badge";
+import { pendingOfficerCount, reviewQueueCount } from "@/lib/queue";
 
 const ROLE_LABEL = { applicant: "Applicant", officer: "Government officer", admin: "Admin" } as const;
 
 export async function SiteHeader() {
   const u = await getCurrentUser();
-  const unread = u ? await remindersAndUnread(u.id) : 0;
+  const [unread, queue, officerRequests] = u
+    ? await Promise.all([remindersAndUnread(u.id), reviewQueueCount(u), pendingOfficerCount(u)])
+    : [0, 0, 0];
   return (
     <header className="bg-navy backdrop-blur-md text-navy-ink border-b border-black/10 sticky top-0 z-40">
       <div className="max-w-6xl mx-auto px-4 min-h-16 py-3 flex flex-wrap items-center gap-x-6 gap-y-2">
@@ -19,8 +23,8 @@ export async function SiteHeader() {
           <Link href="/match" className="hover:text-black hover:underline">What can I apply for?</Link>
           <Link href="/assistant" className="hover:text-black hover:underline">Ask</Link>
           {u && <Link href="/saved" className="hover:text-black hover:underline">Saved</Link>}
-          {isActiveOfficer(u) && <Link href="/portal" className="hover:text-black hover:underline">Officer portal</Link>}
-          {isAdmin(u) && <Link href="/admin/users" className="hover:text-black hover:underline">Users</Link>}
+          {isActiveOfficer(u) && <Link href="/portal" className="hover:text-black hover:underline inline-flex items-center" aria-label={`Officer portal${queue ? `, ${queue} waiting for review` : ""}`}>Officer portal<CountBadge n={queue} testId="queue-count" /></Link>}
+          {isAdmin(u) && <Link href="/admin/users" className="hover:text-black hover:underline inline-flex items-center" aria-label={`Users${officerRequests ? `, ${officerRequests} officer requests` : ""}`}>Users<CountBadge n={officerRequests} testId="officer-requests-count" /></Link>}
         </nav>
         <div className="ml-auto sm:ml-0 flex items-center gap-4 text-sm text-black/80">
           {u ? (
@@ -30,6 +34,8 @@ export async function SiteHeader() {
               roleLabel={`${ROLE_LABEL[u.role]}${u.status === "pending" ? " · awaiting approval" : ""}${u.departmentName ? ` · ${u.departmentName}` : ""}`}
               isOfficer={isActiveOfficer(u)}
               unread={unread}
+              queue={queue}
+              officerRequests={officerRequests}
             />
           ) : (
             <>

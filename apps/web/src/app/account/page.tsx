@@ -5,6 +5,8 @@ import { Badge, Notice } from "@/components/ui";
 import { Avatar } from "@/components/account-menu";
 import { formatDate } from "@/lib/format";
 import { requireUser } from "@/lib/session";
+import { pendingOfficerCount, reviewQueueCount } from "@/lib/queue";
+import { CountBadge } from "@/components/count-badge";
 
 const roleLabel = { applicant: "Applicant", officer: "Government officer", admin: "Admin" };
 
@@ -18,6 +20,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
     db.select({ created: schema.user.createdAt }).from(schema.user).where(eq(schema.user.id, u.id)),
   ]);
   const officerActive = (u.role === "officer" || u.role === "admin") && u.status === "active";
+  const [queue, officerRequests] = await Promise.all([reviewQueueCount(u), pendingOfficerCount(u)]);
 
   return (
     <div className="max-w-4xl space-y-8">
@@ -45,6 +48,39 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         <Notice tone="danger">Your officer access was not approved. <Link className="underline" href="/account/request-officer-access">Ask again</Link></Notice>
       )}
 
+      {/* Work waiting for this officer / admin */}
+      {officerActive && (
+        <section
+          data-testid="queue-card"
+          className={`rounded-3xl p-6 sm:p-7 flex flex-col sm:flex-row sm:items-center gap-5 ${queue > 0 ? "bg-black text-white" : "border border-black/10 bg-white"}`}
+        >
+          <div className="flex-1">
+            <p className={`text-sm font-semibold uppercase tracking-wide ${queue > 0 ? "text-white/70" : "text-muted"}`}>Review queue</p>
+            <p className={`mt-1 text-2xl font-bold ${queue > 0 ? "!text-white" : ""}`}>
+              {queue > 0 ? `${queue} ${queue === 1 ? "record is" : "records are"} waiting for your approval` : "Nothing waiting for approval"}
+            </p>
+            <p className={`mt-1 text-sm ${queue > 0 ? "text-white/70" : "text-muted"}`}>
+              {u.role === "admin" ? "All departments" : u.departmentName}. Nothing is published until an officer approves it.
+            </p>
+          </div>
+          <Link
+            href="/portal"
+            className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 font-semibold ${queue > 0 ? "bg-white text-black hover:bg-white/90" : "border border-black/20 hover:bg-black/5"}`}
+          >
+            Go to review queue <span aria-hidden>→</span>
+          </Link>
+        </section>
+      )}
+      {officerRequests > 0 && (
+        <section className="rounded-3xl border border-black/10 bg-white p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="flex-1">
+            <p className="font-semibold inline-flex items-center">Officer requests<CountBadge n={officerRequests} /></p>
+            <p className="text-sm text-muted mt-1">People asking for officer access without a code.</p>
+          </div>
+          <Link href="/admin/users" className="inline-flex min-h-11 items-center justify-center rounded-full bg-black px-6 font-semibold text-white hover:bg-[#222]">Review requests</Link>
+        </section>
+      )}
+
       {/* Quick actions */}
       <section className="grid gap-4 sm:grid-cols-2">
         <Tile href="/saved" title="My saved jobs" value={saved?.n ?? 0} hint="Jobs you are keeping an eye on" />
@@ -56,7 +92,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
           hint={profile?.at ? `Read on ${formatDate(profile.at)} · see your matching jobs` : "Upload it to see the jobs that fit you"}
         />
         {officerActive ? (
-          <Tile href="/portal" title="Officer portal" value="Open" hint="Upload and approve your department's jobs" />
+          <Tile href="/portal/upload" title="Upload a document" value="Upload" hint="Adverts, circulars, amendments or forms" />
         ) : u.role === "applicant" ? (
           <Tile href="/account/request-officer-access" title="Government officer?" value="Get access" hint="Have an officer code? Start straight away" />
         ) : null}

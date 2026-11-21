@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ButtonLink, Card, Notice } from "@/components/ui";
 import { isActiveOfficer, requireUser } from "@/lib/session";
+import { reviewQueueCount } from "@/lib/queue";
+import { CountBadge } from "@/components/count-badge";
 
 const nav = [
   { href: "/portal", label: "Review queue" },
@@ -29,12 +31,16 @@ export default async function PortalLayout({ children }: { children: React.React
       </Card>
     );
   }
+  const queue = await reviewQueueCount(u);
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-3">
         <nav className="flex flex-wrap gap-1 text-sm">
           {nav.map((n) => (
-            <Link key={n.href} href={n.href} className="rounded-md px-3 py-1.5 hover:bg-brand-soft">{n.label}</Link>
+            <Link key={n.href} href={n.href} className="rounded-md px-3 py-1.5 hover:bg-brand-soft inline-flex items-center">
+              {n.label}
+              {n.href === "/portal" && <CountBadge n={queue} />}
+            </Link>
           ))}
         </nav>
         <p className="text-sm text-muted">
