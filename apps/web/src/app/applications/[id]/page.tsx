@@ -7,12 +7,12 @@ import { SubmitButton } from "@/components/submit-button";
 import { UrlError } from "@/components/url-error";
 import { ClosingText } from "@/components/opportunity-bits";
 import {
-  FILE_LABEL, getApplicationFor, missingForSubmit, REQUIRED_FILES, STATUS_LABEL, type FileKind,
+  FILE_LABEL, getApplicationFor, missingForSubmit, myDocuments, REQUIRED_FILES, SINGLE_KINDS, STATUS_LABEL, type FileKind,
 } from "@/lib/applications";
 import { formatDateTime } from "@/lib/format";
 import { requireUser } from "@/lib/session";
 import { displayTitle } from "@/lib/text";
-import { deleteApplicationFile, saveApplication, uploadApplicationFile, withdrawApplication } from "../actions";
+import { attachSavedDocument, deleteApplicationFile, saveApplication, uploadApplicationFile, withdrawApplication } from "../actions";
 
 export default async function ApplicationPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ saved?: string }> }) {
   const { id } = await params;
@@ -26,6 +26,7 @@ export default async function ApplicationPage({ params, searchParams }: { params
   if (app.a.status !== "draft") return <StatusView app={app} title={title} />;
 
   const kinds = app.files.map((f) => f.kind);
+  const savedDocs = await myDocuments(u.id);
   const missing = missingForSubmit(z, kinds);
   const quals = [...(z.qualifications ?? []), ...Array(6).fill({})].slice(0, Math.max(3, (z.qualifications ?? []).length + 1));
   const exps = [...(z.experience ?? []), ...Array(6).fill({})].slice(0, Math.max(2, (z.experience ?? []).length + 1));
@@ -45,21 +46,29 @@ export default async function ApplicationPage({ params, searchParams }: { params
       </Notice>
 
       {/* Documents first: separate small uploads keep each request under the size limit */}
-      <section id="documents" className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6 space-y-4">
-        <h2 className="text-xl font-bold">1. Your documents</h2>
+      <section id="documents" className="rounded-2xl border border-black/10 bg-white/70 backdrop-blur-sm p-5 sm:p-6 space-y-4">
+        <div>
+          <h2 className="text-xl font-bold">1. Your documents</h2>
+          <p className="text-sm text-muted mt-1">
+            We attach the documents you saved before. Anything you upload here is also kept in <Link href="/account/documents" className="underline">My documents</Link> for your next application.
+          </p>
+        </div>
         {(["cv", "id_copy", "qualification", "other"] as FileKind[]).map((k) => {
           const files = app.files.filter((f) => f.kind === k);
+          const attachedFrom = new Set(files.map((f) => f.fromUserDocumentId));
+          const reusable = savedDocs.filter((d) => d.kind === k && !attachedFrom.has(d.id));
           return (
             <div key={k} className="border-t border-black/10 pt-4 first:border-0 first:pt-0">
               <p className="font-semibold">
                 {files.length ? "✓ " : ""}{FILE_LABEL[k]} {REQUIRED_FILES.includes(k) ? <span className="text-muted font-normal">(required)</span> : <span className="text-muted font-normal">(optional)</span>}
               </p>
-              <ul className="mt-2 space-y-1">
+              <ul className="mt-2 space-y-2">
                 {files.map((f) => (
-                  <li key={f.id} className="flex flex-wrap items-center gap-3 text-sm">
-                    <a className="underline" href={`/api/applications/files/${f.id}`} target="_blank">{f.fileName}</a>
-                    <span className="text-muted">{Math.round(f.size / 1024)} KB</span>
-                    <form action={deleteApplicationFile}>
+                  <li key={f.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-black/10 bg-white/60 px-4 py-3 text-sm">
+                    <span aria-hidden>📄</span>
+                    <a className="underline font-medium break-all" href={`/api/applications/files/${f.id}`} target="_blank">{f.fileName}</a>
+                    <span className="text-muted">{Math.round(f.size / 1024)} KB · Last updated {formatDateTime(f.uploadedAt)}</span>
+                    <form action={deleteApplicationFile} className="ml-auto">
                       <input type="hidden" name="applicationId" value={app.a.id} />
                       <input type="hidden" name="fileId" value={f.id} />
                       <SubmitButton variant="ghost" className="!min-h-0 px-2 py-0.5 text-sm underline" pendingText="Removing…">Remove</SubmitButton>
@@ -67,11 +76,20 @@ export default async function ApplicationPage({ params, searchParams }: { params
                   </li>
                 ))}
               </ul>
+              {reusable.map((d) => (
+                <form key={d.id} action={attachSavedDocument} className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-dashed border-black/20 px-4 py-3 text-sm">
+                  <input type="hidden" name="applicationId" value={app.a.id} />
+                  <input type="hidden" name="userDocumentId" value={d.id} />
+                  <span>Saved: <span className="font-medium break-all">{d.fileName}</span> <span className="text-muted">· Last updated {formatDateTime(d.updatedAt)}</span></span>
+                  <SubmitButton variant="secondary" className="ml-auto !min-h-0 px-3 py-1 text-sm" pendingText="Adding…">{files.length && SINGLE_KINDS.includes(k) ? "Use this one instead" : "Use this"}</SubmitButton>
+                </form>
+              ))}
               <form action={uploadApplicationFile} className="mt-2 flex flex-wrap items-center gap-2">
                 <input type="hidden" name="applicationId" value={app.a.id} />
                 <input type="hidden" name="kind" value={k} />
-                <input name="file" type="file" required accept=".pdf,.docx,.jpg,.jpeg,.png" aria-label={`Upload ${FILE_LABEL[k]}`} className="text-sm max-w-full" />
-                <SubmitButton variant="secondary" pendingText="Uploading…">Upload</SubmitButton>
+                <input name="file" type="file" required accept=".pdf,.docx,.jpg,.jpeg,.png" aria-label={`Upload ${FILE_LABEL[k]}`}
+                  className="text-sm max-w-full text-muted file:mr-3 file:rounded-full file:border file:border-black/15 file:bg-white file:px-4 file:py-1.5 file:font-semibold file:text-black hover:file:bg-black/5" />
+                <SubmitButton variant="secondary" pendingText="Uploading…">{files.length && SINGLE_KINDS.includes(k) ? "Upload a newer one" : files.length ? "Upload another" : "Upload"}</SubmitButton>
               </form>
             </div>
           );
@@ -221,10 +239,10 @@ function StatusView({ app, title }: { app: App; title: string }) {
         <p className="mt-1 text-muted">{app.dept}{app.o.referenceNumber && ` · Ref ${app.o.referenceNumber}`}</p>
       </header>
       <Suspense fallback={null}><UrlError /></Suspense>
-      <section className="rounded-3xl bg-black text-white p-6 sm:p-8">
-        <p className="text-white/70 text-sm">Status</p>
-        <p className="mt-1 text-3xl font-bold !text-white" data-testid="app-status">{STATUS_LABEL[s]}</p>
-        <p className="mt-2 text-white/70">
+      <section className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-sm shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-6 sm:p-8">
+        <p className="text-black/60 text-sm">Status</p>
+        <p className="mt-1 text-3xl font-bold !text-black" data-testid="app-status">{STATUS_LABEL[s]}</p>
+        <p className="mt-2 text-black/60">
           {s === "submitted" && "Your application has been sent to the department. We'll let you know when it changes."}
           {s === "under_review" && "The department is reviewing your application."}
           {s === "shortlisted" && "Good news: you've been shortlisted. The department will contact you about the next step."}
@@ -249,7 +267,7 @@ function StatusView({ app, title }: { app: App; title: string }) {
         <h2 className="font-bold mb-2">Documents you sent</h2>
         <ul className="space-y-1 text-sm">
           {app.files.map((f) => (
-            <li key={f.id}><a className="underline" href={`/api/applications/files/${f.id}`} target="_blank">{f.fileName}</a> <span className="text-muted">· {FILE_LABEL[f.kind]}</span></li>
+            <li key={f.id}><a className="underline" href={`/api/applications/files/${f.id}`} target="_blank">{f.fileName}</a> <span className="text-muted">· {FILE_LABEL[f.kind]} · Last updated {formatDateTime(f.uploadedAt)}</span></li>
           ))}
         </ul>
       </section>

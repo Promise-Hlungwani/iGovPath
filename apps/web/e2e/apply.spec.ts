@@ -46,6 +46,18 @@ test("apply inside iGovPath, officer updates the status, applicant sees it", asy
   await page.goto("/applications");
   await expect(page.getByTestId("application").first()).toContainText("Sent");
 
+  // The uploads were kept in My documents, with the time they were last updated...
+  await page.goto("/account/documents");
+  await expect(page.getByTestId("my-document")).toHaveCount(2);
+  await expect(page.getByTestId("my-document").first()).toContainText("Last updated");
+  // ...and a new application starts with them already attached.
+  const [next] = await sql<{ id: string }>(
+    `select id from opportunities where closing_date >= current_date and status <> 'withdrawn' and id <> $1 order by closing_date desc limit 1`, [opp.id]);
+  await page.goto(`/posts/${next.id}`);
+  await page.getByRole("button", { name: "Apply now →" }).click();
+  await expect(page.getByText("✓ CV")).toBeVisible();
+  await expect(page.getByText("✓ Certified copy of your ID")).toBeVisible();
+
   // Officer of another department can't see it.
   await page.context().clearCookies();
   const outsider = email("outsider");

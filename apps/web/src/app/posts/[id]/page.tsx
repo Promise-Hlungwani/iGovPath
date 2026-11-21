@@ -74,77 +74,54 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
       {status === "withdrawn" && <Notice tone="danger">This post has been withdrawn. Do not apply.</Notice>}
 
       {/* 2. How to apply */}
-      <section className="rounded-3xl bg-black text-white p-6 sm:p-8 space-y-5" aria-labelledby="apply">
-        <div>
-          <h2 id="apply" className="text-2xl font-bold !text-white">Apply for this job</h2>
-          <p className="mt-1 text-white/70">
-            Apply right here. Your application goes straight to {dept.name}, and you can follow its status under My applications.
-          </p>
-        </div>
+      <section className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-sm shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-6 sm:p-8" aria-labelledby="apply">
+        <h2 id="apply" className="text-2xl font-bold">Apply for this job</h2>
         {closed ? (
-          <p className="rounded-xl bg-white/10 px-4 py-3">This post is {status === "withdrawn" ? "withdrawn" : "closed"}. Applications are no longer accepted.</p>
+          <p className="mt-3 text-muted">This post is {status === "withdrawn" ? "withdrawn" : "closed"}. Applications are no longer accepted.</p>
         ) : (
-          <div className="space-y-4">
-            {myApp ? (
-              <a href={`/applications/${myApp.id}`} className="flex items-center justify-between gap-3 rounded-2xl bg-white px-5 py-4 text-black font-semibold hover:bg-white/90" data-testid="my-application">
-                <span>
-                  {myApp.status === "draft" ? "Continue your application" : "View your application"}
-                  <span className="block text-sm font-normal text-black/60">Status: {STATUS_LABEL[myApp.status]}</span>
-                </span>
-                <span aria-hidden className="text-2xl">→</span>
-              </a>
-            ) : user ? (
-              <form action={startApplication}>
-                <input type="hidden" name="opportunityId" value={opp.id} />
-                <SubmitButton className="w-full !min-h-14 !rounded-2xl !bg-white !text-black text-lg hover:!bg-white/90" pendingText="Starting your application…">
-                  Apply now →
-                </SubmitButton>
-              </form>
-            ) : (
-              <a href={`/sign-in?next=/posts/${opp.id}`} className="flex items-center justify-between rounded-2xl bg-white px-5 py-4 text-black text-lg font-semibold hover:bg-white/90">
-                Sign in to apply <span aria-hidden className="text-2xl">→</span>
-              </a>
-            )}
-            {opp.referenceNumber && (
-              <p className="text-sm text-white/70">Reference number: <CopyText dark value={opp.referenceNumber} label="reference number" /></p>
-            )}
-            <details className="rounded-2xl border border-white/20 px-5 py-3 text-sm">
-              <summary className="cursor-pointer text-white/80">Prefer to apply the department&apos;s way?</summary>
-              <div className="mt-3 space-y-3">
-            {portal && (
-              <a href={portal} target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 rounded-2xl bg-white px-5 py-4 text-black font-semibold hover:bg-white/90">
-                <span>Apply on the department&apos;s website<span className="block text-sm font-normal text-black/60 break-all">{route!.portal_url}</span></span>
-                <span aria-hidden className="text-2xl">→</span>
-              </a>
-            )}
-            {route?.email && (
-              <div className="rounded-2xl bg-white/10 px-5 py-4">
-                <p className="text-sm text-white/70">Email your application to</p>
-                <CopyText dark value={route.email} label="email address" />
-              </div>
-            )}
-            {route?.postal && (
-              <div className="rounded-2xl bg-white/10 px-5 py-4">
-                <p className="text-sm text-white/70">Or post it to</p>
-                <p>{route.postal}</p>
-              </div>
-            )}
-            {route?.hand_delivery && (
-              <div className="rounded-2xl bg-white/10 px-5 py-4">
-                <p className="text-sm text-white/70">Or hand it in at</p>
-                <p>{route.hand_delivery}</p>
-              </div>
-            )}
-            {!portal && !route?.email && !route?.postal && !route?.hand_delivery && (
-              <p className="rounded-xl bg-white/10 px-4 py-3">The advert doesn&apos;t say how to apply. Contact the department{opp.contact?.phone ? ` on ${opp.contact.phone}` : ""}.</p>
-            )}
-              </div>
-            </details>
-          </div>
+          <>
+            <p className="mt-1 text-muted">Fill in your application here. It goes straight to {dept.name}.</p>
+
+            {/* One clear action, with Save beside it */}
+            <div className="mt-5 flex flex-col sm:flex-row sm:items-start gap-3">
+              {myApp ? (
+                <a href={`/applications/${myApp.id}`} data-testid="my-application" className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-black bg-white/60 px-7 min-h-12 text-base font-semibold text-black hover:bg-black/5 transition">
+                  {myApp.status === "draft" ? "Continue your application" : "View your application"} <span aria-hidden>→</span>
+                </a>
+              ) : user ? (
+                <form action={startApplication}>
+                  <input type="hidden" name="opportunityId" value={opp.id} />
+                  <SubmitButton variant="secondary" className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-black bg-white/60 px-7 min-h-12 text-base font-semibold text-black hover:bg-black/5 transition w-full sm:w-auto" pendingText="Starting your application…">Apply now →</SubmitButton>
+                </form>
+              ) : (
+                <a href={`/sign-in?next=/posts/${opp.id}`} className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-black bg-white/60 px-7 min-h-12 text-base font-semibold text-black hover:bg-black/5 transition">Sign in to apply <span aria-hidden>→</span></a>
+              )}
+              <div className="sm:w-64 [&_a]:!rounded-full [&_button]:!rounded-full [&_a]:!min-h-12 [&_button]:!min-h-12"><SaveButton opportunityId={opp.id} saved={saved} signedIn={!!user} /></div>
+            </div>
+            {myApp && <p className="mt-2 text-sm text-muted">Status: <strong className="text-black">{STATUS_LABEL[myApp.status]}</strong></p>}
+
+            {/* Small print */}
+            <div className="mt-6 border-t border-black/10 pt-4 space-y-3 text-sm">
+              {opp.referenceNumber && (
+                <p className="text-muted">Reference number: <CopyText value={opp.referenceNumber} label="reference number" /></p>
+              )}
+              <details>
+                <summary className="cursor-pointer text-muted hover:text-black">Prefer to apply the department&apos;s way?</summary>
+                <ul className="mt-3 space-y-2 pl-4">
+                  {portal && (
+                    <li>Website: <a href={portal} target="_blank" rel="noreferrer" className="underline break-all">{route!.portal_url}</a></li>
+                  )}
+                  {route?.email && <li>Email: <CopyText value={route.email} label="email address" /></li>}
+                  {route?.postal && <li>Post: {route.postal}</li>}
+                  {route?.hand_delivery && <li>Hand in: {route.hand_delivery}</li>}
+                  {!portal && !route?.email && !route?.postal && !route?.hand_delivery && (
+                    <li>The advert doesn&apos;t say. Contact the department{opp.contact?.phone ? ` on ${opp.contact.phone}` : ""}.</li>
+                  )}
+                </ul>
+              </details>
+            </div>
+          </>
         )}
-        <div className="flex flex-wrap gap-3 pt-1 [&_button]:!bg-white [&_button]:!text-black [&_a]:!bg-white [&_a]:!text-black">
-          <div className="min-w-56"><SaveButton opportunityId={opp.id} saved={saved} signedIn={!!user} /></div>
-        </div>
       </section>
 
       {/* 3. Get ready: the checklist, right here */}

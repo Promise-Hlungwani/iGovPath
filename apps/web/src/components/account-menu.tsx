@@ -84,6 +84,8 @@ export function AccountMenu({ name, email, roleLabel, isOfficer, unread, queue =
           <p className="px-3 pb-2 text-xs font-medium text-muted">{roleLabel}</p>
           <div className="my-1 h-px bg-black/10" />
           <Link role="menuitem" href="/account" className={item} onClick={() => setOpen(false)}>My account</Link>
+          <Link role="menuitem" href="/applications" className={item} onClick={() => setOpen(false)}>My applications</Link>
+          <Link role="menuitem" href="/account/documents" className={item} onClick={() => setOpen(false)}>My documents</Link>
           <Link role="menuitem" href="/saved" className={item} onClick={() => setOpen(false)}>My saved jobs</Link>
           <Link role="menuitem" href="/notifications" className={item} onClick={() => setOpen(false)}>
             Messages {unread > 0 && <span className="rounded-full bg-black px-2 text-xs font-bold leading-5 text-white">{unread}</span>}

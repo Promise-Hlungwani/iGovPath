@@ -3,7 +3,6 @@ import { and, desc, eq } from "drizzle-orm";
 import { db, schema } from "@/db";
 import type { Z83 } from "@/db/schema";
 import { logAudit } from "@/lib/audit";
-import { notifySavers } from "@/lib/notify";
 import { todayIso } from "@/lib/opportunities";
 import { UserFacingError } from "@/lib/safe-action";
 import { canActOnDepartment, isActiveOfficer, toActor, type CurrentUser } from "@/lib/session";
@@ -52,7 +51,7 @@ export async function getApplicationFor(u: CurrentUser, id: string) {
   const isDeptOfficer = isActiveOfficer(u) && canActOnDepartment(u, row.a.departmentId) && row.a.status !== "draft";
   if (!isOwner && !isDeptOfficer) return null;
   const files = await db
-    .select({ id: schema.applicationFiles.id, kind: schema.applicationFiles.kind, fileName: schema.applicationFiles.fileName, size: schema.applicationFiles.size, uploadedAt: schema.applicationFiles.uploadedAt })
+    .select({ id: schema.applicationFiles.id, kind: schema.applicationFiles.kind, fileName: schema.applicationFiles.fileName, size: schema.applicationFiles.size, uploadedAt: schema.applicationFiles.uploadedAt, fromUserDocumentId: schema.applicationFiles.fromUserDocumentId })
     .from(schema.applicationFiles)
     .where(eq(schema.applicationFiles.applicationId, id));
   const events = await db
@@ -93,7 +92,10 @@ export async function getOrCreateDraft(u: CurrentUser, opportunityId: string) {
     .values({ opportunityId, userId: u.id, departmentId: opp.departmentId, status: "draft", z83: prefill })
     .onConflictDoNothing()
     .returning();
-  if (created) return created;
+  if (created) {
+    await attachAllSavedDocuments(u.id, created.id);
+    return created;
+  }
   const [again] = await db.select().from(schema.applications).where(and(eq(schema.applications.userId, u.id), eq(schema.applications.opportunityId, opportunityId)));
   return again;
 }
@@ -142,4 +144,52 @@ export async function setStatusByOfficer(u: CurrentUser, applicationId: string, 
     .onConflictDoNothing();
 }
 
-export { notifySavers };
+
+/** CV and ID copy keep one current version each; qualifications and other documents can have several. */
+export const SINGLE_KINDS: FileKind[] = ["cv", "id_copy"];
+
+type FileData = { fileName: string; contentType: string; size: number; data: Buffer };
+
+/** Keep a document in the person's own store so they can reuse it on their next application. Returns the stored row. */
+export async function storeUserDocument(userId: string, kind: FileKind, f: FileData) {
+  const now = new Date();
+  if (SINGLE_KINDS.includes(kind)) {
+    const [existing] = await db.select({ id: schema.userDocuments.id }).from(schema.userDocuments)
+      .where(and(eq(schema.userDocuments.userId, userId), eq(schema.userDocuments.kind, kind)));
+    if (existing) {
+      const [row] = await db.update(schema.userDocuments).set({ ...f, updatedAt: now }).where(eq(schema.userDocuments.id, existing.id)).returning({ id: schema.userDocuments.id, updatedAt: schema.userDocuments.updatedAt });
+      return row;
+    }
+  }
+  const [row] = await db.insert(schema.userDocuments).values({ userId, kind, ...f, updatedAt: now }).returning({ id: schema.userDocuments.id, updatedAt: schema.userDocuments.updatedAt });
+  return row;
+}
+
+/** The person's saved documents (without file bytes). */
+export async function myDocuments(userId: string) {
+  return db
+    .select({ id: schema.userDocuments.id, kind: schema.userDocuments.kind, fileName: schema.userDocuments.fileName, size: schema.userDocuments.size, updatedAt: schema.userDocuments.updatedAt })
+    .from(schema.userDocuments)
+    .where(eq(schema.userDocuments.userId, userId))
+    .orderBy(desc(schema.userDocuments.updatedAt));
+}
+
+/** Copy one saved document into a draft application. A CV or ID copy replaces the one already attached. */
+export async function attachUserDocument(userId: string, applicationId: string, userDocumentId: string) {
+  const [d] = await db.select().from(schema.userDocuments).where(and(eq(schema.userDocuments.id, userDocumentId), eq(schema.userDocuments.userId, userId)));
+  if (!d) throw new UserFacingError("That saved document no longer exists.");
+  if (SINGLE_KINDS.includes(d.kind)) {
+    await db.delete(schema.applicationFiles).where(and(eq(schema.applicationFiles.applicationId, applicationId), eq(schema.applicationFiles.kind, d.kind)));
+  } else {
+    await db.delete(schema.applicationFiles).where(and(eq(schema.applicationFiles.applicationId, applicationId), eq(schema.applicationFiles.fromUserDocumentId, d.id)));
+  }
+  await db.insert(schema.applicationFiles).values({
+    applicationId, kind: d.kind, fileName: d.fileName, contentType: d.contentType, size: d.size, data: d.data,
+    fromUserDocumentId: d.id, uploadedAt: d.updatedAt,
+  });
+}
+
+/** A new draft starts with every saved document already attached. */
+export async function attachAllSavedDocuments(userId: string, applicationId: string) {
+  for (const d of await myDocuments(userId)) await attachUserDocument(userId, applicationId, d.id);
+}

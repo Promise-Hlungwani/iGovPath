@@ -8,7 +8,7 @@ import { db, schema } from "@/db";
 import type { Z83 } from "@/db/schema";
 import { logAudit } from "@/lib/audit";
 import {
-  addEvent, ALLOWED_TYPES, getOrCreateDraft, MAX_FILE_BYTES, missingForSubmit, type FileKind,
+  addEvent, ALLOWED_TYPES, attachUserDocument, getOrCreateDraft, MAX_FILE_BYTES, missingForSubmit, SINGLE_KINDS, storeUserDocument, type FileKind,
 } from "@/lib/applications";
 import { todayIso } from "@/lib/opportunities";
 import { safely, UserFacingError } from "@/lib/safe-action";
@@ -103,9 +103,22 @@ async function uploadApplicationFileImpl(formData: FormData) {
   if (!(file instanceof File) || file.size === 0) throw new UserFacingError("Choose a file to upload.");
   if (file.size > MAX_FILE_BYTES) throw new UserFacingError("Each document must be smaller than 4 MB.");
   if (!ALLOWED_TYPES.includes(file.type)) throw new UserFacingError("Upload a PDF, Word document, or a photo (JPG or PNG).");
-  await db.insert(schema.applicationFiles).values({
-    applicationId: id, kind, fileName: file.name.slice(0, 200), contentType: file.type, size: file.size, data: Buffer.from(await file.arrayBuffer()),
-  });
+  const f = { fileName: file.name.slice(0, 200), contentType: file.type, size: file.size, data: Buffer.from(await file.arrayBuffer()) };
+  // Keep it in the person's documents too, so the next application can reuse it.
+  const stored = await storeUserDocument(u.id, kind, f);
+  if (SINGLE_KINDS.includes(kind)) {
+    await db.delete(schema.applicationFiles).where(and(eq(schema.applicationFiles.applicationId, id), eq(schema.applicationFiles.kind, kind)));
+  }
+  await db.insert(schema.applicationFiles).values({ applicationId: id, kind, ...f, fromUserDocumentId: stored.id, uploadedAt: stored.updatedAt });
+  revalidatePath(`/applications/${id}`);
+  redirect(`/applications/${id}#documents`);
+}
+
+async function attachSavedDocumentImpl(formData: FormData) {
+  const u = await requireUser("/applications");
+  const id = uuid.parse(formData.get("applicationId"));
+  await ownDraft(u.id, id);
+  await attachUserDocument(u.id, id, uuid.parse(formData.get("userDocumentId")));
   revalidatePath(`/applications/${id}`);
   redirect(`/applications/${id}#documents`);
 }
@@ -153,4 +166,7 @@ export async function deleteApplicationFile(formData?: FormData) {
 }
 export async function withdrawApplication(formData?: FormData) {
   return safely(() => withdrawApplicationImpl(formData as FormData), `/applications/${formData?.get("applicationId") ?? ""}`);
+}
+export async function attachSavedDocument(formData?: FormData) {
+  return safely(() => attachSavedDocumentImpl(formData as FormData), `/applications/${formData?.get("applicationId") ?? ""}`);
 }

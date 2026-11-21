@@ -382,6 +382,7 @@ export const applicationFiles = pgTable("application_files", {
   contentType: text("content_type").notNull(),
   size: integer("size").notNull(),
   data: bytea("data").notNull(),
+  fromUserDocumentId: uuid("from_user_document_id"),
   uploadedAt: timestamp("uploaded_at").notNull().defaultNow(),
 });
 
@@ -395,3 +396,20 @@ export const applicationEvents = pgTable("application_events", {
   actorName: text("actor_name"),
   at: timestamp("at").notNull().defaultNow(),
 });
+
+/** The applicant's own document store: uploaded once, reused for every application.
+ * CV and ID copy keep one current version each; qualifications and other documents can have several. */
+export const userDocuments = pgTable(
+  "user_documents",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+    kind: applicationFileKindEnum("kind").notNull(),
+    fileName: text("file_name").notNull(),
+    contentType: text("content_type").notNull(),
+    size: integer("size").notNull(),
+    data: bytea("data").notNull(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (t) => [index("user_documents_user").on(t.userId)],
+);

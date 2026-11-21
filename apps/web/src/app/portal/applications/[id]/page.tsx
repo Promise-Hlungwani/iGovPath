@@ -31,20 +31,20 @@ export default async function OfficerApplication({ params, searchParams }: { par
       <Suspense fallback={null}><UrlError /></Suspense>
       {updated && <Notice tone="brand">Status updated. The applicant has been told.</Notice>}
 
-      <section className="rounded-2xl bg-black text-white p-6 flex flex-col sm:flex-row gap-5 sm:items-end">
+      <section className="rounded-2xl border border-black/10 bg-white/70 backdrop-blur-sm shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-6 flex flex-col sm:flex-row gap-5 sm:items-end">
         <div className="flex-1">
-          <p className="text-white/70 text-sm">Current status</p>
-          <p className="text-2xl font-bold !text-white" data-testid="officer-status">{STATUS_LABEL[app.a.status]}</p>
+          <p className="text-black/60 text-sm">Current status</p>
+          <p className="text-2xl font-bold !text-black" data-testid="officer-status">{STATUS_LABEL[app.a.status]}</p>
         </div>
         {app.a.status !== "withdrawn" && (
           <form action={setApplicationStatus} className="flex-1 space-y-2">
             <input type="hidden" name="applicationId" value={app.a.id} />
-            <label htmlFor="status" className="text-sm text-white/70">Change status</label>
-            <Select id="status" name="status" defaultValue={OFFICER_STATUSES.includes(app.a.status) ? app.a.status : "under_review"} className="!bg-white !text-black">
+            <label htmlFor="status" className="text-sm text-black/60">Change status</label>
+            <Select id="status" name="status" defaultValue={OFFICER_STATUSES.includes(app.a.status) ? app.a.status : "under_review"} className="!bg-white !text-black border-black/20">
               {OFFICER_STATUSES.map((s) => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}
             </Select>
-            <Textarea name="note" rows={2} placeholder="Optional note to the applicant" className="!bg-white !text-black" />
-            <SubmitButton className="!bg-white !text-black hover:!bg-white/90" pendingText="Saving…">Save status</SubmitButton>
+            <Textarea name="note" rows={2} placeholder="Optional note to the applicant" className="!bg-white !text-black border-black/20" />
+            <SubmitButton className="!bg-black !text-black hover:!bg-[#222]" pendingText="Saving…">Save status</SubmitButton>
           </form>
         )}
       </section>
@@ -76,7 +76,7 @@ export default async function OfficerApplication({ params, searchParams }: { par
         </Box>
         <Box title="Documents">
           {app.files.map((f) => (
-            <p key={f.id} className="text-sm"><a className="underline" href={`/api/applications/files/${f.id}`} target="_blank">{f.fileName}</a> <span className="text-muted">· {FILE_LABEL[f.kind]}</span></p>
+            <p key={f.id} className="text-sm"><a className="underline" href={`/api/applications/files/${f.id}`} target="_blank">{f.fileName}</a> <span className="text-muted">· {FILE_LABEL[f.kind]} · Last updated {formatDateTime(f.uploadedAt)}</span></p>
           ))}
         </Box>
       </div>

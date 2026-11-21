@@ -15,11 +15,12 @@ const roleLabel = { applicant: "Applicant", officer: "Government officer", admin
 export default async function AccountPage({ searchParams }: { searchParams: Promise<{ deleteError?: string }> }) {
   const u = await requireUser("/account");
   const { deleteError } = await searchParams;
-  const [[saved], [unread], [profile], [me]] = await Promise.all([
+  const [[saved], [unread], [profile], [me], [docs]] = await Promise.all([
     db.select({ n: count() }).from(schema.savedOpportunities).where(eq(schema.savedOpportunities.userId, u.id)),
     db.select({ n: count() }).from(schema.notifications).where(and(eq(schema.notifications.userId, u.id), eq(schema.notifications.read, false))),
     db.select({ at: schema.applicantProfiles.cvUpdatedAt }).from(schema.applicantProfiles).where(eq(schema.applicantProfiles.userId, u.id)),
     db.select({ created: schema.user.createdAt }).from(schema.user).where(eq(schema.user.id, u.id)),
+    db.select({ n: count() }).from(schema.userDocuments).where(eq(schema.userDocuments.userId, u.id)),
   ]);
   const officerActive = (u.role === "officer" || u.role === "admin") && u.status === "active";
   const [queue, officerRequests] = await Promise.all([reviewQueueCount(u), pendingOfficerCount(u)]);
@@ -55,20 +56,20 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
       {officerActive && (
         <section
           data-testid="queue-card"
-          className={`rounded-3xl p-6 sm:p-7 flex flex-col sm:flex-row sm:items-center gap-5 ${queue > 0 ? "bg-black text-white" : "border border-black/10 bg-white"}`}
+          className={`rounded-3xl p-6 sm:p-7 flex flex-col sm:flex-row sm:items-center gap-5 border border-black/10 bg-white/70 backdrop-blur-sm shadow-[0_8px_30px_rgba(0,0,0,0.06)]`}
         >
           <div className="flex-1">
-            <p className={`text-sm font-semibold uppercase tracking-wide ${queue > 0 ? "text-white/70" : "text-muted"}`}>Review queue</p>
-            <p className={`mt-1 text-2xl font-bold ${queue > 0 ? "!text-white" : ""}`}>
+            <p className={`text-sm font-semibold uppercase tracking-wide text-muted`}>Review queue</p>
+            <p className={`mt-1 text-2xl font-bold `}>
               {queue > 0 ? `${queue} ${queue === 1 ? "record is" : "records are"} waiting for your approval` : "Nothing waiting for approval"}
             </p>
-            <p className={`mt-1 text-sm ${queue > 0 ? "text-white/70" : "text-muted"}`}>
+            <p className={`mt-1 text-sm text-muted`}>
               {u.role === "admin" ? "All departments" : u.departmentName}. Nothing is published until an officer approves it.
             </p>
           </div>
           <Link
             href="/portal"
-            className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 font-semibold ${queue > 0 ? "bg-white text-black hover:bg-white/90" : "border border-black/20 hover:bg-black/5"}`}
+            className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 font-semibold bg-black text-white hover:bg-[#222]`}
           >
             Go to review queue <span aria-hidden>→</span>
           </Link>
@@ -87,6 +88,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
       {/* Quick actions */}
       <section className="grid gap-4 sm:grid-cols-2">
         <Tile href="/saved" title="My saved jobs" value={saved?.n ?? 0} hint="Jobs you are keeping an eye on" />
+        <Tile href="/account/documents" title="My documents" value={docs?.n ?? 0} hint="CV, ID copy and qualifications, ready to reuse" />
         <Tile href="/notifications" title="Messages" value={unread?.n ?? 0} hint={unread?.n ? "New messages waiting" : "No new messages"} />
         <Tile
           href="/match"

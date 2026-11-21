@@ -11,7 +11,7 @@ export function SaveButton({ opportunityId, saved, signedIn }: { opportunityId: 
   const [error, setError] = useState<string | null>(null);
   if (!signedIn) {
     return (
-      <ButtonLink href={`/sign-in?next=/posts/${opportunityId}`} className="w-full">
+      <ButtonLink variant="secondary" href={`/sign-in?next=/posts/${opportunityId}`} className="w-full">
         Sign in to save
       </ButtonLink>
     );
@@ -20,7 +20,7 @@ export function SaveButton({ opportunityId, saved, signedIn }: { opportunityId: 
     <div className="space-y-1">
       <Button
         className="w-full"
-        variant={isSaved ? "secondary" : "primary"}
+        variant="secondary"
         disabled={pending}
         onClick={() =>
           start(async () => {
