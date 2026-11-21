@@ -152,6 +152,7 @@ class ChecklistItem(BaseModel):
 class ChecklistRequest(BaseModel):
     record: dict
     answers: dict = Field(default_factory=dict)
+    source_text: str | None = None  # used only by the code-owned SAQA rule, never sent to the model
     is_sample: bool
 
 

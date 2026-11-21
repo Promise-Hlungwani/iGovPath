@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db, schema } from "@/db";
 import { logAudit } from "@/lib/audit";
@@ -36,16 +36,20 @@ export async function setChecklistItem(input: { opportunityId: string; key: stri
   const u = await requireUser(`/posts/${input.opportunityId}/checklist`);
   const p = checklistSchema.parse(input);
   const where = and(eq(schema.savedOpportunities.userId, u.id), eq(schema.savedOpportunities.opportunityId, p.opportunityId));
-  let [row] = await db.select().from(schema.savedOpportunities).where(where);
+  const [row] = await db.select().from(schema.savedOpportunities).where(where);
   if (!row) {
     // Ticking a checklist item saves the post, so progress is kept.
     const [opp] = await db.select({ v: schema.opportunities.currentVersion }).from(schema.opportunities).where(eq(schema.opportunities.id, p.opportunityId));
     if (!opp) throw new Error("Post not found");
-    [row] = await db.insert(schema.savedOpportunities).values({ userId: u.id, opportunityId: p.opportunityId, seenVersion: opp.v }).returning();
+    await db.insert(schema.savedOpportunities).values({ userId: u.id, opportunityId: p.opportunityId, seenVersion: opp.v }).onConflictDoNothing();
     await logAudit({ actor: toActor(u), action: "saved.add", entity: "opportunity", entityId: p.opportunityId });
   }
-  const state = { ...row.checklistState, [p.key]: p.done };
-  await db.update(schema.savedOpportunities).set({ checklistState: state }).where(where);
+  // Atomic merge so quick consecutive ticks never overwrite each other.
+  const [updated] = await db
+    .update(schema.savedOpportunities)
+    .set({ checklistState: sql`${schema.savedOpportunities.checklistState} || jsonb_build_object(${p.key}::text, ${p.done}::boolean)` })
+    .where(where)
+    .returning({ state: schema.savedOpportunities.checklistState });
   await trackFunnel(p.opportunityId, "checklist_started");
-  return state;
+  return updated?.state ?? { [p.key]: p.done };
 }

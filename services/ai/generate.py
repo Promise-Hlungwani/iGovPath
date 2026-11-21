@@ -45,18 +45,32 @@ def standard_items(record: dict) -> list[ChecklistItem]:
     return items
 
 
-def _saqa_item(record: dict) -> ChecklistItem | None:
-    texts = [json.dumps(record.get("conditional_items") or []), json.dumps(record.get("documents_required") or []),
-             json.dumps(record.get("minimum_requirements") or [])]
-    joined = " ".join(texts).lower()
-    if "saqa" not in joined and "foreign" not in joined:
+def saqa_timing(source_text: str) -> str | None:
+    """When the advert wants a SAQA evaluation for foreign qualifications, from the advert's own sentences.
+
+    Returns None when the advert has no foreign-qualification condition (a mention like
+    "NQF level 4 as recognised by SAQA" is not a condition).
+    """
+    text = re.sub(r"\s+", " ", source_text)
+    sentences = [x for x in re.split(r"(?<=[.;])\s+", text) if "saqa" in x.lower() and "foreign" in x.lower()]
+    if not sentences:
         return None
-    if "shortlist" in joined:
-        when = "only if you are shortlisted"
-    elif "foreign" in joined or "saqa" in joined:
-        when = "with your application" if re.search(r"(attach|submit|accompan|include).{0,80}saqa|saqa.{0,80}(attach|submit|with your application)", joined) else "check the advert"
-    else:
-        when = "check the advert"
+    timings = set()
+    for sent in sentences:
+        low = sent.lower()
+        if "shortlist" in low or "short-list" in low or "short list" in low:
+            timings.add("only if you are shortlisted")
+        elif re.search(r"attach|accompan|submit|include|must be|required to", low):
+            timings.add("with your application")
+        else:
+            timings.add("check the advert")
+    return timings.pop() if len(timings) == 1 else "check the advert"
+
+
+def _saqa_item(record: dict, source_text: str | None) -> ChecklistItem | None:
+    when = saqa_timing(source_text) if source_text else None
+    if when is None:
+        return None
     return ChecklistItem(
         group="Conditional",
         item=f"If you have a foreign qualification: SAQA evaluation report ({when})",
@@ -69,7 +83,7 @@ def _same(a: str, b: str) -> bool:
     return na == nb or (len(na) > 12 and (na in nb or nb in na))
 
 
-def build_checklist(record: dict, answers: dict, *, is_sample: bool) -> list[ChecklistItem]:
+def build_checklist(record: dict, answers: dict, *, is_sample: bool, source_text: str | None = None) -> list[ChecklistItem]:
     prompt = _fill(llm.load_prompt("checklist"), approved_record_json=_record_for_prompt(record),
                    answers_json=json.dumps(answers or {}, ensure_ascii=False))
     raw = llm.chat_json(prompt, "Build the checklist now.", is_sample=is_sample, task="checklist")
@@ -90,9 +104,10 @@ def build_checklist(record: dict, answers: dict, *, is_sample: bool) -> list[Che
         t = " " + text.lower() + " "
         return any(any(k in t for k in ks) for ks in keywords) and not any(w in t for w in ("qualification", "licen", "saqa"))
     items = [i for i in items if not (i.source == "standard rule" or is_std(i.item))]
-    saqa = _saqa_item(record)
+    # SAQA timing is decided by code from the advert's sentences, never by the model.
+    items = [i for i in items if "saqa" not in i.item.lower()]
+    saqa = _saqa_item(record, source_text)
     if saqa:
-        items = [i for i in items if "saqa" not in i.item.lower()]
         items.append(saqa)
     merged = std + items
     out: list[ChecklistItem] = []

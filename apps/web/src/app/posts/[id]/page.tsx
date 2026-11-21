@@ -7,7 +7,7 @@ import { effectiveStatus, getOpportunity } from "@/lib/opportunities";
 import { displayTitle } from "@/lib/text";
 import { getCurrentUser } from "@/lib/session";
 import { SaveButton } from "@/components/save-button";
-import { isSaved } from "@/lib/saved";
+import { isSaved, markSeen } from "@/lib/saved";
 import { trackFunnel } from "@/lib/funnel";
 
 const FIELD_LABELS: Record<string, string> = {
@@ -23,6 +23,7 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
   const status = effectiveStatus(opp.status, opp.closingDate);
   const user = await getCurrentUser();
   const saved = user ? await isSaved(user.id, opp.id) : false;
+  if (user && saved) await markSeen(user.id, opp.id, opp.currentVersion);
   await trackFunnel(opp.id, "viewed");
   const route = opp.applyRoute;
   const latestChange = versions.find((v) => v.v.version === opp.currentVersion && v.v.version > 1);

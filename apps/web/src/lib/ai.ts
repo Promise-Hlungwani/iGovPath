@@ -71,8 +71,8 @@ export const ai = {
       "/extract", { text, is_sample: isSample, document_date: documentDate ?? null }),
   amendments: (text: string, isSample: boolean) =>
     call<{ amendments: { amendment: Amendment; flags: Flag[] }[]; model: string }>("/extract-amendments", { text, is_sample: isSample }),
-  checklist: (record: unknown, isSample: boolean, answers: Record<string, unknown> = {}) =>
-    call<{ items: { group: string; item: string; source: string }[]; model: string }>("/checklist", { record, answers, is_sample: isSample }),
+  checklist: (record: unknown, isSample: boolean, sourceText: string | null, answers: Record<string, unknown> = {}) =>
+    call<{ items: { group: string; item: string; source: string }[]; model: string }>("/checklist", { record, answers, source_text: sourceText, is_sample: isSample }),
   explain: (record: unknown, language: string, contact: string, isSample: boolean, profile = "") =>
     call<{ explanation: Record<string, string | string[]>; language: string; fact_check_passed: boolean; fact_problems: string[]; model: string }>(
       "/explain", { record, language, department_contact: contact, profile_summary: profile, is_sample: isSample }),

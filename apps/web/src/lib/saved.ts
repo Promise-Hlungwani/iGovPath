@@ -17,3 +17,10 @@ export async function getSaved(userId: string, opportunityId: string) {
     .where(and(eq(schema.savedOpportunities.userId, userId), eq(schema.savedOpportunities.opportunityId, opportunityId)));
   return row ?? null;
 }
+
+export async function markSeen(userId: string, opportunityId: string, version: number) {
+  await db
+    .update(schema.savedOpportunities)
+    .set({ seenVersion: version })
+    .where(and(eq(schema.savedOpportunities.userId, userId), eq(schema.savedOpportunities.opportunityId, opportunityId)));
+}

@@ -1,8 +1,14 @@
 import Link from "next/link";
 import { getCurrentUser, isActiveOfficer, isAdmin } from "@/lib/session";
+import { ensureClosingReminders, unreadCount } from "@/lib/notify";
 
 export async function SiteHeader() {
   const u = await getCurrentUser();
+  let unread = 0;
+  if (u) {
+    await ensureClosingReminders(u.id);
+    unread = await unreadCount(u.id);
+  }
   return (
     <header className="border-b border-border bg-surface">
       <div className="max-w-6xl mx-auto px-4 min-h-14 py-2 flex flex-wrap items-center gap-x-6 gap-y-2">
@@ -19,7 +25,13 @@ export async function SiteHeader() {
         </nav>
         <div className="flex items-center gap-3 text-sm">
           {u ? (
-            <Link href="/account" className="hover:text-brand">{u.name}</Link>
+            <>
+              <Link href="/notifications" className="hover:text-brand relative" aria-label={`Notifications${unread ? `, ${unread} unread` : ""}`}>
+                Notifications
+                {unread > 0 && <span data-testid="unread" className="ml-1 inline-flex min-w-5 justify-center rounded-full bg-danger text-white text-xs px-1.5">{unread}</span>}
+              </Link>
+              <Link href="/account" className="hover:text-brand">{u.name}</Link>
+            </>
           ) : (
             <>
               <Link href="/sign-in" className="hover:text-brand">Sign in</Link>

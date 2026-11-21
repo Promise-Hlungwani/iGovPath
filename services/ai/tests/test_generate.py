@@ -21,11 +21,18 @@ def test_standard_items_always_present(monkeypatch):
     assert sum(1 for i in items if i.source == "standard rule") == 4
 
 
-def test_saqa_shortlisted_timing(monkeypatch):
-    monkeypatch.setattr(generate.llm, "chat_json", lambda *a, **k: {"items": []})
-    items = generate.build_checklist(REC, {}, is_sample=True)
+def test_saqa_timing_from_advert_sentences():
+    assert generate.saqa_timing("Shortlisted candidates must submit SAQA evaluation reports for foreign qualifications.") == "only if you are shortlisted"
+    assert generate.saqa_timing("Should you be in possession of foreign qualification/s, it must be accompanied by an evaluation certificate from SAQA.") == "with your application"
+    assert generate.saqa_timing("Grade 12 (NQF level 4 as recognized by SAQA).") is None
+    assert generate.saqa_timing("Foreign qualifications: SAQA.") == "check the advert"
+
+
+def test_saqa_item_added_by_code(monkeypatch):
+    monkeypatch.setattr(generate.llm, "chat_json", lambda *a, **k: {"items": [{"group": "Conditional", "item": "SAQA report", "source": "from advert"}]})
+    items = generate.build_checklist(REC, {}, is_sample=True, source_text="Candidates with foreign qualifications are advised to attach SAQA accreditation.")
     saqa = [i for i in items if "SAQA" in i.item]
-    assert saqa and "only if you are shortlisted" in saqa[0].item
+    assert len(saqa) == 1 and "with your application" in saqa[0].item
 
 
 def test_fact_check_catches_invented_number():

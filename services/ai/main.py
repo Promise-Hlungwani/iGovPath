@@ -79,7 +79,7 @@ def amendments(req: AmendmentRequest) -> AmendmentResponse:
 
 @app.post("/checklist", response_model=ChecklistResponse)
 def checklist(req: ChecklistRequest) -> ChecklistResponse:
-    items = generate.build_checklist(req.record, req.answers, is_sample=req.is_sample)
+    items = generate.build_checklist(req.record, req.answers, is_sample=req.is_sample, source_text=req.source_text)
     return ChecklistResponse(items=items, model=llm.provider_info()["model"])
 
 

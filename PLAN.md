@@ -358,13 +358,14 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
 
 ### Phase 3: Applicant features
 
-- [ ] **G10. Checklist per post** 🤖
+- [x] **G10. Checklist per post** 🤖
   - Tasks: Prompt 3 from the approved record only; standard rules added in code (current Z83, CV, certified ID copy, quote the reference number); SAQA wording "at application" / "only if shortlisted" / "check the advert"; each item tagged "from advert" or "standard rule"; tickable and saved for signed-in applicants.
   - Done when: every checklist contains the 4 standard items; the SAQA sample post shows the right timing; ticks persist after sign-out and sign-in.
 
 - [ ] **G11. Plain-language explainer** 🤝
   - Tasks: 🤖 Prompt 2 in English and one other language; original wording beside it; "machine translation, needs native-speaker review" banner on non-English; facts, numbers and dates checked unchanged against the record. 👤 chooses the language (default isiZulu) and a native speaker reviews 3 posts.
   - Done when: explanations keep every date and number from the record (automatic check); the banner appears on non-English; the native speaker has signed off or listed fixes.
+  - Status (21 Nov): ✅ 🤖 English + isiZulu built; automatic fact check passed on 5 posts × 2 languages; banner shows on isiZulu. ⏳ 👤 Native-speaker review still needed (default language isiZulu; change `LANGUAGES` in `apps/web/src/lib/generated.ts` if the team picks another).
 
 - [ ] **G12. Saved posts, reminders and notifications** 🤖
   - Tasks: save / unsave; list of saved posts with closing countdown; in-app reminder 3 days before closing; notification when a saved post is amended, extended or withdrawn, or its form is superseded.
