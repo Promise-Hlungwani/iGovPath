@@ -2,13 +2,13 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 import { db, schema } from "@/db";
 import { AiServiceError, type AdvertRecord, type Amendment } from "@/lib/ai";
 import { createDocument, extractAmendments, extractChunk, fullText, listChunks } from "@/lib/documents";
 import { approveAmendment, approveNew, PublishError, rejectExtraction } from "@/lib/publish";
-import { canActOnDepartment, requireOfficer } from "@/lib/session";
+import { canActOnDepartment, departmentScope, requireOfficer } from "@/lib/session";
 import { SAMPLE_MODE } from "@/lib/flags";
 
 const uploadSchema = z.object({
@@ -152,15 +152,21 @@ export async function rejectAction(formData: FormData) {
  * confirmed one by one) and only drafts with no "fix" flags. Each approval is recorded with the
  * officer's name, exactly like a single approval.
  */
-export async function approveAllClean() {
+type ApproveAllState = { approved: number | null; failed: number };
+
+export async function approveAllClean(
+  _previousState: ApproveAllState,
+  _formData: FormData,
+): Promise<ApproveAllState> {
+  void _previousState;
+  void _formData;
   const u = await requireOfficer();
-  const { departmentScope } = await import("@/lib/session");
-  const { and } = await import("drizzle-orm");
   const scope = departmentScope(u);
   const where = [eq(schema.extractions.status, "draft"), eq(schema.extractions.mode, "new")];
   if (scope !== null) where.push(eq(schema.extractions.departmentId, scope));
   const drafts = await db.select().from(schema.extractions).where(and(...where));
   let done = 0;
+  let failed = 0;
   for (const e of drafts) {
     if (e.flags.some((f) => f.level === "error")) continue;
     try {
@@ -168,9 +174,10 @@ export async function approveAllClean() {
       done++;
     } catch (err) {
       if (!(err instanceof PublishError)) throw err;
+      failed++;
     }
   }
   revalidatePath("/portal");
   revalidatePath("/search");
-  redirect(`/portal?flash=approved&n=${done}`);
+  return { approved: done, failed };
 }

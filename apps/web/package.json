@@ -13,6 +13,7 @@
     "db:seed": "tsx --conditions=react-server src/db/seed.ts",
     "db:reset": "tsx --conditions=react-server src/db/reset.ts",
     "demo:reset": "tsx --conditions=react-server src/db/demo.ts",
+    "import:sita": "tsx --conditions=react-server src/db/import-sita.ts",
     "test:e2e": "playwright test"
   },
   "dependencies": {

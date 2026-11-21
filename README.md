@@ -148,6 +148,7 @@ Sign up with the `ADMIN_EMAIL` address first to become admin. Officers sign up, 
 |---|---|
 | `pnpm demo:reset` | Clean demo state + demo accounts (see `docs/DEMO.md`) |
 | `pnpm db:reset` | Clear content (keeps users and the audit log) and re-seed |
+| `pnpm import:sita` | Import all listed SITA vacancy PDFs as draft public source records |
 | `pnpm test:ai` | AI service unit tests (no live AI calls) |
 | `pnpm test:e2e` | Browser tests for every goal (needs both services running; uses the live Groq key) |
 | `pnpm lint` / `pnpm typecheck` | Code checks |

@@ -12,6 +12,7 @@
     "db:migrate": "pnpm --filter web db:migrate",
     "db:seed": "pnpm --filter web db:seed",
     "db:reset": "pnpm --filter web db:reset",
+    "import:sita": "pnpm --filter web import:sita",
     "ai": "node scripts/python-ai.mjs run uvicorn main:app --reload --port 8000",
     "demo:reset": "pnpm --filter web demo:reset",
     "test:e2e": "pnpm --filter web test:e2e",
