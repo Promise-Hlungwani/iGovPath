@@ -10,7 +10,7 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
   }, [error]);
   return (
     <div className="max-w-xl mx-auto rounded-3xl border border-black/10 bg-white p-8 text-center shadow-[0_8px_30px_rgba(0,0,0,0.05)]">
-      <h1 className="text-2xl font-bold">This page didn&apos;t load</h1>
+      <h1 className="text-2xl font-semibold">This page didn&apos;t load</h1>
       <p className="mt-3 text-muted">
         Something went wrong on our side. Nothing you did caused it. Please try again; if it keeps happening, tell the iGovPath team.
       </p>

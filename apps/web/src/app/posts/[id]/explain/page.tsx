@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { CrumbLabel } from "@/components/breadcrumbs";
+import { displayTitle } from "@/lib/text";
 import { notFound } from "next/navigation";
 import { Card, Notice, PageTitle } from "@/components/ui";
 import { AiServiceError } from "@/lib/ai";
@@ -38,6 +40,7 @@ export default async function ExplainPage({ params, searchParams }: { params: Pr
 
   return (
     <div>
+      <CrumbLabel path={`/posts/${opp.id}`} text={displayTitle(opp.postTitle)} />
       <PageTitle sub={dept.name}>In plain language</PageTitle>
       <div className="flex flex-wrap gap-2 mb-4" role="tablist" aria-label="Language">
         {LANGUAGES.map((l) => (

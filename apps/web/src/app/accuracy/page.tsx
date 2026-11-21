@@ -74,7 +74,7 @@ function Stat({ label, value, sub }: { label: string; value: string; sub: string
   return (
     <Card>
       <p className="text-sm text-muted">{label}</p>
-      <p className="text-3xl font-semibold mt-1">{value}</p>
+      <p className="text-2xl font-semibold mt-1">{value}</p>
       <p className="text-xs text-muted mt-1">{sub}</p>
     </Card>
   );

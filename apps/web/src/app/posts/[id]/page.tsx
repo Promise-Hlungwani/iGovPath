@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CrumbLabel } from "@/components/breadcrumbs";
 import { notFound } from "next/navigation";
 import { Badge, Notice, NotStated } from "@/components/ui";
 import { ClosingText, StatusBadge, TypeBadge } from "@/components/opportunity-bits";
@@ -39,17 +40,18 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
 
   return (
     <div className="max-w-3xl space-y-8">
+      <CrumbLabel path={`/posts/${opp.id}`} text={displayTitle(opp.postTitle)} />
       {/* 1. What the job is, and how long you have */}
       <header>
         <div className="flex flex-wrap items-center gap-2 mb-3">
           <StatusBadge status={status} />
           <TypeBadge type={opp.type} />
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">{displayTitle(opp.postTitle)}</h1>
-        <p className="mt-2 text-lg text-muted">
+        <h1 className="text-2xl font-semibold tracking-tight">{displayTitle(opp.postTitle)}</h1>
+        <p className="mt-1 text-[15px] text-muted">
           {dept.name}{opp.location && ` · ${opp.location}`}{opp.salary && ` · ${opp.salary}`}
         </p>
-        <p className={`mt-3 text-xl font-semibold ${left !== null && left >= 0 && left <= 3 ? "text-danger" : ""}`}>
+        <p className={`mt-2 font-medium ${left !== null && left >= 0 && left <= 3 ? "text-danger" : ""}`}>
           <ClosingText date={opp.closingDate} />
         </p>
       </header>
@@ -65,7 +67,7 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
 
       {/* 2. How to apply */}
       <section className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-sm shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-6 sm:p-8" aria-labelledby="apply">
-        <h2 id="apply" className="text-2xl font-bold">Apply for this job</h2>
+        <h2 id="apply" className="text-lg font-semibold">Apply for this job</h2>
         {closed ? (
           <p className="mt-3 text-muted">This post is {status === "withdrawn" ? "withdrawn" : "closed"}. Applications are no longer accepted.</p>
         ) : (
@@ -97,7 +99,7 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
       {/* 4. What you must have */}
       <section aria-labelledby="need" className="space-y-3">
         <div className="flex flex-wrap items-end justify-between gap-2">
-          <h2 id="need" className="text-2xl font-bold">What you must have</h2>
+          <h2 id="need" className="text-lg font-semibold">What you must have</h2>
           <Link href={`/posts/${opp.id}/explain`} className="text-sm font-semibold underline">Explain this job in simple words</Link>
         </div>
         <List items={opp.minimumRequirements} />

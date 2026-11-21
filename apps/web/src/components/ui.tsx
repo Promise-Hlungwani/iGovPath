@@ -74,11 +74,29 @@ export function Textarea({ className, ...props }: ComponentProps<"textarea">) {
   return <textarea className={cx(field, className)} {...props} />;
 }
 
-export function PageTitle({ children, sub }: { children: ReactNode; sub?: ReactNode }) {
+/* One type scale for every page: page title text-2xl semibold, section title text-lg semibold, body normal. */
+export function PageTitle({ children, sub, eyebrow, actions }: { children: ReactNode; sub?: ReactNode; eyebrow?: ReactNode; actions?: ReactNode }) {
   return (
-    <div className="mb-6">
-      <h1 className="text-2xl font-semibold tracking-tight">{children}</h1>
-      {sub && <p className="mt-1 text-muted">{sub}</p>}
+    <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
+      <div className="min-w-0">
+        {eyebrow && <p className="text-xs font-semibold uppercase tracking-wide text-muted">{eyebrow}</p>}
+        <h1 className="text-2xl font-semibold tracking-tight">{children}</h1>
+        {sub && <p className="mt-1 text-[15px] text-muted max-w-3xl">{sub}</p>}
+      </div>
+      {actions && <div className="shrink-0">{actions}</div>}
+    </div>
+  );
+}
+
+export function SectionTitle({ children, id, className = "" }: { children: ReactNode; id?: string; className?: string }) {
+  return <h2 id={id} className={`text-lg font-semibold ${className}`}>{children}</h2>;
+}
+
+export function EmptyState({ children, action }: { children: ReactNode; action?: ReactNode }) {
+  return (
+    <div className="rounded-2xl border border-dashed border-black/15 px-6 py-10 text-center text-[15px] text-muted">
+      <p>{children}</p>
+      {action && <div className="mt-3">{action}</div>}
     </div>
   );
 }

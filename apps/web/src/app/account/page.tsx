@@ -31,7 +31,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
       <section className="rounded-3xl border border-black/10 bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgba(0,0,0,0.05)] flex flex-col sm:flex-row sm:items-center gap-6">
         <Avatar name={u.name} size={76} />
         <div className="min-w-0 flex-1">
-          <h1 className="text-3xl font-bold tracking-tight truncate">{u.name}</h1>
+          <h1 className="text-2xl font-semibold tracking-tight truncate">{u.name}</h1>
           <p className="text-muted truncate">{u.email}</p>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <Badge tone="brand">{roleLabel[u.role]}</Badge>
@@ -59,8 +59,8 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
           className={`rounded-3xl p-6 sm:p-7 flex flex-col sm:flex-row sm:items-center gap-5 border border-black/10 bg-white/70 backdrop-blur-sm shadow-[0_8px_30px_rgba(0,0,0,0.06)]`}
         >
           <div className="flex-1">
-            <p className={`text-sm font-semibold uppercase tracking-wide text-muted`}>Review queue</p>
-            <p className={`mt-1 text-2xl font-bold `}>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted">Review queue</p>
+            <p className="mt-1 text-lg font-semibold">
               {queue > 0 ? `${queue} ${queue === 1 ? "record is" : "records are"} waiting for your approval` : "Nothing waiting for approval"}
             </p>
             <p className={`mt-1 text-sm text-muted`}>
@@ -120,7 +120,7 @@ function Tile({ href, title, value, hint }: { href: string; title: string; value
         <p className="font-semibold">{title}</p>
         <span className="text-black/30 group-hover:text-black transition" aria-hidden>→</span>
       </div>
-      <p className="mt-3 text-3xl font-bold tracking-tight">{value}</p>
+      <p className="mt-1 text-lg font-semibold">{value}</p>
       <p className="mt-1 text-sm text-muted">{hint}</p>
     </Link>
   );

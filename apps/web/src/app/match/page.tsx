@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { eq, inArray } from "drizzle-orm";
 import { db, schema } from "@/db";
-import { Badge, ButtonLink, Card, Input, Notice, PageTitle } from "@/components/ui";
+import { Badge, ButtonLink, Card, EmptyState, Input, Notice, PageTitle } from "@/components/ui";
 import { SubmitButton } from "@/components/submit-button";
 import { ClosingText } from "@/components/opportunity-bits";
 import type { CvProfile } from "@/lib/ai";
@@ -58,9 +58,9 @@ export default async function MatchPage({ searchParams }: { searchParams: Promis
       ) : null}
       {profile && (
         <section className="space-y-4">
-          <h2 className="text-2xl font-bold">Jobs for you ({matches.length})</h2>
+          <h2 className="text-lg font-semibold">Jobs for you ({matches.length})</h2>
           <p className="text-muted -mt-1">Tap a job to see the details and how to apply.</p>
-          {matches.length === 0 && <Card><p className="text-sm text-muted">No open posts fit your CV right now. Check again when new circulars come out.</p></Card>}
+          {matches.length === 0 && <EmptyState>No open posts fit your CV right now. Check again when new circulars come out.</EmptyState>}
           {matches.map((m) => {
             const x = byId.get(m.id);
             if (!x) return null;
@@ -76,7 +76,7 @@ export default async function MatchPage({ searchParams }: { searchParams: Promis
                     <span className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${m.fit === "strong" ? "bg-black text-white" : "bg-black/[0.06] text-black"}`}>
                       {m.fit === "strong" ? "Good match" : "Worth a look"}
                     </span>
-                    <h3 className="mt-3 text-xl font-bold">{displayTitle(x.o.postTitle)}</h3>
+                    <h3 className="mt-3 text-lg font-semibold">{displayTitle(x.o.postTitle)}</h3>
                     <p className="mt-1 text-muted">{x.dept} · <ClosingText date={x.o.closingDate} /></p>
                   </div>
                   <span className="mt-1 text-2xl text-black/30 group-hover:text-black transition" aria-hidden>→</span>

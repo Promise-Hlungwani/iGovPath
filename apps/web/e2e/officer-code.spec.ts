@@ -7,7 +7,7 @@ async function request(page: Page, code: string) {
   await page.goto("/account/request-officer-access");
   await page.getByLabel("Department").selectOption({ index: 1 });
   await page.getByLabel("Job title").fill("HR Officer");
-  await page.getByLabel(/Officer code/).fill(code);
+  await page.getByLabel(/Officer or admin code/).fill(code);
   await page.getByRole("button", { name: "Send request" }).click();
 }
 

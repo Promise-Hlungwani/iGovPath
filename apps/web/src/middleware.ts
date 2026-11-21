@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
+import { PROFILE_COOKIE } from "@/lib/profile";
 
 // Fast, optimistic check only: no session cookie -> go to sign-in.
 // Real role and department checks run on the server in each layout, page and action.
@@ -9,7 +10,12 @@ export function middleware(req: NextRequest) {
     url.searchParams.set("next", req.nextUrl.pathname);
     return NextResponse.redirect(url);
   }
-  return NextResponse.next();
+  const res = NextResponse.next();
+  const p = req.nextUrl.pathname;
+  if ((p.startsWith("/portal") || p.startsWith("/admin")) && req.cookies.get(PROFILE_COOKIE)?.value !== "officer") {
+    res.cookies.set(PROFILE_COOKIE, "officer", { path: "/", sameSite: "lax", httpOnly: true, maxAge: 60 * 60 * 24 * 365 });
+  }
+  return res;
 }
 
 export const config = {

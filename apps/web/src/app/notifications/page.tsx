@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { and, desc, eq } from "drizzle-orm";
 import { db, schema } from "@/db";
-import { Badge, Card, PageTitle } from "@/components/ui";
+import { Badge, Card, EmptyState, PageTitle } from "@/components/ui";
 import { formatDateTime } from "@/lib/format";
 import { ensureClosingReminders } from "@/lib/notify";
 import { requireUser } from "@/lib/session";
@@ -33,7 +33,7 @@ export default async function NotificationsPage() {
             {n.opportunityId && <Link className="text-sm text-brand underline" href={`/posts/${n.opportunityId}`}>Open the post</Link>}
           </Card>
         ))}
-        {rows.length === 0 && <p className="text-muted text-sm">No notifications yet. Save a post to get reminders and updates.</p>}
+        {rows.length === 0 && <EmptyState>No messages yet. Save a post to get reminders and updates.</EmptyState>}
       </div>
     </div>
   );

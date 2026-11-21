@@ -35,9 +35,9 @@ export default async function Dashboard() {
     <div className="space-y-6">
       <PageTitle sub={`Where applicants drop out. Anonymous counts only, ${scope === null ? "all departments" : u.departmentName}.`}>Dashboard</PageTitle>
       <div className="grid sm:grid-cols-3 gap-4">
-        <Card><p className="text-sm text-muted">Viewed a post</p><p className="text-3xl font-semibold">{totals.viewed}</p></Card>
-        <Card><p className="text-sm text-muted">Started a checklist</p><p className="text-3xl font-semibold">{totals.started}</p><p className="text-xs text-muted">{pct(totals.started, totals.viewed)} of viewers</p></Card>
-        <Card><p className="text-sm text-muted">Finished a checklist</p><p className="text-3xl font-semibold">{totals.complete}</p><p className="text-xs text-muted">{pct(totals.complete, totals.started)} of starters</p></Card>
+        <Card><p className="text-sm text-muted">Viewed a post</p><p className="text-2xl font-semibold">{totals.viewed}</p></Card>
+        <Card><p className="text-sm text-muted">Started a checklist</p><p className="text-2xl font-semibold">{totals.started}</p><p className="text-xs text-muted">{pct(totals.started, totals.viewed)} of viewers</p></Card>
+        <Card><p className="text-sm text-muted">Finished a checklist</p><p className="text-2xl font-semibold">{totals.complete}</p><p className="text-xs text-muted">{pct(totals.complete, totals.started)} of starters</p></Card>
       </div>
       {conflicts.length > 0 && (
         <Notice tone="warn">

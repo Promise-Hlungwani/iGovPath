@@ -24,7 +24,7 @@ export function Modal({ open, onClose, title, children, labelledBy = "modal-titl
       className="m-auto w-[min(92vw,30rem)] rounded-2xl bg-white p-0 text-foreground shadow-[0_24px_80px_rgba(0,0,0,0.25)] backdrop:bg-black/40 backdrop:backdrop-blur-sm open:animate-[modal-in_160ms_ease-out]"
     >
       <div className="p-6 sm:p-7">
-        <h2 id={labelledBy} className="text-xl font-bold">{title}</h2>
+        <h2 id={labelledBy} className="text-lg font-semibold">{title}</h2>
         <div className="mt-3">{children}</div>
       </div>
     </dialog>

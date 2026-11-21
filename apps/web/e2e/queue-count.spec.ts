@@ -12,9 +12,9 @@ test("officers see how many records wait for review: header, menu, account page,
   const o = email("queue");
   await signUp(page, "Queue Officer", o);
   await makeOfficer(o, dept);
-  await page.goto("/account");
-
+  await page.goto("/portal"); // officer profile: the count is in the top menu
   await expect(page.getByTestId("queue-count")).toContainText(String(n));
+  await page.goto("/account");
   await expect(page.getByTestId("queue-card")).toContainText(`${n} ${n === 1 ? "record is" : "records are"} waiting for your approval`);
   await page.getByRole("button", { name: "Account menu" }).click();
   await expect(page.getByRole("menuitem", { name: /Review queue/ })).toContainText(`${n} waiting`);

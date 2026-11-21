@@ -23,7 +23,7 @@ test("G3: roles, officer approval, department isolation, audit", async ({ page }
   // Officer requests access -> pending.
   await page.context().clearCookies();
   await signUp(page, "Sipho Officer", officer);
-  await page.getByRole("link", { name: "I work for a government department" }).click();
+  await page.getByRole("link", { name: /Government officer\?/ }).click();
   await page.getByLabel("Department").selectOption({ label: LIMPOPO + " (Limpopo)" });
   await page.getByLabel("Job title").fill("HR Practitioner");
   await page.getByRole("button", { name: "Send request" }).click();

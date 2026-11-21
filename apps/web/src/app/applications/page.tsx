@@ -2,7 +2,7 @@ import Link from "next/link";
 import { desc, eq } from "drizzle-orm";
 import { Suspense } from "react";
 import { db, schema } from "@/db";
-import { PageTitle } from "@/components/ui";
+import { EmptyState, PageTitle } from "@/components/ui";
 import { UrlError } from "@/components/url-error";
 import { ClosingText } from "@/components/opportunity-bits";
 import { STATUS_LABEL } from "@/lib/applications";
@@ -30,7 +30,7 @@ export default async function MyApplications() {
               <span className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${a.status === "draft" ? "bg-black/[0.06]" : a.status === "shortlisted" || a.status === "appointed" ? "bg-black text-white" : "bg-black/[0.06]"}`}>
                 {STATUS_LABEL[a.status]}
               </span>
-              <h2 className="mt-2 text-lg font-bold truncate">{displayTitle(title)}</h2>
+              <h2 className="mt-2 font-semibold truncate">{displayTitle(title)}</h2>
               <p className="text-sm text-muted">
                 {dept} · {a.status === "draft" ? <ClosingText date={closing} /> : `Sent ${formatDate(a.submittedAt)}`}
               </p>
@@ -39,10 +39,7 @@ export default async function MyApplications() {
           </Link>
         ))}
         {rows.length === 0 && (
-          <div className="rounded-2xl border border-black/10 bg-white p-6">
-            <p>You haven&apos;t applied for anything yet.</p>
-            <Link href="/search" className="mt-3 inline-block underline font-semibold">Find a job to apply for</Link>
-          </div>
+          <EmptyState action={<Link href="/search" className="underline font-medium text-black">Find a job to apply for</Link>}>You haven&apos;t applied for anything yet.</EmptyState>
         )}
       </div>
     </div>

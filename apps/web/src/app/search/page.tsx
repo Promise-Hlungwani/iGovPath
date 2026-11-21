@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button, Card, Input, PageTitle, Select } from "@/components/ui";
+import { Button, Card, EmptyState, Input, PageTitle, Select } from "@/components/ui";
 import { ClosingText, StatusBadge, TypeBadge } from "@/components/opportunity-bits";
 import { PROVINCES } from "@/lib/format";
 import { effectiveStatus, searchOpportunities } from "@/lib/opportunities";
@@ -91,7 +91,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           </Card>
         ))}
         {rows.length === 0 && (
-          <Card><p className="text-muted">Nothing found. Try fewer words, another province, or include closed posts.</p></Card>
+          <EmptyState>Nothing found. Try fewer words, another province, or include closed posts.</EmptyState>
         )}
       </div>
     </div>

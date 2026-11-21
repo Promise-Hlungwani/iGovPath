@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Card, PageTitle } from "@/components/ui";
+import { Card, EmptyState, PageTitle } from "@/components/ui";
 import { ClosingText, StatusBadge } from "@/components/opportunity-bits";
 import { departmentScope, requireOfficer } from "@/lib/session";
 import { effectiveStatus, searchOpportunities } from "@/lib/opportunities";
@@ -25,7 +25,7 @@ export default async function PortalOpportunities() {
             </div>
           </Card>
         ))}
-        {rows.length === 0 && <p className="text-muted text-sm">No published records for your department yet.</p>}
+        {rows.length === 0 && <EmptyState>No published records for your department yet.</EmptyState>}
       </div>
     </div>
   );

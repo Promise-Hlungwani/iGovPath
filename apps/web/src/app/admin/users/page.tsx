@@ -1,6 +1,6 @@
 import { asc, desc, eq } from "drizzle-orm";
 import { db, schema } from "@/db";
-import { Badge, Button, Card, PageTitle, Select } from "@/components/ui";
+import { Badge, Button, Card, EmptyState, PageTitle, Select } from "@/components/ui";
 import { formatDateTime } from "@/lib/format";
 import { requireAdmin } from "@/lib/session";
 import { approveOfficer, changeDepartment, rejectOfficer, setDeactivated } from "./actions";
@@ -39,7 +39,7 @@ export default async function AdminUsersPage() {
       <section>
         <h2 className="font-semibold mb-3">Officer access requests ({pending.length})</h2>
         {pending.length === 0 ? (
-          <p className="text-sm text-muted">No pending requests.</p>
+          <EmptyState>No pending requests.</EmptyState>
         ) : (
           <div className="space-y-3">
             {pending.map((r) => (

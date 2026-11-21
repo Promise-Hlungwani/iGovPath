@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { and, desc, eq, inArray, type SQL } from "drizzle-orm";
 import { db, schema } from "@/db";
-import { Badge, ButtonLink, Card, PageTitle } from "@/components/ui";
+import { Badge, ButtonLink, Card, EmptyState, PageTitle } from "@/components/ui";
 import { formatDateTime } from "@/lib/format";
 import { departmentScope, requireOfficer } from "@/lib/session";
 import { displayTitle } from "@/lib/text";
@@ -59,7 +59,7 @@ export default async function ReviewQueue() {
             </Card>
           );
         })}
-        {rows.length === 0 && <Card><p className="text-muted">Nothing waiting. <Link className="text-brand underline" href="/portal/upload">Upload a document</Link> to start.</p></Card>}
+        {rows.length === 0 && <EmptyState action={<Link className="underline font-medium text-black" href="/portal/upload">Upload a document</Link>}>Nothing waiting for review.</EmptyState>}
       </div>
     </div>
   );

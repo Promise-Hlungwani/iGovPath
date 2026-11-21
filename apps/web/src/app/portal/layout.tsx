@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { NavLink } from "@/components/nav-link";
 import { ButtonLink, Card, Notice } from "@/components/ui";
 import { isActiveOfficer, requireUser } from "@/lib/session";
 import { newApplicationsCount, reviewQueueCount } from "@/lib/queue";
@@ -39,11 +39,11 @@ export default async function PortalLayout({ children }: { children: React.React
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-3">
         <nav className="flex flex-wrap gap-1 text-sm">
           {nav.map((n) => (
-            <Link key={n.href} href={n.href} className="rounded-md px-3 py-1.5 hover:bg-brand-soft inline-flex items-center">
+            <NavLink key={n.href} href={n.href} exact={n.href === "/portal"} also={n.href === "/portal" ? ["/portal/review", "/portal/documents"] : []}>
               {n.label}
               {n.href === "/portal" && <CountBadge n={queue} />}
               {n.href === "/portal/applications" && <CountBadge n={newApps} />}
-            </Link>
+            </NavLink>
           ))}
         </nav>
         <p className="text-sm text-muted">

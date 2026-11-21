@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { switchProfile } from "@/app/profile-actions";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Modal } from "@/components/modal";
@@ -24,9 +25,9 @@ export function Avatar({ name, size = 36 }: { name: string; size?: number }) {
   );
 }
 
-type Props = { name: string; email: string; roleLabel: string; isOfficer: boolean; unread: number; queue?: number; officerRequests?: number };
+type Props = { name: string; email: string; roleLabel: string; isOfficer: boolean; unread: number; queue?: number; officerRequests?: number; profiles?: { current: "personal" | "officer"; officerLabel: string } | null };
 
-export function AccountMenu({ name, email, roleLabel, isOfficer, unread, queue = 0, officerRequests = 0 }: Props) {
+export function AccountMenu({ name, email, roleLabel, isOfficer, unread, queue = 0, officerRequests = 0, profiles = null }: Props) {
   const [open, setOpen] = useState(false);
   const [dialog, setDialog] = useState<null | "signout" | "delete">(null);
   const root = useRef<HTMLDivElement>(null);
@@ -82,6 +83,22 @@ export function AccountMenu({ name, email, roleLabel, isOfficer, unread, queue =
             </div>
           </div>
           <p className="px-3 pb-2 text-xs font-medium text-muted">{roleLabel}</p>
+          {profiles && (
+            <>
+              <div className="my-1 h-px bg-black/10" />
+              <p className="px-3 pt-1 pb-1 text-xs font-semibold uppercase tracking-wide text-muted">Profile</p>
+              {([["personal", "Personal profile"], ["officer", `Officer profile · ${profiles.officerLabel}`]] as const).map(([to, label]) => (
+                <form key={to} action={switchProfile}>
+                  <input type="hidden" name="to" value={to} />
+                  <button role="menuitemradio" aria-checked={profiles.current === to} type="submit"
+                    className={`${item} ${profiles.current === to ? "bg-black/[0.06] font-semibold" : ""}`}>
+                    <span className="truncate">{label}</span>
+                    {profiles.current === to ? <span aria-hidden>✓</span> : to === "officer" && queue > 0 ? <span className="rounded-full bg-black px-2 text-xs font-bold leading-5 text-white">{queue}</span> : null}
+                  </button>
+                </form>
+              ))}
+            </>
+          )}
           <div className="my-1 h-px bg-black/10" />
           <Link role="menuitem" href="/account" className={item} onClick={() => setOpen(false)}>My account</Link>
           <Link role="menuitem" href="/applications" className={item} onClick={() => setOpen(false)}>My applications</Link>

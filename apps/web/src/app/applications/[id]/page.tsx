@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CrumbLabel } from "@/components/breadcrumbs";
 import { DocViewer } from "@/components/doc-viewer";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -27,7 +28,8 @@ export default async function ApplicationPage({ params, searchParams }: { params
   const z = app.a.z83 as Partial<Z83>;
   const title = displayTitle(app.o.postTitle);
 
-  if (app.a.status !== "draft") return <StatusView app={app} title={title} />;
+  const crumb = <CrumbLabel path={`/applications/${app.a.id}`} text={title} />;
+  if (app.a.status !== "draft") return <>{crumb}<StatusView app={app} title={title} /></>;
 
   const kinds = app.files.map((f) => f.kind);
   const savedDocs = await myDocuments(u.id);
@@ -42,6 +44,7 @@ export default async function ApplicationPage({ params, searchParams }: { params
 
   return (
     <div className="max-w-3xl space-y-8">
+      {crumb}
       <header>
         {env.SAMPLE_DATA_ONLY && (
           <form action={fillWithSampleData} className="float-right ml-4">
@@ -49,8 +52,8 @@ export default async function ApplicationPage({ params, searchParams }: { params
             <SubmitButton variant="secondary" className="!min-h-0 px-3 py-1.5 text-sm" pendingText="Filling in…">Fill with sample data</SubmitButton>
           </form>
         )}
-        <p className="text-sm font-semibold uppercase tracking-wide text-muted">Application</p>
-        <h1 className="mt-1 text-3xl font-bold tracking-tight">{title}</h1>
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted">Application</p>
+        <h1 className="mt-1 text-2xl font-semibold tracking-tight">{title}</h1>
         <p className="mt-1 text-muted">{app.dept}{app.o.referenceNumber && ` · Ref ${app.o.referenceNumber}`} · <ClosingText date={app.o.closingDate} /></p>
       </header>
       <Suspense fallback={null}><UrlError /></Suspense>
@@ -64,7 +67,7 @@ export default async function ApplicationPage({ params, searchParams }: { params
       {/* Documents first: separate small uploads keep each request under the size limit */}
       <section id="documents" className="rounded-2xl border border-black/10 bg-white/70 backdrop-blur-sm p-5 sm:p-6 space-y-4">
         <div>
-          <h2 className="text-xl font-bold">1. Your documents</h2>
+          <h2 className="text-lg font-semibold">1. Your documents</h2>
           <p className="text-sm text-muted mt-1">
             We attach the documents you saved before. Anything you upload here is also kept in <Link href="/account/documents" className="underline">My documents</Link> for your next application.
           </p>
@@ -125,7 +128,7 @@ export default async function ApplicationPage({ params, searchParams }: { params
         <input type="hidden" name="applicationId" value={app.a.id} />
 
         <section className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6 space-y-4">
-          <h2 className="text-xl font-bold">2. About you</h2>
+          <h2 className="text-lg font-semibold">2. About you</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <F name="surname" label="Surname" value={z.surname} />
             <F name="fullNames" label="Full names" value={z.fullNames} />
@@ -146,7 +149,7 @@ export default async function ApplicationPage({ params, searchParams }: { params
         </section>
 
         <section className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6 space-y-4">
-          <h2 className="text-xl font-bold">3. How to reach you</h2>
+          <h2 className="text-lg font-semibold">3. How to reach you</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <F name="phone" label="Phone number" value={z.phone} type="tel" />
             <F name="email" label="Email" value={z.email} type="email" />
@@ -163,7 +166,7 @@ export default async function ApplicationPage({ params, searchParams }: { params
         </section>
 
         <section className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6 space-y-4">
-          <h2 className="text-xl font-bold">4. Your qualifications</h2>
+          <h2 className="text-lg font-semibold">4. Your qualifications</h2>
           {quals.map((q, i) => (
             <div key={i} className="grid sm:grid-cols-[2fr_2fr_1fr] gap-3">
               <F name={`q_name_${i}`} label={i === 0 ? "Qualification" : ""} value={q.name} placeholder="e.g. National Senior Certificate" />
@@ -174,7 +177,7 @@ export default async function ApplicationPage({ params, searchParams }: { params
         </section>
 
         <section className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6 space-y-4">
-          <h2 className="text-xl font-bold">5. Your work experience</h2>
+          <h2 className="text-lg font-semibold">5. Your work experience</h2>
           {exps.map((x, i) => (
             <div key={i} className="grid sm:grid-cols-2 gap-3 border-t border-black/10 pt-3 first:border-0 first:pt-0">
               <F name={`x_employer_${i}`} label="Employer" value={x.employer} />
@@ -187,7 +190,7 @@ export default async function ApplicationPage({ params, searchParams }: { params
         </section>
 
         <section className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6 space-y-4">
-          <h2 className="text-xl font-bold">6. Questions every applicant answers</h2>
+          <h2 className="text-lg font-semibold">6. Questions every applicant answers</h2>
           <YesNo name="criminalRecord" label="Have you been convicted of a crime?" value={z.criminalRecord} />
           <F name="criminalRecordDetails" label="If yes, give details" value={z.criminalRecordDetails} />
           <YesNo name="pendingCase" label="Do you have a criminal, civil or disciplinary case pending?" value={z.pendingCase} />
@@ -198,7 +201,7 @@ export default async function ApplicationPage({ params, searchParams }: { params
         </section>
 
         <section className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6 space-y-4">
-          <h2 className="text-xl font-bold">7. Declaration</h2>
+          <h2 className="text-lg font-semibold">7. Declaration</h2>
           <label className="flex items-start gap-3">
             <input type="checkbox" name="declaration" defaultChecked={!!z.declaration} className="mt-1 h-5 w-5" />
             <span>I declare that the information in this application is true and complete. I understand that false information may disqualify me or lead to dismissal.</span>
@@ -258,14 +261,14 @@ function StatusView({ app, title }: { app: App; title: string }) {
   return (
     <div className="max-w-3xl space-y-6">
       <header>
-        <p className="text-sm font-semibold uppercase tracking-wide text-muted">Your application</p>
-        <h1 className="mt-1 text-3xl font-bold tracking-tight">{title}</h1>
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted">Your application</p>
+        <h1 className="mt-1 text-2xl font-semibold tracking-tight">{title}</h1>
         <p className="mt-1 text-muted">{app.dept}{app.o.referenceNumber && ` · Ref ${app.o.referenceNumber}`}</p>
       </header>
       <Suspense fallback={null}><UrlError /></Suspense>
       <section className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-sm shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-6 sm:p-8">
         <p className="text-black/60 text-sm">Status</p>
-        <p className="mt-1 text-3xl font-bold !text-black" data-testid="app-status">{STATUS_LABEL[s]}</p>
+        <p className="mt-1 text-xl font-semibold !text-black" data-testid="app-status">{STATUS_LABEL[s]}</p>
         <p className="mt-2 text-black/60">
           {s === "submitted" && "Your application has been sent to the department. We'll let you know when it changes."}
           {s === "under_review" && "The department is reviewing your application."}
@@ -276,7 +279,7 @@ function StatusView({ app, title }: { app: App; title: string }) {
         </p>
       </section>
       <section className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6">
-        <h2 className="font-bold mb-3">What has happened</h2>
+        <h2 className="text-lg font-semibold mb-3">What has happened</h2>
         <ol className="space-y-3">
           {app.events.map((e) => (
             <li key={e.id} className="border-l-2 border-black/15 pl-3">
@@ -288,7 +291,7 @@ function StatusView({ app, title }: { app: App; title: string }) {
         </ol>
       </section>
       <section className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6">
-        <h2 className="font-bold mb-2">Documents you sent</h2>
+        <h2 className="text-lg font-semibold mb-2">Documents you sent</h2>
         <ul className="space-y-1 text-sm">
           {app.files.map((f) => (
             <li key={f.id}><DocViewer className="underline text-left" href={`/api/applications/files/${f.id}`} fileName={f.fileName} /> <span className="text-muted">· {FILE_LABEL[f.kind]} · Last updated {formatDateTime(f.uploadedAt)}</span></li>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CrumbLabel } from "@/components/breadcrumbs";
 import { DocViewer } from "@/components/doc-viewer";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -24,9 +25,9 @@ export default async function OfficerApplication({ params, searchParams }: { par
   const name = [z.fullNames, z.surname].filter(Boolean).join(" ") || app.applicant;
   return (
     <div className="max-w-4xl space-y-6">
-      <p className="text-sm"><Link href="/portal/applications" className="underline">← All applications</Link></p>
+      <CrumbLabel path={`/portal/applications/${app.a.id}`} text={name} />
       <header>
-        <h1 className="text-3xl font-bold">{name}</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{name}</h1>
         <p className="text-muted">For <Link className="underline" href={`/posts/${app.o.id}`}>{displayTitle(app.o.postTitle)}</Link>{app.o.referenceNumber && ` · Ref ${app.o.referenceNumber}`} · sent {formatDateTime(app.a.submittedAt)}</p>
       </header>
       <Suspense fallback={null}><UrlError /></Suspense>
@@ -35,19 +36,19 @@ export default async function OfficerApplication({ params, searchParams }: { par
       <section className="rounded-2xl border border-black/10 bg-white/70 backdrop-blur-sm shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-6 space-y-5">
         <div className="flex flex-wrap items-center gap-3">
           <p className="text-muted">Current status</p>
-          <span className="rounded-full bg-black/[0.06] px-4 py-1 text-lg font-bold" data-testid="officer-status">{STATUS_LABEL[app.a.status]}</span>
+          <span className="rounded-full bg-black/[0.06] px-3 py-1 text-sm font-semibold" data-testid="officer-status">{STATUS_LABEL[app.a.status]}</span>
         </div>
         {app.a.status !== "withdrawn" && (
           <form action={setApplicationStatus} className="space-y-3 border-t border-black/10 pt-5 max-w-xl">
             <input type="hidden" name="applicationId" value={app.a.id} />
             <div>
-              <label htmlFor="status" className="block font-semibold mb-1.5">Change the status to</label>
+              <label htmlFor="status" className="block text-sm font-medium mb-1.5">Change the status to</label>
               <Select id="status" name="status" defaultValue={OFFICER_STATUSES.includes(app.a.status) ? app.a.status : "under_review"}>
                 {OFFICER_STATUSES.map((s) => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}
               </Select>
             </div>
             <div>
-              <label htmlFor="note" className="block font-semibold mb-1.5">Note to the applicant <span className="font-normal text-muted">(optional)</span></label>
+              <label htmlFor="note" className="block text-sm font-medium mb-1.5">Note to the applicant <span className="font-normal text-muted">(optional)</span></label>
               <Textarea id="note" name="note" rows={2} placeholder="Optional note to the applicant" />
             </div>
             <p className="text-sm text-muted">The applicant gets a message when you save.</p>
@@ -96,7 +97,7 @@ export default async function OfficerApplication({ params, searchParams }: { par
 }
 
 function Box({ title, children }: { title: string; children: React.ReactNode }) {
-  return <section className="rounded-2xl border border-black/10 bg-white p-5 space-y-1.5"><h2 className="font-bold mb-2">{title}</h2>{children}</section>;
+  return <section className="rounded-2xl border border-black/10 bg-white p-5 space-y-1.5"><h2 className="font-semibold mb-2">{title}</h2>{children}</section>;
 }
 function Row({ k, v, extra }: { k: string; v?: string; extra?: React.ReactNode }) {
   return <p className="text-sm flex gap-2"><span className="text-muted w-40 shrink-0">{k}</span><span className="font-medium">{v || "—"}</span>{extra}</p>;

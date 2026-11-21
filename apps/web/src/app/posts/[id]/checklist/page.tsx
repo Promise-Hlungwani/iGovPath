@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { CrumbLabel } from "@/components/breadcrumbs";
+import { displayTitle } from "@/lib/text";
 import { notFound } from "next/navigation";
 import { Notice, PageTitle } from "@/components/ui";
 import { Checklist } from "@/components/checklist";
@@ -33,6 +35,7 @@ export default async function ChecklistPage({ params }: { params: Promise<{ id: 
 
   return (
     <div className="max-w-3xl">
+      <CrumbLabel path={`/posts/${opp.id}`} text={displayTitle(opp.postTitle)} />
       <PageTitle sub={`${dept.name}${opp.referenceNumber ? ` · Ref ${opp.referenceNumber}` : ""}`}>Application checklist</PageTitle>
       <div className="space-y-4">
         <Notice tone="info">
