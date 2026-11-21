@@ -392,7 +392,7 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
   - Tasks: versioned forms; officers upload new versions of forms their department owns; Z83 shown as central and read-only, linking to the DPSA source; superseded versions archived, and applicants who saved one are warned.
   - Done when: an officer cannot edit the Z83; uploading a new version of a department form archives the old one and notifies affected applicants.
 
-- [ ] **G17. Dashboard and audit log screens** 🤖
+- [x] **G17. Dashboard and audit log screens** 🤖
   - Tasks: anonymised funnel per post (viewed → checklist started → checklist complete), aggregated only; flag conflicting records (same reference, different closing dates); searchable audit log.
   - Done when: the dashboard shows counts with no names or emails; the audit log lists every approval and role change from earlier goals.
 
