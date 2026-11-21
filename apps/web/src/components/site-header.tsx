@@ -1,16 +1,12 @@
 import Link from "next/link";
 import { getCurrentUser, isActiveOfficer, isAdmin } from "@/lib/session";
-import { ensureClosingReminders, unreadCount } from "@/lib/notify";
+import { remindersAndUnread } from "@/lib/notify";
 
 export async function SiteHeader() {
   const u = await getCurrentUser();
-  let unread = 0;
-  if (u) {
-    await ensureClosingReminders(u.id);
-    unread = await unreadCount(u.id);
-  }
+  const unread = u ? await remindersAndUnread(u.id) : 0;
   return (
-    <header className="bg-navy text-navy-ink">
+    <header className="bg-navy/90 backdrop-blur text-navy-ink border-b border-white/10 sticky top-0 z-40">
       <div className="max-w-6xl mx-auto px-4 min-h-16 py-3 flex flex-wrap items-center gap-x-6 gap-y-2">
         <Link href="/" className="font-bold text-xl tracking-tight text-white">
           <span className="text-accent">iGov</span>Path
@@ -28,14 +24,14 @@ export async function SiteHeader() {
             <>
               <Link href="/notifications" className="hover:text-accent relative" aria-label={`Notifications${unread ? `, ${unread} unread` : ""}`}>
                 Notifications
-                {unread > 0 && <span data-testid="unread" className="ml-1 inline-flex min-w-5 justify-center rounded-full bg-danger text-white text-xs px-1.5">{unread}</span>}
+                {unread > 0 && <span data-testid="unread" className="ml-1 inline-flex min-w-5 justify-center rounded-full bg-brand text-brand-ink font-semibold text-xs px-1.5">{unread}</span>}
               </Link>
               <Link href="/account" className="hover:text-accent">{u.name}</Link>
             </>
           ) : (
             <>
               <Link href="/sign-in" className="hover:text-accent">Sign in</Link>
-              <Link href="/sign-up" className="rounded-md bg-brand text-white font-medium px-4 py-2 hover:opacity-90">Sign up</Link>
+              <Link href="/sign-up" className="rounded-md bg-brand text-brand-ink font-semibold px-4 py-2 hover:brightness-105">Sign up</Link>
             </>
           )}
         </div>

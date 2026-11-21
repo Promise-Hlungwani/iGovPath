@@ -8,10 +8,10 @@ export function cx(...c: (string | false | null | undefined)[]) {
 const buttonBase =
   "inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 const variants = {
-  primary: "bg-brand text-brand-ink hover:opacity-90",
-  secondary: "border border-border bg-surface hover:bg-brand-soft",
-  danger: "bg-danger text-white hover:opacity-90",
-  ghost: "hover:bg-brand-soft",
+  primary: "bg-brand text-brand-ink font-semibold shadow-[0_4px_0_#3a8f71] hover:brightness-105 active:translate-y-px active:shadow-[0_2px_0_#3a8f71]",
+  secondary: "border border-white/25 text-foreground hover:bg-white/5",
+  danger: "bg-danger text-[#2b0b08] font-semibold hover:brightness-105",
+  ghost: "text-foreground hover:bg-white/5",
 };
 type Variant = keyof typeof variants;
 
@@ -32,11 +32,11 @@ export function ButtonLink({
 }
 
 export function Card({ className, ...props }: ComponentProps<"div">) {
-  return <div className={cx("rounded-lg border border-border bg-surface p-5", className)} {...props} />;
+  return <div className={cx("rounded-xl border border-border bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-5", className)} {...props} />;
 }
 
 const badgeTones = {
-  neutral: "bg-background text-muted border border-border",
+  neutral: "bg-white/5 text-muted border border-border",
   brand: "bg-brand-soft text-brand",
   warn: "bg-warn-bg text-warn-ink",
   danger: "bg-danger-soft text-danger",
@@ -63,7 +63,7 @@ export function Label({ className, ...props }: ComponentProps<"label">) {
 }
 
 const field =
-  "w-full rounded-md border border-border bg-surface px-3 py-2 text-sm focus:outline-2 focus:outline-brand";
+  "w-full rounded-md border border-border bg-field text-foreground placeholder:text-muted/70 px-3 py-2 text-sm focus:outline-2 focus:outline-brand";
 export function Input({ className, ...props }: ComponentProps<"input">) {
   return <input className={cx(field, className)} {...props} />;
 }
@@ -91,12 +91,12 @@ export function Notice({
   children: ReactNode;
 }) {
   const t = {
-    info: "bg-info-soft text-info-ink",
-    warn: "bg-warn-bg text-warn-ink",
-    danger: "bg-danger-soft text-danger",
-    brand: "bg-brand-soft text-brand",
+    info: "bg-info-soft text-info-ink border-info-ink/30",
+    warn: "bg-warn-bg text-warn-ink border-warn-ink/30",
+    danger: "bg-danger-soft text-danger border-danger/30",
+    brand: "bg-brand-soft text-brand border-brand/30",
   }[tone];
-  return <div className={cx("rounded-md px-4 py-3 text-sm", t)}>{children}</div>;
+  return <div className={cx("rounded-lg border px-4 py-3 text-sm", t)}>{children}</div>;
 }
 
 export function NotStated() {

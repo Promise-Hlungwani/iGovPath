@@ -18,7 +18,8 @@
     "test:ai": "cd services/ai && .venv/bin/pytest -q",
     "ai:setup": "cd services/ai && (python3.12 -m venv .venv || python3 -m venv .venv) && .venv/bin/pip install -q -r requirements.txt",
     "dev:web": "pnpm --filter web dev",
-    "bootstrap": "pnpm ai:setup && pnpm db:migrate && pnpm db:seed"
+    "bootstrap": "pnpm ai:setup && pnpm db:migrate && pnpm db:seed",
+    "prod": "pnpm build && concurrently -k -n ai,web -c blue,green \"cd services/ai && .venv/bin/uvicorn main:app --port 8000\" \"pnpm --filter web start\""
   },
   "devDependencies": {
     "concurrently": "^9.2.5"

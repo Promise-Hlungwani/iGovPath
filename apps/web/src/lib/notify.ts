@@ -62,3 +62,29 @@ export async function unreadCount(userId: string) {
     .where(and(eq(schema.notifications.userId, userId), eq(schema.notifications.read, false)));
   return r?.n ?? 0;
 }
+
+/**
+ * Header badge in one database round trip: creates any due "closing soon" reminders
+ * for saved posts (idempotent) and returns the unread count.
+ */
+export async function remindersAndUnread(userId: string): Promise<number> {
+  const { sql } = await import("drizzle-orm");
+  const { rows } = await db.execute<{ n: number }>(sql`
+    with due as (
+      select o.id, o.post_title, o.closing_date from saved_opportunities s
+      join opportunities o on o.id = s.opportunity_id
+      where s.user_id = ${userId} and o.status <> 'withdrawn'
+        and o.closing_date between current_date and current_date + 3
+    ), ins as (
+      insert into notifications (user_id, opportunity_id, kind, message, dedupe_key)
+      select ${userId}, id, 'closing_soon',
+        '"' || initcap(post_title) || '" closes on ' || trim(to_char(closing_date, 'FMDD Month YYYY')) || '. Finish your checklist and apply.',
+        'closing:' || to_char(closing_date, 'YYYY-MM-DD')
+      from due
+      on conflict (user_id, dedupe_key) do nothing
+      returning 1
+    )
+    select ((select count(*) from notifications where user_id = ${userId} and read = false)
+          + (select count(*) from ins))::int as n`);
+  return rows[0]?.n ?? 0;
+}

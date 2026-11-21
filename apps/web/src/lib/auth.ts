@@ -17,6 +17,8 @@ export const auth = betterAuth({
   }),
   // Email + password only; no email verification or reset yet (PLAN.md §2).
   emailAndPassword: { enabled: true, minPasswordLength: 8, requireEmailVerification: false },
+  // Keep the session in a signed cookie for 5 minutes so each page doesn't wait on a database lookup.
+  session: { cookieCache: { enabled: true, maxAge: 5 * 60 } },
   databaseHooks: {
     user: {
       create: {

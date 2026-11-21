@@ -1,52 +1,30 @@
 @import "tailwindcss";
 
-/* Colours taken from SITA's public website (sita.co.za):
-   navy #002c42 (headings, header), green #009673 (primary actions),
-   dark teal #003E4F (dark sections), slate #455565 (body text), cyan #28b8dc (accent). */
+/* One palette for every page, taken from the home page:
+   dark teal ground, mint for actions and highlights, white text, soft cyan for notices.
+   No orange or yellow. Red only for errors. Single (dark) theme on purpose. */
 :root {
-  --background: #f3f5f7;
-  --surface: #ffffff;
-  --foreground: #1d2b36;
-  --heading: #002c42;
-  --muted: #455565;
-  --border: #dee2e6;
-  --brand: #009673;
-  --brand-ink: #ffffff;
-  --brand-soft: #e1f3ee;
-  --navy: #002c42;
+  color-scheme: dark;
+  --background: #0b1c21;
+  --surface: #11292f;
+  --field: #0d2227;
+  --foreground: #e3eeeb;
+  --heading: #ffffff;
+  --muted: #9db3af;
+  --border: rgba(255, 255, 255, 0.11);
+  --brand: #9be8c6;
+  --brand-ink: #0b2a24;
+  --brand-soft: rgba(155, 232, 198, 0.12);
+  --navy: #0b1c21;
   --navy-ink: #ffffff;
-  --teal: #003e4f;
-  --accent: #28b8dc;
-  --warn-bg: #fff4d6;
-  --warn-ink: #6b4e00;
-  --danger: #c0392b;
-  --danger-soft: #fdecea;
-  --info-soft: #e3f4fa;
-  --info-ink: #00597a;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #001722;
-    --surface: #022536;
-    --foreground: #e6edf2;
-    --heading: #ffffff;
-    --muted: #a6b7c4;
-    --border: #164b63;
-    --brand: #19b38b;
-    --brand-ink: #00140d;
-    --brand-soft: #073f3a;
-    --navy: #00344e;
-    --navy-ink: #ffffff;
-    --teal: #003e4f;
-    --accent: #28b8dc;
-    --warn-bg: #3a2f10;
-    --warn-ink: #f3d98a;
-    --danger: #f97066;
-    --danger-soft: #3d1a17;
-    --info-soft: #0b3550;
-    --info-ink: #9fdcf0;
-  }
+  --teal: #0f262c;
+  --accent: #9be8c6;
+  --warn-bg: rgba(40, 184, 220, 0.12);
+  --warn-ink: #8fd8ee;
+  --danger: #f28b82;
+  --danger-soft: rgba(242, 139, 130, 0.12);
+  --info-soft: rgba(40, 184, 220, 0.12);
+  --info-ink: #8fd8ee;
 }
 
 @theme inline {
@@ -62,6 +40,7 @@
   --color-navy: var(--navy);
   --color-navy-ink: var(--navy-ink);
   --color-teal: var(--teal);
+  --color-field: var(--field);
   --color-accent: var(--accent);
   --color-warn-bg: var(--warn-bg);
   --color-warn-ink: var(--warn-ink);
@@ -73,7 +52,7 @@
 }
 
 body {
-  background: var(--background);
+  background: radial-gradient(ellipse at 75% -10%, #163a40 0%, #0f262c 45%, var(--background) 100%) fixed var(--background);
   color: var(--foreground);
   font-family: var(--font-roboto), system-ui, sans-serif;
 }
