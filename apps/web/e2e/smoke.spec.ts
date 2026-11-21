@@ -26,7 +26,7 @@ test("G20 smoke: every page loads with no console or server errors", async ({ pa
   const [opp] = await sql<{ id: string }>(`select id from opportunities where reference_number='DSD 02/11/2026'`);
 
   for (const url of ["/", "/search", "/search?q=clerk&province=Limpopo", `/posts/${opp.id}`, `/posts/${opp.id}/checklist`,
-    `/posts/${opp.id}/explain`, `/posts/${opp.id}/explain?lang=isiZulu`, "/match?education=grade12&province=Limpopo&licence=1",
+    `/posts/${opp.id}/explain`, `/posts/${opp.id}/explain?lang=isiZulu`, "/match",
     "/assistant", "/accuracy", "/sign-in", "/sign-up"]) {
     await visit(page, url);
   }

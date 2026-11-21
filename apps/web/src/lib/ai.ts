@@ -63,6 +63,32 @@ export async function intakePdf(bytes: Buffer, fileName: string, maxPages?: numb
   return (await res.json()) as { sha256: string; page_count: number; pages: PageText[] };
 }
 
+export type CvProfile = {
+  highest_qualification: string | null; qualification_level: string; qualifications: string[]; fields_of_study: string[];
+  skills: string[]; experience: { role: string; years: number | null }[]; total_years_experience: number | null;
+  licences: string[]; languages: string[]; summary: string;
+};
+export type CvMatch = { id: string; fit: "strong" | "possible"; reasons: string[]; missing: string[] };
+
+/** Send a CV for reading. The file is not stored by the AI service; personal details are removed before the AI sees it. */
+export async function cvProfile(bytes: Buffer, fileName: string, consent: boolean) {
+  const fd = new FormData();
+  fd.append("file", new Blob([new Uint8Array(bytes)]), fileName);
+  fd.append("consent", consent ? "true" : "false");
+  let res: Response;
+  try {
+    res = await fetch(`${env.AI_SERVICE_URL}/cv/profile`, { method: "POST", body: fd, signal: AbortSignal.timeout(120_000) });
+  } catch {
+    throw new AiServiceError("The AI service is not reachable. Please try again in a moment.");
+  }
+  if (!res.ok) {
+    let msg = `Could not read the CV (${res.status}).`;
+    try { const j = await res.json(); msg = j.error || j.detail || msg; } catch {}
+    throw new AiServiceError(msg);
+  }
+  return (await res.json()) as { profile: CvProfile; personal_details_removed: number; model: string };
+}
+
 export const ai = {
   split: (pages: string[]) =>
     call<{ chunks: { chunk_ref: string; annexure: string; page: number; title: string; text: string }[] }>("/split", { pages }),
@@ -82,6 +108,8 @@ export const ai = {
   formDetails: (text: string, isSample: boolean) =>
     call<{ name: string | null; code: string | null; version: string | null; effective_date: string | null; flags: Flag[]; model: string }>(
       "/form-details", { text, is_sample: isSample }),
+  cvMatch: (profile: CvProfile, posts: unknown[], consent: boolean) =>
+    call<{ matches: CvMatch[]; model: string }>("/cv/match", { profile, posts, consent }),
   assistant: (question: string, listings: unknown[], isSample: boolean) =>
     call<{ known: boolean; answer: string; listing_ids: string[]; model: string }>("/assistant", { question, listings, is_sample: isSample }),
 };

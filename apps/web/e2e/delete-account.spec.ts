@@ -31,9 +31,7 @@ test("an applicant can delete their account and everything linked to it", async 
   await expect(page.getByRole("button", { name: /Saved/ })).toBeVisible();
   await page.goto(`/posts/${opp.id}/checklist`);
   await page.getByRole("checkbox", { name: /Your CV/ }).check();
-  await page.goto("/match");
-  await page.getByRole("button", { name: "Show matches" }).click();
-  await expect(page).toHaveURL(/education=/);
+  await sql(`insert into applicant_profiles (user_id, cv_profile, is_sample) values ($1, '{"summary":"test"}', false)`, [id]);
   await sql(`insert into notifications (user_id, opportunity_id, kind, message, dedupe_key) values ($1,$2,'amended','test','t1')`, [id, opp.id]);
   const before = await leftovers(id, mail);
   expect(before.saved + before.profiles + before.notifications + before.audit).toBeGreaterThan(3);

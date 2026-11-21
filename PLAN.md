@@ -373,6 +373,7 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
   - Done when: saving a post that closes in 2 days shows a reminder; publishing an amendment to it creates a notification for that applicant.
 
 - [x] **G13. "What can I apply for?" matching** 🤖
+  - Change (21 Nov, team decision): replaced the rule-based form with **CV upload + AI matching** (simpler, AI-first). Personal details are removed in code before the AI reads the CV; the file is not stored; consent required; summary deletable. Tested in `e2e/cv-match.spec.ts`.
   - Tasks: small profile form (qualifications, licences, province); filters + rule match against minimum requirements; text search ranking (embeddings optional); output "looks like a fit" / "you may be missing X" with links to the source text; never says "eligible", never shows a score.
   - Done when: the proposal's example (matric + driver's licence, Limpopo) returns the expected sample posts with reasons; no screen contains the word "eligible" or a numeric score.
 
