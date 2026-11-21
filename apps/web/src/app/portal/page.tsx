@@ -5,6 +5,10 @@ import { Badge, ButtonLink, Card, PageTitle } from "@/components/ui";
 import { formatDateTime } from "@/lib/format";
 import { departmentScope, requireOfficer } from "@/lib/session";
 import { displayTitle } from "@/lib/text";
+import { ApproveAllButton } from "@/components/approve-all";
+
+// Approving many records can take a while.
+export const maxDuration = 60;
 
 export default async function ReviewQueue() {
   const u = await requireOfficer();
@@ -22,7 +26,13 @@ export default async function ReviewQueue() {
     <div>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <PageTitle sub="AI-prepared records waiting for an officer. Check each one against the source before approving.">Review queue</PageTitle>
-        <ButtonLink href="/portal/upload">Upload a document</ButtonLink>
+        <div className="flex flex-wrap gap-3">
+          <ApproveAllButton
+            count={rows.filter(({ e }) => e.mode === "new" && e.status === "draft" && !e.flags.some((f) => f.level === "error")).length}
+            skipped={rows.filter(({ e }) => !(e.mode === "new" && e.status === "draft" && !e.flags.some((f) => f.level === "error"))).length}
+          />
+          <ButtonLink href="/portal/upload" variant="secondary">Upload a document</ButtonLink>
+        </div>
       </div>
       <div className="space-y-2">
         {rows.map(({ e, doc, dept }) => {

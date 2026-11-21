@@ -3,8 +3,12 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-const MESSAGES: Record<string, string> = {
-  deleted: "Your account and all your data have been deleted.",
+const MESSAGES: Record<string, (p: URLSearchParams) => string> = {
+  deleted: () => "Your account and all your data have been deleted.",
+  approved: (p) => {
+    const n = Number(p.get("n") ?? 0);
+    return n === 0 ? "Nothing was approved." : `${n} record${n === 1 ? "" : "s"} approved and published.`;
+  },
 };
 
 /** Small pop-up for one-off messages passed as ?flash=<key>. Disappears after a few seconds. */
@@ -17,10 +21,11 @@ export function FlashToast() {
   useEffect(() => {
     const key = params.get("flash");
     if (!key || !MESSAGES[key]) return;
-    setText(MESSAGES[key]);
+    setText(MESSAGES[key](params));
     // Clean the address bar so a refresh doesn't show it again.
     const rest = new URLSearchParams(params);
     rest.delete("flash");
+    rest.delete("n");
     router.replace(rest.size ? `${pathname}?${rest}` : pathname, { scroll: false });
     const t = setTimeout(() => setText(null), 5000);
     return () => clearTimeout(t);

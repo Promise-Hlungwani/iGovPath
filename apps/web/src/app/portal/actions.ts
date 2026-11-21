@@ -146,3 +146,31 @@ export async function rejectAction(formData: FormData) {
   revalidatePath("/portal");
   redirect("/portal");
 }
+
+/**
+ * Approve every clean draft in the officer's scope in one go: new records only (amendments are
+ * confirmed one by one) and only drafts with no "fix" flags. Each approval is recorded with the
+ * officer's name, exactly like a single approval.
+ */
+export async function approveAllClean() {
+  const u = await requireOfficer();
+  const { departmentScope } = await import("@/lib/session");
+  const { and } = await import("drizzle-orm");
+  const scope = departmentScope(u);
+  const where = [eq(schema.extractions.status, "draft"), eq(schema.extractions.mode, "new")];
+  if (scope !== null) where.push(eq(schema.extractions.departmentId, scope));
+  const drafts = await db.select().from(schema.extractions).where(and(...where));
+  let done = 0;
+  for (const e of drafts) {
+    if (e.flags.some((f) => f.level === "error")) continue;
+    try {
+      await approveNew(u, e.id, e.record as unknown as AdvertRecord, "Approved with “Approve all”");
+      done++;
+    } catch (err) {
+      if (!(err instanceof PublishError)) throw err;
+    }
+  }
+  revalidatePath("/portal");
+  revalidatePath("/search");
+  redirect(`/portal?flash=approved&n=${done}`);
+}
