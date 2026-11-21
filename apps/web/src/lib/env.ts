@@ -10,6 +10,8 @@ const schema = z.object({
   DATABASE_URL_POOLED: z.string().optional(),
   BETTER_AUTH_SECRET: z.string().min(16),
   BETTER_AUTH_URL: z.string().url().default("http://localhost:3000"),
+  RESEND_API_KEY: z.string().trim().optional().or(z.literal("")),
+  RESEND_FROM_EMAIL: z.string().trim().optional().or(z.literal("")),
   ADMIN_EMAIL: z.string().email().optional().or(z.literal("")),
   // On Vercel this is injected by the service binding in vercel.json; locally it comes from .env.
   AI_SERVICE_URL: z.string().url().default("http://localhost:8000").transform((u) => u.replace(/\/+$/, "")),

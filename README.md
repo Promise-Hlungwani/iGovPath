@@ -74,10 +74,14 @@ openssl rand -base64 32       # paste the output into BETTER_AUTH_SECRET
 | `OLLAMA_*` *(optional)* | Install Ollama, then pull the models | `ollama pull qwen2.5:7b-instruct` and `ollama pull bge-m3` |
 | `BETTER_AUTH_SECRET` | Generate locally; it signs login sessions | `openssl rand -base64 32` |
 | `BETTER_AUTH_URL` | The app's address | `http://localhost:3000` locally; the live URL when deployed |
+| `RESEND_API_KEY` | Resend dashboard → API Keys | Keep in `.env` and Vercel; never commit it |
+| `RESEND_FROM_EMAIL` | Resend's onboarding sender for testing, or an address on your verified domain | Onboarding can only send to your Resend account email |
 | `ADMIN_EMAIL` | The email of the person who will manage users (approve officers) | Type it into `.env`, then sign up with that email |
 | `APP_URL`, `AI_SERVICE_URL`, `SAMPLE_DATA_ONLY`, `LLM_PROVIDER` | Defaults are fine | Leave as is |
 
 **Sharing keys with the team:** send them privately (password manager or direct message), never in the repo, issues or public group chats.
+
+Password reset emails use Resend. The onboarding sender is for testing only and can send only to your Resend account email; verify a domain in Resend before sending reset links to other users.
 
 ### Step 3: check everything works
 

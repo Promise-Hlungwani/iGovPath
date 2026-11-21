@@ -56,7 +56,7 @@ The proposal's build plan (section 7) fixes the demo scope. Everything below is 
 | LLM | **Groq** free tier (gpt-oss-120b, Apache 2.0; ~1,000 req/day, ~6–12K tokens/min); backup **OpenRouter** `:free`; offline fallback **Qwen 2.5 7B via Ollama** | Hosted, no GPU needed; sample data only (proposal 5c). Alternative on Groq: qwen/qwen3.8-27b |
 | Search | Postgres full-text search + rule matching; **bge-m3** embeddings via Ollama only if time allows | Hugging Face free inference credits were removed in Oct 2026 |
 | Guardrails | **Pydantic** schemas + rule checks + evidence-substring check + human approval queue | Proposal section 5 |
-| Accounts and login | **Better Auth** (open source, **email + password**; no email verification or password reset for the hackathon — add Resend later), users and sessions stored in Neon; roles: applicant / officer / admin | "A named official approves" and "who and when" in the audit log need real accounts, not a shared password |
+| Accounts and login | **Better Auth** (open source, **email + password**; password reset through Resend, no email verification), users and sessions stored in Neon; roles: applicant / officer / admin | "A named official approves" and "who and when" in the audit log need real accounts, not a shared password |
 | Runtime | `pnpm dev` (web) + `uvicorn` (ai-service); database and LLM are hosted | Nothing heavy to install; works on any laptop |
 
 All three LLM options speak the same OpenAI-compatible API, so switching Groq → OpenRouter → Ollama is a change of `LLM_PROVIDER` in `.env`. Hosted models receive **sample data only** (proposal 5c).
@@ -236,7 +236,7 @@ Cut order if time runs short: assistant → drafting check → dashboard → mat
 | H4 | ~~Hardware / LLM hosting~~ | ✅ Decided: hosted Groq (gpt-oss-120b) + Neon; any laptop works |
 | H5 | **Team split:** who owns frontend, AI service, data/eval, pitch | — |
 | H6 | Confirm Next.js + Python FastAPI + Postgres stack (vs. all-TypeScript) | As in §2 |
-| H7 | ~~Login method~~ | ✅ Decided: email + password via Better Auth, no email verification for now |
+| H7 | ~~Login method~~ | ✅ Decided: email + password via Better Auth; no email verification; password reset through Resend (22 Nov 2026) |
 | H8 | **Optional $10 OpenRouter credit** as LLM backup (1,000 req/day instead of 50) | No; Ollama on a laptop as offline backup |
 
 ### 9.2 Tasks only a human can do
@@ -266,7 +266,7 @@ Cut order if time runs short: assistant → drafting check → dashboard → mat
 
 - ✅ **Groq** (LLM) and ✅ **Neon** (database): created and tested 21 Nov 2026.
 - **GitHub** repo access for every team member.
-- Optional: **OpenRouter** (backup LLM), **Ollama** installed on one laptop (offline backup), **Resend** (only if email verification is added later).
+- Optional: **OpenRouter** (backup LLM), **Ollama** installed on one laptop (offline backup). **Resend** sends password reset links; its onboarding sender is test-only until a domain is verified.
 - Keys are shared privately (password manager), never committed; the repo is public. Turn on GitHub secret scanning + push protection.
 
 ---

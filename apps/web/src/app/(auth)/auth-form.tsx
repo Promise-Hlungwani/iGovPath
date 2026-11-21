@@ -45,6 +45,11 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
           ? "Applicants can use the app straight away. Government officers can request portal access after signing up."
           : "Welcome back."}
       </p>
+      {mode === "sign-in" && params.get("passwordReset") === "success" && (
+        <div className="mt-4" aria-live="polite">
+          <Notice tone="brand">Your password has been reset. Sign in with your new password.</Notice>
+        </div>
+      )}
       <form onSubmit={onSubmit} method="post" action="" className="mt-5 space-y-4">
         {mode === "sign-up" && (
           <div>
@@ -67,6 +72,11 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
             autoComplete={mode === "sign-up" ? "new-password" : "current-password"}
           />
           {mode === "sign-up" && <p className="text-xs text-muted mt-1">At least 8 characters.</p>}
+          {mode === "sign-in" && (
+            <Link className="mt-2 inline-flex min-h-11 items-center text-sm text-brand underline" href="/forgot-password">
+              Forgot your password?
+            </Link>
+          )}
         </div>
         {error && <Notice tone="danger">{error}</Notice>}
         <Button type="submit" disabled={busy || !ready} className="w-full">

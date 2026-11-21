@@ -18,7 +18,7 @@ iGovPath deploys as **one Vercel project with two services**, set up by `vercel.
 
 ## Step 2: add the keys
 
-Open **Environment Variables** and add these. Copy the values from your `.env` unless shown otherwise. Both services share them.
+Open **Environment Variables** and add these. Copy the values from your `.env` unless shown otherwise. Resend is only used by the web service.
 
 | Name | Value |
 |---|---|
@@ -26,6 +26,8 @@ Open **Environment Variables** and add these. Copy the values from your `.env` u
 | `DATABASE_URL_POOLED` | your Neon pooled connection string (has `-pooler`) |
 | `BETTER_AUTH_SECRET` | from `.env` |
 | `BETTER_AUTH_URL` | your website's address, e.g. `https://igovpath.vercel.app` |
+| `RESEND_API_KEY` | from Resend → API Keys |
+| `RESEND_FROM_EMAIL` | `iGovPath <onboarding@resend.dev>` for tests; a sender on a verified domain for real users |
 | `APP_URL` | the same address as above |
 | `ADMIN_EMAIL` | your email (becomes the admin when it signs up) |
 | `OFFICER_CODE` | from `.env` |
@@ -37,6 +39,8 @@ Open **Environment Variables** and add these. Copy the values from your `.env` u
 | `SAMPLE_DATA_ONLY` | `true` |
 
 **Don't add `AI_SERVICE_URL`.** Vercel fills it in automatically for the website.
+
+Resend's onboarding sender only delivers to the email address on your Resend account. Verify a domain in Resend before sending password reset emails to other users.
 
 Don't know the website's address yet? Vercel shows it after the first deploy. Put it into `BETTER_AUTH_URL` and `APP_URL`, then use **Deployments → ⋯ → Redeploy**.
 
