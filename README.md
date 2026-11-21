@@ -6,7 +6,7 @@ iGovPath is a single platform that helps South Africans find government jobs and
 
 > **Principle:** AI proposes, a responsible official approves. The system never invents a deadline, office or document. If the source does not say it, the answer is *"not stated in the advert"*.
 
-Hackathon: **26–27 November 2026**. Prepared by Elime. Full implementation plan: [`PLAN.md`](PLAN.md).
+Hackathon: **26–27 November 2026**. Prepared by SPH.NC. Full implementation plan: [`PLAN.md`](PLAN.md).
 
 > ⚠️ **Sample data only.** Every record in the demo comes from public circulars (DPSA PSVC) and is labelled *sample*. No real applicant data is used or sent to any AI service.
 

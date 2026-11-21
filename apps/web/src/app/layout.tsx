@@ -19,7 +19,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <main className="flex-1 w-full max-w-6xl mx-auto px-4 py-8">{children}</main>
         <footer className="bg-navy text-navy-ink/80 text-sm">
           <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row gap-3 justify-between">
-            <span><strong className="text-white">iGovPath</strong> by Elime</span>
+            <span><strong className="text-white">iGovPath</strong> by SPH.NC</span>
             <span>AI proposes, a named official approves. Always check the original advert.</span>
           </div>
         </footer>

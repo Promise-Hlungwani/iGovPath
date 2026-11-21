@@ -1,6 +1,6 @@
 # iGovPath — Implementation Plan
 
-> Source: *iGovPath – Final Proposal* (Elime, revised 21 Nov 2026).
+> Source: *iGovPath – Final Proposal* (SPH.NC, revised 21 Nov 2026).
 > Target: working demo for the hackathon on **26–27 November 2026**.
 > Principle carried through every part of the build: **AI proposes, a named official approves.** The system never invents a deadline, office, salary or document. If the source does not say it, the answer is "not stated in the advert".
 
