@@ -10,14 +10,19 @@ const nextConfig: NextConfig = {
   distDir: process.env.NEXT_DIST_DIR || ".next",
   devIndicators: false,
   serverExternalPackages: ["pg"],
-  // Don't reload the dev server when test results, AI caches, uploads or the Python service change.
-  webpack: (config) => {
-    config.watchOptions = {
-      ...config.watchOptions,
-      ignored: ["**/node_modules/**", "**/.git/**", "**/.e2e-results/**", "**/data/**", "**/services/**", "**/.next/**"],
-    };
-    return config;
-  },
+  // Webpack only (production builds and `next dev` without --turbopack): don't reload when test
+  // results, AI caches, uploads or the Python service change. Turbopack only watches imported files.
+  ...(process.env.TURBOPACK
+    ? {}
+    : {
+        webpack: (config: { watchOptions?: Record<string, unknown> }) => {
+          config.watchOptions = {
+            ...config.watchOptions,
+            ignored: ["**/node_modules/**", "**/.git/**", "**/.e2e-results/**", "**/data/**", "**/services/**", "**/.next/**"],
+          };
+          return config;
+        },
+      }),
   experimental: {
     serverActions: { bodySizeLimit: "15mb" },
   },
