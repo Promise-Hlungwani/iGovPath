@@ -318,6 +318,7 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
 - [x] **G1. Project scaffold** 🤖
   - Tasks: Next.js (App Router, TypeScript) in `apps/web` with Tailwind + shadcn/ui; pnpm workspace; Python FastAPI skeleton in `services/ai` with `requirements.txt`; shared env loading; `pnpm dev` and `uvicorn` scripts; lint + typecheck.
   - Also: read `SAMPLE_DATA_ONLY` from env; while `true`, show the "SAMPLE DATA" banner on every page, label every record *sample*, and hide any ID-number or other real-personal-data fields.
+  - Change (21 Nov, team decision): the banner was removed from the UI; records are labelled "From public circular". `SAMPLE_DATA_ONLY` still gates the AI and the upload form.
   - Done when: `pnpm dev` serves a home page with the "SAMPLE DATA" banner; `GET localhost:8000/health` returns ok; `pnpm lint` and `pnpm typecheck` pass. With `SAMPLE_DATA_ONLY=true` no form asks for an ID number.
 
 - [x] **G2. Database schema and migrations** 🤖

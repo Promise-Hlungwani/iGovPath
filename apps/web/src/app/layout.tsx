@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
-import { SampleBanner } from "@/components/sample-banner";
 import { SiteHeader } from "@/components/site-header";
 
 const roboto = Roboto({ variable: "--font-roboto", subsets: ["latin"], weight: ["400", "500", "700"] });
@@ -16,7 +15,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body className={`${roboto.variable} antialiased min-h-screen flex flex-col`}>
-        <SampleBanner />
         <SiteHeader />
         <main className="flex-1 w-full max-w-6xl mx-auto px-4 py-8">{children}</main>
         <footer className="bg-navy text-navy-ink/80 text-sm">

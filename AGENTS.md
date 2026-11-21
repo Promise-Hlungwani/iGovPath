@@ -22,7 +22,7 @@ Hackathon demo on **26–27 November 2026**. The full plan is in [`PLAN.md`](PLA
 ## Non-negotiable rules
 
 ### Privacy and data (POPIA)
-- **Sample public data only.** Never use real applicant data or ID numbers. Every record shows its source document and date and is labelled as copied from a public circular (not yet confirmed by the department) while `SAMPLE_DATA_ONLY` is on. No "demo" or "hackathon" wording in the product UI.
+- **Sample public data only.** Never use real applicant data or ID numbers. Every record shows its source document and date and is labelled as copied from a public circular. No notice bars, and no "demo" or "hackathon" wording in the product UI (team decision, 21 Nov 2026). `SAMPLE_DATA_ONLY` still blocks non-sample data from reaching the AI.
 - **AI never ranks, scores, shortlists or rejects applicants** (POPIA s71). Matching says "looks like a fit" / "you may be missing X". Never "eligible", never a numeric score shown about a person.
 - Dashboards show aggregated, anonymised counts only: no names, emails or IDs.
 - Never send anything to an LLM that is not sample data.
