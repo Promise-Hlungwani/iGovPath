@@ -10,7 +10,7 @@ export default async function RequestOfficerAccess({ searchParams }: { searchPar
   const depts = await db.select().from(schema.departments).orderBy(asc(schema.departments.name));
   return (
     <div className="max-w-xl">
-      <PageTitle sub="An admin checks every request before you can publish anything.">Request officer access</PageTitle>
+      <PageTitle sub="Have an officer code? Enter it and you can start straight away. No code? An admin will check your request.">Request officer access</PageTitle>
       <Card>
         <form action={requestOfficerAccess} className="space-y-4">
           <div>
@@ -26,7 +26,14 @@ export default async function RequestOfficerAccess({ searchParams }: { searchPar
             <Label htmlFor="jobTitle">Job title</Label>
             <Input id="jobTitle" name="jobTitle" required minLength={2} placeholder="e.g. HR Practitioner" />
           </div>
-          {error && <Notice tone="danger">Please choose a department and enter your job title.</Notice>}
+          <div>
+            <Label htmlFor="officerCode">Officer code (if you have one)</Label>
+            <Input id="officerCode" name="officerCode" inputMode="numeric" autoComplete="off" placeholder="e.g. 12345" className="max-w-xs" />
+            <p className="text-xs text-muted mt-1">Leave it empty to wait for an admin to approve you.</p>
+          </div>
+          {error === "1" && <Notice tone="danger">Please choose a department and enter your job title.</Notice>}
+          {error === "code" && <Notice tone="danger">Incorrect code.</Notice>}
+          {error === "locked" && <Notice tone="danger">Too many wrong codes. Please wait an hour, or leave the code empty to wait for an admin.</Notice>}
           <Button type="submit">Send request</Button>
         </form>
       </Card>

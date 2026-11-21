@@ -12,6 +12,8 @@ const schema = z.object({
   BETTER_AUTH_URL: z.string().url().default("http://localhost:3000"),
   ADMIN_EMAIL: z.string().email().optional().or(z.literal("")),
   AI_SERVICE_URL: z.string().url().default("http://localhost:8000"),
+  // Officer code: entering it gives officer access straight away. Empty means admin approval only.
+  OFFICER_CODE: z.string().trim().default(""),
   APP_URL: z.string().url().default("http://localhost:3000"),
   SAMPLE_DATA_ONLY: z
     .string()
