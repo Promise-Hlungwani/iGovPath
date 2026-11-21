@@ -317,7 +317,8 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
 
 - [ ] **G1. Project scaffold** 🤖
   - Tasks: Next.js (App Router, TypeScript) in `apps/web` with Tailwind + shadcn/ui; pnpm workspace; Python FastAPI skeleton in `services/ai` with `requirements.txt`; shared env loading; `pnpm dev` and `uvicorn` scripts; lint + typecheck.
-  - Done when: `pnpm dev` serves a home page with the "SAMPLE DATA" banner; `GET localhost:8000/health` returns ok; `pnpm lint` and `pnpm typecheck` pass.
+  - Also: read `SAMPLE_DATA_ONLY` from env; while `true`, show the "SAMPLE DATA" banner on every page, label every record *sample*, and hide any ID-number or other real-personal-data fields.
+  - Done when: `pnpm dev` serves a home page with the "SAMPLE DATA" banner; `GET localhost:8000/health` returns ok; `pnpm lint` and `pnpm typecheck` pass. With `SAMPLE_DATA_ONLY=true` no form asks for an ID number.
 
 - [ ] **G2. Database schema and migrations** 🤖
   - Tasks: Drizzle schema for every table in §4; migrations run against Neon using `DATABASE_URL`; app uses `DATABASE_URL_POOLED`; pgvector enabled; Postgres full-text index on opportunities.
@@ -335,7 +336,8 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
 
 - [ ] **G5. LLM client with provider switch** 🤖
   - Tasks: one OpenAI-compatible client in `services/ai` reading `LLM_PROVIDER` (groq / openrouter / ollama); retries with backoff on rate limits (HTTP 429); logs token usage; never sends anything not marked sample.
-  - Done when: the same test prompt succeeds with `LLM_PROVIDER=groq`; changing the variable switches provider with no code change; a forced 429 is retried and then reported clearly.
+  - Also: while `SAMPLE_DATA_ONLY=true`, the client refuses (with a clear error) any payload not marked sample, before it leaves the server.
+  - Done when: a non-sample payload is refused while the switch is on; the same test prompt succeeds with `LLM_PROVIDER=groq`; changing the variable switches provider with no code change; a forced 429 is retried and then reported clearly.
 
 - [ ] **G6. Document intake** 🤖
   - Tasks: upload endpoint stores the PDF, records sha256 and page count; PyMuPDF text blocks with page + position; Tesseract fallback for pages with no text; `split_psvc.py` splits a circular into per-post chunks.
