@@ -1,52 +1,160 @@
-import { ButtonLink, Card } from "@/components/ui";
+import Link from "next/link";
+import type { ReactNode } from "react";
+import {
+  IconArrowRight, IconBell, IconCheck, IconClipboard, IconLandmark, IconLanguages, IconPath, IconSearch,
+} from "@/components/icons";
+
+/* Home page. Dark teal design with a mint accent; full-bleed, independent of the light/dark theme. */
+const MINT = "#9be8c6";
 
 export default function Home() {
   return (
-    <div className="space-y-10">
-      <section className="rounded-2xl bg-navy text-navy-ink px-6 py-12 sm:px-12 sm:py-16 relative overflow-hidden">
-        <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-brand/25 to-transparent hidden md:block" aria-hidden />
-        <p className="text-accent font-medium text-sm uppercase tracking-wider">Government jobs, internships and learnerships</p>
-        <h1 className="mt-3 text-3xl sm:text-5xl font-bold tracking-tight max-w-3xl text-white">
-          Every public service opportunity, in one place.
-        </h1>
-        <p className="mt-5 text-lg text-white/80 max-w-2xl">
-          Find posts across national and provincial departments, see exactly which form and documents each one needs,
-          and get told when a closing date or requirement changes.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <ButtonLink href="/search" className="px-6 py-3 text-base">Find opportunities</ButtonLink>
-          <ButtonLink href="/match" variant="secondary" className="px-6 py-3 text-base bg-transparent text-white border-white/40 hover:bg-white/10">
-            What can I apply for?
-          </ButtonLink>
+    <div className="relative left-1/2 -translate-x-1/2 w-screen -my-8 overflow-hidden bg-[radial-gradient(ellipse_at_70%_35%,#163a40_0%,#0f262c_45%,#0b1c21_100%)] text-white">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="border-t border-white/10" />
+
+        {/* Hero */}
+        <section className="grid lg:grid-cols-[1.15fr_1fr] gap-10 items-center py-16 lg:py-24">
+          <div>
+            <p className="flex items-center gap-3 text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: MINT }}>
+              <span className="h-px w-8" style={{ background: MINT }} />
+              Government jobs, internships and learnerships
+            </p>
+            <h1 className="mt-6 text-5xl sm:text-6xl lg:text-[4.1rem] font-bold tracking-tight leading-[1.04] !text-white">
+              <span className="lg:whitespace-nowrap">Every public service</span>{" "}
+              <span className="block">opportunity,</span>
+              <span className="block" style={{ color: MINT }}>in one place.</span>
+            </h1>
+            <p className="mt-8 text-lg leading-relaxed text-white/70 max-w-xl">
+              Find posts across national and provincial departments, see exactly which form and documents each one
+              needs, and get told when a closing date or requirement changes.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-4">
+              <Link
+                href="/search"
+                className="inline-flex items-center gap-3 rounded-lg px-7 py-4 font-semibold text-[#0b2a24] shadow-[0_6px_0_#3a8f71,0_12px_30px_rgba(155,232,198,0.25)] hover:brightness-105 transition"
+                style={{ background: `linear-gradient(180deg, #c3f3dd 0%, ${MINT} 100%)` }}
+              >
+                Find opportunities <IconArrowRight />
+              </Link>
+              <Link
+                href="/match"
+                className="inline-flex items-center rounded-lg px-7 py-4 font-semibold border border-white/25 hover:bg-white/5 transition"
+              >
+                What can I apply for?
+              </Link>
+            </div>
+            <p className="mt-8 flex items-center gap-2 text-sm text-white/55">
+              <IconPath width={16} height={16} /> Innovated pathway to government employment
+            </p>
+          </div>
+
+          <HeroVisual />
+        </section>
+
+        {/* Features */}
+        <section className="pb-12">
+          <div className="flex items-center gap-4 mb-8">
+            <p className="text-xs tracking-[0.25em] uppercase text-white/50 whitespace-nowrap">A simpler way forward</p>
+            <span className="h-px flex-1 bg-white/10" />
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            <Feature icon={<IconSearch />} step="01 / Discover" title="One search" href="/search">
+              Posts and learnerships with closing date, reference number, where to apply and the latest amendment.
+            </Feature>
+            <Feature icon={<IconClipboard />} step="02 / Prepare" title="A checklist per post" href="/search">
+              The current Z83, documents to certify, and conditional items such as a SAQA evaluation.
+            </Feature>
+            <Feature icon={<IconLanguages />} step="03 / Understand" title="Plain language" href="/search">
+              Requirements explained simply, in your language, with the original wording beside it.
+            </Feature>
+          </div>
+        </section>
+
+        {/* Officer banner */}
+        <section className="pb-20">
+          <div className="flex flex-wrap items-center justify-between gap-6 rounded-2xl border border-white/10 border-l-4 bg-white/[0.04] px-8 py-7" style={{ borderLeftColor: MINT }}>
+            <div className="flex items-center gap-5">
+              <span className="text-white/80"><IconLandmark width={34} height={34} strokeWidth={1.5} /></span>
+              <div>
+                <h2 className="font-semibold text-lg !text-white">Work for a government department?</h2>
+                <p className="text-white/65 text-sm mt-1">Publish adverts, forms and amendments once. AI prepares the record; you approve it.</p>
+              </div>
+            </div>
+            <Link href="/portal" className="inline-flex items-center gap-3 rounded-lg border border-white/25 px-6 py-3 font-semibold hover:bg-white/5 transition">
+              Officer portal <IconArrowRight />
+            </Link>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function Feature({ icon, step, title, href, children }: { icon: ReactNode; step: string; title: string; href: string; children: ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="group block rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-7 shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:border-white/25 transition"
+    >
+      <div className="flex items-center justify-between">
+        <span className="grid place-items-center h-12 w-12 rounded-xl border border-white/10 bg-white/[0.06]" style={{ color: MINT }}>{icon}</span>
+        <span className="text-xs tracking-[0.18em] uppercase text-white/45">{step}</span>
+      </div>
+      <h3 className="mt-6 text-xl font-semibold !text-white">{title}</h3>
+      <p className="mt-3 text-sm leading-relaxed text-white/60">{children}</p>
+    </Link>
+  );
+}
+
+function Chip({ icon, title, sub, className }: { icon: ReactNode; title: string; sub: string; className: string }) {
+  return (
+    <div className={`absolute flex items-center gap-4 rounded-xl border border-white/15 bg-[#1c3c42]/95 px-5 py-4 shadow-[0_18px_40px_rgba(0,0,0,0.45)] backdrop-blur ${className}`}>
+      <span className="grid place-items-center h-11 w-11 rounded-lg bg-white/[0.07] border border-white/10" style={{ color: MINT }}>{icon}</span>
+      <div>
+        <p className="font-semibold text-sm">{title}</p>
+        <p className="text-xs text-white/55 mt-0.5">{sub}</p>
+      </div>
+    </div>
+  );
+}
+
+function HeroVisual() {
+  return (
+    <div className="relative hidden lg:block h-[460px] [perspective:1400px]" aria-hidden>
+      <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(155,232,198,0.10),transparent_60%)]" />
+      {/* Floating cube */}
+      <div
+        className="absolute -right-2 -top-6 z-20 h-14 w-14 rounded-xl rotate-12 shadow-[0_14px_30px_rgba(0,0,0,0.45)] motion-safe:animate-[float_6s_ease-in-out_infinite]"
+        style={{ background: `linear-gradient(135deg, #c7f5e0, ${MINT} 55%, #4fb08a)` }}
+      />
+      {/* Card stack */}
+      <div className="absolute left-[24%] top-[6%] w-[340px] [transform-style:preserve-3d] [transform:rotateX(14deg)_rotateY(-18deg)_rotateZ(-5deg)]">
+        <div className="absolute inset-0 translate-x-6 -translate-y-3 rounded-2xl border border-white/10 bg-[#173238]" />
+        <div className="relative rounded-2xl border border-white/15 bg-gradient-to-b from-[#24484f] to-[#1a3a40] p-7 shadow-[0_30px_60px_rgba(0,0,0,0.5)]">
+          <div className="flex items-start justify-between">
+            <p className="text-[10px] tracking-[0.25em] uppercase text-white/50">Your next chapter</p>
+            <span style={{ color: MINT }}><IconPath width={18} height={18} /></span>
+          </div>
+          <p className="mt-4 text-[26px] leading-tight font-bold">A clearer path.<br />A new possibility.</p>
+          <ul className="mt-6 space-y-3 text-sm text-white/80">
+            {["Opportunities in one place", "Forms and documents, sorted", "Closing dates kept in view"].map((t) => (
+              <li key={t} className="flex items-center gap-3">
+                <span className="grid place-items-center h-6 w-6 rounded-md border border-white/20 bg-white/[0.06]" style={{ color: MINT }}>
+                  <IconCheck width={14} height={14} strokeWidth={2.4} />
+                </span>
+                {t}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-7 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-white/50">
+            <span>Less searching. More possibility.</span>
+            <span className="rounded-md border border-white/20 px-2 py-1 text-white/80">iGovPath</span>
+          </div>
         </div>
-      </section>
-      <section className="grid gap-4 sm:grid-cols-3">
-        <Card className="border-t-4 border-t-brand">
-          <h2 className="font-bold">One search</h2>
-          <p className="mt-1 text-sm text-muted">
-            Posts and learnerships with closing date, reference number, where to apply and the latest amendment.
-          </p>
-        </Card>
-        <Card className="border-t-4 border-t-accent">
-          <h2 className="font-bold">A checklist per post</h2>
-          <p className="mt-1 text-sm text-muted">
-            The current Z83, documents to certify, and conditional items such as a SAQA evaluation.
-          </p>
-        </Card>
-        <Card className="border-t-4 border-t-teal">
-          <h2 className="font-bold">Plain language</h2>
-          <p className="mt-1 text-sm text-muted">
-            Requirements explained simply, in your language, with the original wording beside it.
-          </p>
-        </Card>
-      </section>
-      <Card className="flex flex-wrap items-center justify-between gap-4 bg-brand-soft border-brand/30">
-        <div>
-          <h2 className="font-bold">Work for a government department?</h2>
-          <p className="text-sm text-muted">Publish adverts, forms and amendments once. AI prepares the record; you approve it.</p>
-        </div>
-        <ButtonLink href="/portal">Officer portal</ButtonLink>
-      </Card>
+      </div>
+      <Chip icon={<IconClipboard />} title="Know what you need" sub="A checklist for every post" className="left-0 top-2 z-10 [transform:rotate(-3deg)] motion-safe:animate-[float_7s_ease-in-out_infinite]" />
+      <Chip icon={<IconBell />} title="Stay a step ahead" sub="Changes, without the guesswork" className="-right-4 -bottom-4 z-10 motion-safe:animate-[float_8s_ease-in-out_infinite_1s]" />
     </div>
   );
 }

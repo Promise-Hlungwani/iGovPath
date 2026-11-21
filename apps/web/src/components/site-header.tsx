@@ -15,7 +15,7 @@ export async function SiteHeader() {
         <Link href="/" className="font-bold text-xl tracking-tight text-white">
           <span className="text-accent">iGov</span>Path
         </Link>
-        <nav className="flex flex-wrap items-center gap-5 text-sm flex-1 text-white/85">
+        <nav className="order-last w-full sm:order-none sm:w-auto flex flex-wrap items-center gap-x-5 gap-y-1 text-sm sm:flex-1 text-white/85">
           <Link href="/search" className="hover:text-accent">Find opportunities</Link>
           <Link href="/match" className="hover:text-accent">What can I apply for?</Link>
           <Link href="/assistant" className="hover:text-accent">Ask</Link>
@@ -23,7 +23,7 @@ export async function SiteHeader() {
           {isActiveOfficer(u) && <Link href="/portal" className="hover:text-accent">Officer portal</Link>}
           {isAdmin(u) && <Link href="/admin/users" className="hover:text-accent">Users</Link>}
         </nav>
-        <div className="flex items-center gap-4 text-sm text-white/85">
+        <div className="ml-auto sm:ml-0 flex items-center gap-4 text-sm text-white/85">
           {u ? (
             <>
               <Link href="/notifications" className="hover:text-accent relative" aria-label={`Notifications${unread ? `, ${unread} unread` : ""}`}>
