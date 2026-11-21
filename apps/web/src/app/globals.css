@@ -1,30 +1,30 @@
 @import "tailwindcss";
 
-/* One palette for every page, taken from the home page:
-   dark teal ground, mint for actions and highlights, white text, soft cyan for notices.
-   No orange or yellow. Red only for errors. Single (dark) theme on purpose. */
+/* White background, black for text and buttons, greys for secondary text,
+   a few see-through surfaces. The logo keeps its colours ("iGov" cyan #28b8dc). */
 :root {
-  color-scheme: dark;
-  --background: #0b1c21;
-  --surface: #11292f;
-  --field: #0d2227;
-  --foreground: #e3eeeb;
-  --heading: #ffffff;
-  --muted: #9db3af;
-  --border: rgba(255, 255, 255, 0.11);
-  --brand: #9be8c6;
-  --brand-ink: #0b2a24;
-  --brand-soft: rgba(155, 232, 198, 0.12);
-  --navy: #0b1c21;
-  --navy-ink: #ffffff;
-  --teal: #0f262c;
-  --accent: #9be8c6;
-  --warn-bg: rgba(40, 184, 220, 0.12);
-  --warn-ink: #8fd8ee;
-  --danger: #f28b82;
-  --danger-soft: rgba(242, 139, 130, 0.12);
-  --info-soft: rgba(40, 184, 220, 0.12);
-  --info-ink: #8fd8ee;
+  color-scheme: light;
+  --background: #ffffff;
+  --surface: #ffffff;
+  --field: #ffffff;
+  --foreground: #111111;
+  --heading: #000000;
+  --muted: #5c5c5c;
+  --border: rgba(0, 0, 0, 0.12);
+  --brand: #000000;
+  --brand-ink: #ffffff;
+  --brand-soft: rgba(0, 0, 0, 0.05);
+  --navy: rgba(255, 255, 255, 0.8);
+  --navy-ink: #000000;
+  --teal: #f4f4f4;
+  --accent: #000000;
+  --logo: #28b8dc;
+  --warn-bg: rgba(0, 0, 0, 0.04);
+  --warn-ink: #111111;
+  --danger: #000000;
+  --danger-soft: rgba(0, 0, 0, 0.05);
+  --info-soft: rgba(0, 0, 0, 0.04);
+  --info-ink: #111111;
 }
 
 @theme inline {
@@ -40,6 +40,7 @@
   --color-navy: var(--navy);
   --color-navy-ink: var(--navy-ink);
   --color-teal: var(--teal);
+  --color-logo: var(--logo);
   --color-field: var(--field);
   --color-accent: var(--accent);
   --color-warn-bg: var(--warn-bg);
@@ -52,7 +53,7 @@
 }
 
 body {
-  background: radial-gradient(ellipse at 75% -10%, #163a40 0%, #0f262c 45%, var(--background) 100%) fixed var(--background);
+  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-roboto), system-ui, sans-serif;
 }

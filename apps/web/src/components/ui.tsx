@@ -8,10 +8,10 @@ export function cx(...c: (string | false | null | undefined)[]) {
 const buttonBase =
   "inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 const variants = {
-  primary: "bg-brand text-brand-ink font-semibold shadow-[0_4px_0_#3a8f71] hover:brightness-105 active:translate-y-px active:shadow-[0_2px_0_#3a8f71]",
-  secondary: "border border-white/25 text-foreground hover:bg-white/5",
-  danger: "bg-danger text-[#2b0b08] font-semibold hover:brightness-105",
-  ghost: "text-foreground hover:bg-white/5",
+  primary: "bg-black text-white font-semibold hover:bg-[#222] active:translate-y-px",
+  secondary: "border border-black/25 text-foreground hover:bg-black/5",
+  danger: "bg-black text-white font-semibold hover:bg-[#222]",
+  ghost: "text-foreground hover:bg-black/5",
 };
 type Variant = keyof typeof variants;
 
@@ -32,11 +32,11 @@ export function ButtonLink({
 }
 
 export function Card({ className, ...props }: ComponentProps<"div">) {
-  return <div className={cx("rounded-xl border border-border bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-5", className)} {...props} />;
+  return <div className={cx("rounded-xl border border-border bg-white p-5 shadow-[0_4px_16px_rgba(0,0,0,0.04)]", className)} {...props} />;
 }
 
 const badgeTones = {
-  neutral: "bg-white/5 text-muted border border-border",
+  neutral: "bg-black/[0.04] text-muted border border-border",
   brand: "bg-brand-soft text-brand",
   warn: "bg-warn-bg text-warn-ink",
   danger: "bg-danger-soft text-danger",

@@ -22,9 +22,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </Suspense>
         <SiteHeader />
         <main className="flex-1 w-full max-w-6xl mx-auto px-4 py-8">{children}</main>
-        <footer className="border-t border-white/10 text-muted text-sm">
+        <footer className="border-t border-black/10 text-muted text-sm">
           <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row gap-3 justify-between">
-            <span><strong className="text-white">iGovPath</strong> by SPH.NC</span>
+            <span><strong className="text-black">iGovPath</strong> by SPH.NC</span>
             <span>AI proposes, a named official approves. Always check the original advert.</span>
           </div>
         </footer>

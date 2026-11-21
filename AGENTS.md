@@ -60,7 +60,7 @@ Conventions:
 - Python: type hints, Pydantic models for every request, response and LLM output.
 - Keep it simple: no new library or service without a reason noted in the commit or `PLAN.md`. Hackathon scope: no microservices beyond the two above.
 - UI text in plain English (about grade 8); dates shown as `5 December 2026`.
-- One uniform palette on every page, taken from the home page: dark teal ground, mint `#9be8c6` for actions and highlights, white text, soft cyan for notices, red only for errors; no orange or yellow; single dark theme; Roboto. Tokens live in `apps/web/src/app/globals.css`; use them, never raw colours. Never use the SITA logo or present the site as SITA's own.
+- One uniform style on every page: literal white background, black for text and buttons, greys for secondary text, a few see-through surfaces (header, chips). No other colours, except the logo ("iGov" cyan `#28b8dc`). Tokens live in `apps/web/src/app/globals.css`; use them, never raw colours. Never use the SITA logo or present the site as SITA's own.
 - Every click must show feedback: links trigger the top progress bar, forms use `SubmitButton` (pending text), and each route group has a `loading.tsx` skeleton.
 
 ## LLM usage limits (free tier)
