@@ -75,3 +75,15 @@ mark.evidence {
   0%, 100% { translate: 0 0; }
   50% { translate: 0 -8px; }
 }
+
+@keyframes menu-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [role="menu"], dialog[open] { animation: none !important; }
+}

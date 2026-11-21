@@ -24,7 +24,12 @@ export async function signUp(page: Page, name: string, mail: string) {
   await page.getByLabel("Full name").fill(name);
   await page.getByLabel("Email").fill(mail);
   await page.getByLabel("Password").fill(PASSWORD);
+  const resp = page.waitForResponse((r) => r.url().includes("/api/auth/sign-up/email"), { timeout: 60_000 }).catch(() => null);
   await page.getByRole("button", { name: "Create account" }).click();
+  const r = await resp;
+  if (!r || r.status() !== 200) {
+    throw new Error(`sign-up failed: ${r ? `${r.status()} ${(await r.text()).slice(0, 300)}` : "no response from /api/auth/sign-up/email"}`);
+  }
   await expect(page).toHaveURL(/\/account/);
 }
 

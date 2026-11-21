@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { getCurrentUser, isActiveOfficer, isAdmin } from "@/lib/session";
 import { remindersAndUnread } from "@/lib/notify";
+import { AccountMenu } from "@/components/account-menu";
+
+const ROLE_LABEL = { applicant: "Applicant", officer: "Government officer", admin: "Admin" } as const;
 
 export async function SiteHeader() {
   const u = await getCurrentUser();
@@ -21,13 +24,13 @@ export async function SiteHeader() {
         </nav>
         <div className="ml-auto sm:ml-0 flex items-center gap-4 text-sm text-black/80">
           {u ? (
-            <>
-              <Link href="/notifications" className="hover:text-black hover:underline relative" aria-label={`Notifications${unread ? `, ${unread} unread` : ""}`}>
-                Notifications
-                {unread > 0 && <span data-testid="unread" className="ml-1 inline-flex min-w-5 justify-center rounded-full bg-brand text-brand-ink font-semibold text-xs px-1.5">{unread}</span>}
-              </Link>
-              <Link href="/account" className="hover:text-black hover:underline">{u.name}</Link>
-            </>
+            <AccountMenu
+              name={u.name}
+              email={u.email}
+              roleLabel={`${ROLE_LABEL[u.role]}${u.status === "pending" ? " · awaiting approval" : ""}${u.departmentName ? ` · ${u.departmentName}` : ""}`}
+              isOfficer={isActiveOfficer(u)}
+              unread={unread}
+            />
           ) : (
             <>
               <Link href="/sign-in" className="hover:text-black hover:underline">Sign in</Link>

@@ -22,6 +22,7 @@ async function visit(page: Page, url: string) {
 }
 
 test("G20 smoke: every page loads with no console or server errors", async ({ page }) => {
+  test.setTimeout(480_000); // ~27 pages; the dev server compiles each on first visit
   const problems = watch(page);
   const [opp] = await sql<{ id: string }>(`select id from opportunities where reference_number='DSD 02/11/2026'`);
 

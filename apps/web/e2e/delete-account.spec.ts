@@ -38,7 +38,9 @@ test("an applicant can delete their account and everything linked to it", async 
 
   // Delete.
   await page.goto("/account");
-  await page.getByRole("button", { name: "I want to delete my account" }).click();
+  await page.getByRole("button", { name: "Account menu" }).click();
+  await page.getByRole("menuitem", { name: "Delete account" }).click();
+  await expect(page.getByRole("dialog", { name: "Delete your account?" })).toBeVisible();
   const btn = page.getByRole("button", { name: "Delete my account permanently" });
   await expect(btn).toBeDisabled();
   await page.getByLabel("Type DELETE to confirm").fill("DELETE");
@@ -65,7 +67,8 @@ test("a deleted officer's approved records stay published without their name", a
   await sql(`insert into audit_log (actor_user_id, actor_name, action, entity, entity_id) values ($1,'Delete Me Officer','opportunity.publish','opportunity',$2)`, [id, v.opportunity_id]);
 
   await page.goto("/account");
-  await page.getByRole("button", { name: "I want to delete my account" }).click();
+  await page.getByRole("button", { name: "Account menu" }).click();
+  await page.getByRole("menuitem", { name: "Delete account" }).click();
   await page.getByLabel("Type DELETE to confirm").fill("DELETE");
   await page.getByRole("button", { name: "Delete my account permanently" }).click();
   await expect(page.getByRole("heading", { name: "Account deleted" })).toBeVisible();
@@ -79,4 +82,19 @@ test("a deleted officer's approved records stay published without their name", a
   );
   expect(after).toEqual({ approved_by: null, opp: 1, named: 0, anon: 1 });
   await sql(`delete from audit_log where actor_name='Deleted user' and action='opportunity.publish' and entity_id=$1`, [v.opportunity_id]);
+});
+
+
+test("sign out asks for confirmation in a dialog", async ({ page }) => {
+  await signUp(page, "Signout Tester", email("signout"));
+  await page.getByRole("button", { name: "Account menu" }).click();
+  await page.getByRole("menuitem", { name: "Sign out" }).click();
+  const dlg = page.getByRole("dialog", { name: "Sign out of iGovPath?" });
+  await expect(dlg).toBeVisible();
+  await dlg.getByRole("button", { name: "Cancel" }).click();
+  await expect(dlg).toBeHidden();
+  await page.getByRole("button", { name: "Account menu" }).click();
+  await page.getByRole("menuitem", { name: "Sign out" }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "Sign out" }).click();
+  await expect(page.getByRole("link", { name: "Sign in" })).toBeVisible();
 });

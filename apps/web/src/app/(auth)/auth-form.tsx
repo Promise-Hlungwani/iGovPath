@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
@@ -12,6 +12,10 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
   const next = params.get("next") || "/account";
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // Until the page's JavaScript is ready, keep the button disabled so the browser never
+  // falls back to a plain form submit (which would put the email and password in the URL).
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -41,7 +45,7 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
           ? "Applicants can use the app straight away. Government officers can request portal access after signing up."
           : "Welcome back."}
       </p>
-      <form onSubmit={onSubmit} className="mt-5 space-y-4">
+      <form onSubmit={onSubmit} method="post" action="" className="mt-5 space-y-4">
         {mode === "sign-up" && (
           <div>
             <Label htmlFor="name">Full name</Label>
@@ -65,7 +69,7 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
           {mode === "sign-up" && <p className="text-xs text-muted mt-1">At least 8 characters.</p>}
         </div>
         {error && <Notice tone="danger">{error}</Notice>}
-        <Button type="submit" disabled={busy} className="w-full">
+        <Button type="submit" disabled={busy || !ready} className="w-full">
           {busy ? "Please wait…" : mode === "sign-up" ? "Create account" : "Sign in"}
         </Button>
       </form>
