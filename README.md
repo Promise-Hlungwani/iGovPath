@@ -167,7 +167,7 @@ Sign up with the `ADMIN_EMAIL` address first to become admin. Officers sign up, 
 
 ## Deploying
 
-See [`docs/DEPLOY.md`](docs/DEPLOY.md): two Vercel projects from this repo (the website in `apps/web`, the AI helper in `services/ai`) and which keys go where.
+See [`docs/DEPLOY.md`](docs/DEPLOY.md): one Vercel project with two services set up by `vercel.json` (the website in `apps/web`, the private AI helper in `services/ai`), and which keys to add.
 
 ## Privacy and limits
 

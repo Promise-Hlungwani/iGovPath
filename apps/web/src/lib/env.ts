@@ -11,7 +11,8 @@ const schema = z.object({
   BETTER_AUTH_SECRET: z.string().min(16),
   BETTER_AUTH_URL: z.string().url().default("http://localhost:3000"),
   ADMIN_EMAIL: z.string().email().optional().or(z.literal("")),
-  AI_SERVICE_URL: z.string().url().default("http://localhost:8000"),
+  // On Vercel this is injected by the service binding in vercel.json; locally it comes from .env.
+  AI_SERVICE_URL: z.string().url().default("http://localhost:8000").transform((u) => u.replace(/\/+$/, "")),
   // Shared secret sent to the AI service (x-igovpath-key). Must match the AI service's AI_SERVICE_KEY.
   AI_SERVICE_KEY: z.string().trim().default(""),
   // Officer code: entering it gives officer access straight away. Empty means admin approval only.
