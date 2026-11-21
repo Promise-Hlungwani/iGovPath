@@ -3,7 +3,7 @@
   "private": true,
   "packageManager": "pnpm@10.33.2",
   "scripts": {
-    "dev": "pnpm --filter web dev",
+    "dev": "concurrently -k -n ai,web -c blue,green \"pnpm ai\" \"pnpm dev:web\"",
     "build": "pnpm --filter web build",
     "start": "pnpm --filter web start",
     "lint": "pnpm --filter web lint",
@@ -16,6 +16,10 @@
     "demo:reset": "pnpm --filter web demo:reset",
     "test:e2e": "pnpm --filter web test:e2e",
     "test:ai": "cd services/ai && .venv/bin/pytest -q",
-    "ai:setup": "cd services/ai && python3.12 -m venv .venv && .venv/bin/pip install -q -r requirements.txt"
+    "ai:setup": "cd services/ai && python3.12 -m venv .venv && .venv/bin/pip install -q -r requirements.txt",
+    "dev:web": "pnpm --filter web dev"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.5"
   }
 }

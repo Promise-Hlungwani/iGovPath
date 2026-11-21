@@ -130,12 +130,14 @@ pnpm db:migrate              # create tables in Neon (uses DATABASE_URL, direct)
 pnpm db:seed                 # departments, Z83 form and 18 sample opportunities
 ```
 
-Every time, in two terminals:
+Every time, one command starts everything (AI service + web app; Ctrl+C stops both):
 
 ```bash
-pnpm ai                      # AI service on http://localhost:8000 (check /health)
-pnpm dev                     # web app on http://localhost:3000 (applicant) · /portal (officer) · /admin/users (admin)
+pnpm dev                     # web app http://localhost:3000 (applicant) · /portal (officer) · /admin/users (admin)
+                             # AI service http://localhost:8000/health
 ```
+
+To run only one part: `pnpm dev:web` or `pnpm ai`.
 
 Sign up with the `ADMIN_EMAIL` address first to become admin. Officers sign up, request access on their account page, and an admin approves them.
 

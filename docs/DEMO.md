@@ -6,10 +6,9 @@ Five-minute pitch flow from PLAN.md §8, with the exact clicks. Everything shown
 
 1. In `.env`, set the demo accounts (real team names, not "test"):
    `DEMO_PASSWORD`, `DEMO_OFFICER_NAME`, `DEMO_OFFICER_EMAIL`, `DEMO_APPLICANT_NAME`, `DEMO_APPLICANT_EMAIL`.
-2. Start both services in two terminals:
+2. Start everything (AI service + web app) with one command:
    ```bash
-   pnpm ai     # AI service on http://localhost:8000
-   pnpm dev    # web app on http://localhost:3000
+   pnpm dev    # web app on http://localhost:3000, AI service on http://localhost:8000
    ```
 3. Reset to a clean demo state and create the demo accounts:
    ```bash
@@ -39,7 +38,7 @@ Five-minute pitch flow from PLAN.md §8, with the exact clicks. Everything shown
 
 ## If something breaks
 
-- **AI service down / Groq rate limit:** set `LLM_PROVIDER=openrouter` (needs `OPENROUTER_API_KEY`) or `ollama` in `.env`, restart `pnpm ai`. Cached answers keep working.
+- **AI service down / Groq rate limit:** set `LLM_PROVIDER=openrouter` (needs `OPENROUTER_API_KEY`) or `ollama` in `.env`, restart `pnpm dev`. Cached answers keep working.
 - **Amendment already applied (rehearsal ran it):** `pnpm demo:reset`.
 - **No internet:** phone hotspot, or play the backup video.
 
