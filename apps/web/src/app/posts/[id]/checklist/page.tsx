@@ -7,7 +7,6 @@ import { getChecklist, itemKey } from "@/lib/generated";
 import { getOpportunity } from "@/lib/opportunities";
 import { getSaved } from "@/lib/saved";
 import { getCurrentUser } from "@/lib/session";
-import { displayTitle } from "@/lib/text";
 import { trackFunnel } from "@/lib/funnel";
 
 // AI steps can take up to a minute.
@@ -34,7 +33,6 @@ export default async function ChecklistPage({ params }: { params: Promise<{ id: 
 
   return (
     <div className="max-w-3xl">
-      <p className="text-sm mb-2"><Link className="text-brand underline" href={`/posts/${opp.id}`}>← {displayTitle(opp.postTitle)}</Link></p>
       <PageTitle sub={`${dept.name}${opp.referenceNumber ? ` · Ref ${opp.referenceNumber}` : ""}`}>Application checklist</PageTitle>
       <div className="space-y-4">
         <Notice tone="info">

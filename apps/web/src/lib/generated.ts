@@ -33,7 +33,7 @@ export type ExplanationContent = {
   model: string;
 };
 
-export const LANGUAGES = ["English", "isiZulu"] as const;
+export const LANGUAGES = ["English", "isiZulu", "Xitsonga", "Sesotho"] as const;
 export type Language = (typeof LANGUAGES)[number];
 
 export async function getExplanation(opp: Opp, deptName: string, language: Language) {

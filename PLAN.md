@@ -146,7 +146,7 @@ iGovPath/
 - SAQA rule: if the record has a foreign-qualification condition, show "at application" vs "only if shortlisted" exactly as the advert says, else "check the advert".
 
 ### 5.5 Plain language + translation (Prompt 2, D4)
-- English explainer + **one** additional language (human to choose — see §9). Original text always beside it; non-English output carries a "machine translation — needs native-speaker review" banner.
+- English explainer plus isiZulu, Xitsonga, and Sesotho options. Original text remains available beside it; non-English output carries a "machine translation — needs native-speaker review" banner.
 
 ### 5.6 Matching
 - Hybrid: hard filters (province, open status, closing date ≥ today) + rule match on qualifications/licences against `minimum_requirements` + pgvector similarity on bge-m3 embeddings.
@@ -244,7 +244,7 @@ Cut order if time runs short: assistant → drafting check → dashboard → mat
 - [ ] **Collect source documents** (public, from links in the proposal's references): PSVC 41 and 42 of 2026 + annexures, PSVC 39 (the post the amendment changes), DPSA Circular 55 of 2026, Z83 PDF, the 2026 annexure E with the SAQA "when shortlisted" wording, 3–5 learnership adverts from SETA/department pages.
 - [ ] **Choose the 10–20 sample opportunities**, covering: national + provincial, one learnership with matric + driver's licence in Limpopo (for the proposal's example), one with a SAQA condition, one with hand-delivery route, the amended post.
 - [ ] **Hand-label the eval set:** for ~15 adverts, fill in the correct JSON per Prompt 1's schema (template will be provided in `data/eval/`). This is the ground truth for the accuracy page — it must be done by a person, not the model.
-- [ ] **Native-speaker review** of the second-language explanations (at least 3 posts) before the pitch.
+- [ ] **Native-speaker review** of each non-English explanation language (at least 3 posts per language) before the pitch.
 - [ ] **Verify model licences** on the exact model card being demoed (gpt-oss-120b on Groq; Qwen if used) — proposal 5a flags this as not re-verified.
 - [ ] **Re-check learnership details** the day before the pitch (proposal: they change often).
 - [ ] **Set `ADMIN_EMAIL`** in `.env` and sign up with it first, so that account becomes admin.
@@ -364,9 +364,9 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
   - Done when: every checklist contains the 4 standard items; the SAQA sample post shows the right timing; ticks persist after sign-out and sign-in.
 
 - [ ] **G11. Plain-language explainer** 🤝
-  - Tasks: 🤖 Prompt 2 in English and one other language; original wording beside it; "machine translation, needs native-speaker review" banner on non-English; facts, numbers and dates checked unchanged against the record. 👤 chooses the language (default isiZulu) and a native speaker reviews 3 posts.
+  - Tasks: 🤖 Prompt 2 in English, isiZulu, Xitsonga, and Sesotho; original wording beside it; "machine translation, needs native-speaker review" banner on non-English; facts, numbers and dates checked unchanged against the record. 👤 native speakers review 3 posts per non-English language.
   - Done when: explanations keep every date and number from the record (automatic check); the banner appears on non-English; the native speaker has signed off or listed fixes.
-  - Status (21 Nov): ✅ 🤖 English + isiZulu built; automatic fact check passed on 5 posts × 2 languages; banner shows on isiZulu. ⏳ 👤 Native-speaker review still needed (default language isiZulu; change `LANGUAGES` in `apps/web/src/lib/generated.ts` if the team picks another).
+  - Status (21 Nov): ✅ 🤖 English, isiZulu, Xitsonga, and Sesotho options; automatic fact check previously passed on 5 posts × English/isiZulu; banner shows for non-English. ⏳ 👤 Validate each new language with native speakers; machine translations are not yet reviewed.
 
 - [x] **G12. Saved posts, reminders and notifications** 🤖
   - Tasks: save / unsave; list of saved posts with closing countdown; in-app reminder 3 days before closing; notification when a saved post is amended, extended or withdrawn, or its form is superseded.

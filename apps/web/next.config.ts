@@ -6,8 +6,8 @@ import { config } from "dotenv";
 config({ path: path.resolve(__dirname, "../../.env"), quiet: true });
 
 const nextConfig: NextConfig = {
-  // Lets a production build run next to `pnpm dev` without clashing (NEXT_DIST_DIR=.next-build).
-  distDir: process.env.NEXT_DIST_DIR || ".next",
+  // Keep production output separate so builds cannot overwrite a running dev server's chunks.
+  distDir: process.env.NEXT_DIST_DIR || (process.env.NODE_ENV === "production" ? ".next-build" : ".next"),
   devIndicators: false,
   serverExternalPackages: ["pg"],
   // Webpack only (production builds and `next dev` without --turbopack): don't reload when test
@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
         webpack: (config: { watchOptions?: Record<string, unknown> }) => {
           config.watchOptions = {
             ...config.watchOptions,
-            ignored: ["**/node_modules/**", "**/.git/**", "**/.e2e-results/**", "**/data/**", "**/services/**", "**/.next/**"],
+            ignored: ["**/node_modules/**", "**/.git/**", "**/.e2e-results/**", "**/data/**", "**/services/**", "**/.next/**", "**/.next-build/**"],
           };
           return config;
         },

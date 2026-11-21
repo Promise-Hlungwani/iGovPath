@@ -2,6 +2,7 @@
 iGovPath is a single platform that helps South Africans find government jobs and learnerships, understand requirements in plain language, and manage applications in one place. AI transforms government vacancy documents into structured information, application checklists, and easy-to-understand guidance while departments publish and update opportunities through a central portal.
 
 - **Applicant app**: one search across national and provincial posts and learnerships, a checklist per application, plain-language explanations, deadlines and reminders.
+- **Languages**: plain-language explanations in English, isiZulu, Xitsonga, and Sesotho. Non-English text is machine translated and needs native-speaker review.
 - **Government portal**: departments upload circulars, adverts, forms and amendments once; AI extracts a structured record; **a named official approves it** before it goes live.
 
 > **Principle:** AI proposes, a responsible official approves. The system never invents a deadline, office or document. If the source does not say it, the answer is *"not stated in the advert"*.

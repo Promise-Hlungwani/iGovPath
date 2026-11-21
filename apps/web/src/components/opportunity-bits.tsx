@@ -19,10 +19,6 @@ export function TypeBadge({ type }: { type: "post" | "internship" | "learnership
   return <Badge tone="info">{type === "internship" ? "Internship" : "Learnership"}</Badge>;
 }
 
-export function SampleTag() {
-  return <Badge tone="neutral">From public circular</Badge>;
-}
-
 export function ClosingText({ date }: { date: string | null }) {
   if (!date) return <span className="italic text-muted">Closing date not stated in the advert</span>;
   const n = daysUntil(date);

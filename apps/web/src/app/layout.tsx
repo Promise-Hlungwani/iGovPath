@@ -4,6 +4,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { NavProgress } from "@/components/nav-progress";
 import { FlashToast } from "@/components/flash-toast";
+import { BackButton } from "@/components/back-button";
 import { Suspense } from "react";
 
 const roboto = Roboto({ variable: "--font-roboto", subsets: ["latin"], weight: ["400", "500", "700"] });
@@ -25,7 +26,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <FlashToast />
         </Suspense>
         <SiteHeader />
-        <main className="flex-1 w-full max-w-6xl mx-auto px-4 py-8">{children}</main>
+        <main className="flex-1 w-full max-w-6xl mx-auto px-4 py-8">
+          <BackButton />
+          {children}
+        </main>
         <footer className="border-t border-black/10 text-muted text-sm">
           <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row gap-3 justify-between">
             <span><strong className="text-black">iGovPath</strong> by SPH.NC</span>

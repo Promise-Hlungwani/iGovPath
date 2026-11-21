@@ -5,7 +5,6 @@ import { AiServiceError } from "@/lib/ai";
 import { getExplanation, LANGUAGES, type ExplanationContent, type Language } from "@/lib/generated";
 import { formatDate } from "@/lib/format";
 import { getOpportunity } from "@/lib/opportunities";
-import { displayTitle } from "@/lib/text";
 import { trackFunnel } from "@/lib/funnel";
 
 // AI steps can take up to a minute.
@@ -39,9 +38,8 @@ export default async function ExplainPage({ params, searchParams }: { params: Pr
 
   return (
     <div>
-      <p className="text-sm mb-2"><Link className="text-brand underline" href={`/posts/${opp.id}`}>← {displayTitle(opp.postTitle)}</Link></p>
       <PageTitle sub={dept.name}>In plain language</PageTitle>
-      <div className="flex gap-2 mb-4" role="tablist" aria-label="Language">
+      <div className="flex flex-wrap gap-2 mb-4" role="tablist" aria-label="Language">
         {LANGUAGES.map((l) => (
           <Link key={l} role="tab" aria-selected={l === language} href={`/posts/${opp.id}/explain?lang=${l}`}
             className={`rounded-full px-3 py-1 text-sm border ${l === language ? "bg-brand text-brand-ink border-brand" : "border-border bg-surface"}`}>
@@ -84,10 +82,6 @@ export default async function ExplainPage({ params, searchParams }: { params: Pr
             <div><dt className="font-medium">Documents</dt><dd><ul className="list-disc pl-5">{opp.documentsRequired.map((r, i) => <li key={i}>{r}</li>)}</ul></dd></div>
             <div><dt className="font-medium">Apply</dt><dd>{[route?.portal_url, route?.email, route?.postal, route?.hand_delivery].filter(Boolean).join(" · ") || "Not stated in the advert"}</dd></div>
           </dl>
-          <details>
-            <summary className="cursor-pointer text-sm text-brand">Full advert text</summary>
-            <pre className="mt-2 whitespace-pre-wrap text-xs max-h-96 overflow-auto">{opp.sourceText}</pre>
-          </details>
         </Card>
       </div>
     </div>
