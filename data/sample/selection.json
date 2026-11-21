@@ -1,0 +1,43 @@
+{
+  "_note": "Sample opportunities for the hackathon demo. All are real public adverts from the DPSA Public Service Vacancy Circulars, labelled sample in the app. Chosen by Claude to cover the cases in PLAN.md §9.2; the team should review this list.",
+  "documents": [
+    {"file": "psvc-39-2026.pdf", "title": "Public Service Vacancy Circular 39 of 2026", "date": "2026-10-30", "source_url": "https://www.dpsa.gov.za/dpsa2g/documents/vacancies/2026/PSV%20CIRCULAR%2039%20of%202026.pdf"},
+    {"file": "psvc-42-2026.pdf", "title": "Public Service Vacancy Circular 42 of 2026", "date": "2026-11-20", "source_url": "https://www.gov.za/sites/default/files/PUBLIC%20SERVICE%20VACANCY%20CIRCULAR%2042%20.pdf"}
+  ],
+  "departments": [
+    {"key": "sita", "name": "State Information Technology Agency (SITA)", "sphere": "agency", "province": "National"},
+    {"key": "ec-dsd", "name": "Eastern Cape Department of Social Development", "sphere": "provincial", "province": "Eastern Cape"},
+    {"key": "gpw", "name": "Government Printing Works", "sphere": "agency", "province": "National"},
+    {"key": "lp-dard", "name": "Limpopo Department of Agriculture and Rural Development", "sphere": "provincial", "province": "Limpopo"},
+    {"key": "ec-health", "name": "Eastern Cape Department of Health", "sphere": "provincial", "province": "Eastern Cape"},
+    {"key": "fs-dardea", "name": "Free State Department of Agriculture, Rural Development and Environmental Affairs", "sphere": "provincial", "province": "Free State"},
+    {"key": "dhet", "name": "Department of Higher Education and Training", "sphere": "national", "province": "National"},
+    {"key": "dha", "name": "Department of Home Affairs", "sphere": "national", "province": "National"},
+    {"key": "saps", "name": "South African Police Service", "sphere": "national", "province": "National"},
+    {"key": "dws", "name": "Department of Water and Sanitation", "sphere": "national", "province": "National"},
+    {"key": "statssa", "name": "Statistics South Africa", "sphere": "national", "province": "National"},
+    {"key": "gcis", "name": "Government Communication and Information System", "sphere": "national", "province": "National"},
+    {"key": "gp-health", "name": "Gauteng Department of Health", "sphere": "provincial", "province": "Gauteng"},
+    {"key": "kzn-health", "name": "KwaZulu-Natal Department of Health", "sphere": "provincial", "province": "KwaZulu-Natal"}
+  ],
+  "opportunities": [
+    {"file": "psvc-39-2026.pdf", "ref": "39/247", "dept": "ec-dsd", "why": "Amendment story 1: requirements changed in PSVC 42"},
+    {"file": "psvc-39-2026.pdf", "ref": "39/35", "dept": "gpw", "why": "Amendment story 2: closing date extended in PSVC 42"},
+    {"file": "psvc-42-2026.pdf", "ref": "42/450", "dept": "lp-dard", "why": "Limpopo, entry level, driver's licence"},
+    {"file": "psvc-42-2026.pdf", "ref": "42/446", "dept": "lp-dard", "why": "Limpopo clerk, Grade 12"},
+    {"file": "psvc-42-2026.pdf", "ref": "42/444", "dept": "lp-dard", "why": "Limpopo HR clerk, Grade 12"},
+    {"file": "psvc-42-2026.pdf", "ref": "42/449", "dept": "lp-dard", "why": "Limpopo switchboard operator"},
+    {"file": "psvc-42-2026.pdf", "ref": "42/299", "dept": "ec-health", "type": "internship", "why": "Internship"},
+    {"file": "psvc-42-2026.pdf", "ref": "42/309", "dept": "ec-health", "type": "learnership", "why": "TVET learner (learnership-style)"},
+    {"file": "psvc-42-2026.pdf", "ref": "42/317", "dept": "fs-dardea", "type": "internship", "why": "Internship with SAQA condition, postal/hand delivery"},
+    {"file": "psvc-42-2026.pdf", "ref": "42/35", "dept": "dhet", "why": "National, SAQA, hand delivery"},
+    {"file": "psvc-42-2026.pdf", "ref": "42/48", "dept": "dha", "why": "National"},
+    {"file": "psvc-42-2026.pdf", "ref": "42/190", "dept": "saps", "why": "National, clerk"},
+    {"file": "psvc-42-2026.pdf", "ref": "42/281", "dept": "dws", "why": "National, Grade 12 clerk, online portal"},
+    {"file": "psvc-42-2026.pdf", "ref": "42/276", "dept": "dws", "why": "National, IT"},
+    {"file": "psvc-42-2026.pdf", "ref": "42/256", "dept": "statssa", "why": "National"},
+    {"file": "psvc-42-2026.pdf", "ref": "42/24", "dept": "gcis", "why": "National, casual worker"},
+    {"file": "psvc-42-2026.pdf", "ref": "42/406", "dept": "gp-health", "why": "Gauteng, nursing"},
+    {"file": "psvc-42-2026.pdf", "ref": "42/417", "dept": "kzn-health", "why": "KwaZulu-Natal, nursing"}
+  ]
+}

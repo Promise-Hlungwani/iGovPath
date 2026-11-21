@@ -328,7 +328,7 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
   - Tasks: Better Auth email + password (no verification); `user_roles` table; sign-up → applicant/active; "request officer access" (department + job title) → officer/pending; first sign-up with `ADMIN_EMAIL` → admin; `/admin/users` approve / reject / deactivate / assign department; middleware guarding `/portal/*` (active officer) and `/admin/*` (admin); officers limited to their own department's records; role changes written to `audit_log`.
   - Done when: an applicant cannot open `/portal` (redirected); a pending officer sees "awaiting approval"; after admin approval the officer can open `/portal`; an officer from department A cannot see or approve department B's records; the admin's approval appears in the audit log with names.
 
-- [ ] **G4. Seed data and search** 🤝
+- [x] **G4. Seed data and search** 🤝
   - Tasks: 🤖 `pnpm db:seed` loads departments (SITA + those in the sample), the central Z83 form record, and approved sample opportunities from `data/sample/*.json`; search page (keyword, province, type, open only); post detail page (facts, apply route, status badge, source link + date, "sample" label). 👤 supplies or approves the sample list (see §9.2).
   - Done when: seeding a fresh database gives 10–20 searchable opportunities; searching "clerk" + a province returns the expected posts; every post shows its source document and date.
 
