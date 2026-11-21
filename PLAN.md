@@ -386,6 +386,7 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
 - [ ] **G15. Accuracy page** 🤝
   - Tasks: 👤 hand-labels ~15 adverts in `data/eval/` (template provided by 🤖); 🤖 `scripts/eval_extraction.py` compares pipeline output with the labels per field and writes a one-page result shown at `/accuracy`.
   - Done when: the page shows per-field accuracy, how many fields were left null correctly, and how many evidence quotes failed, with the date of the run. Numbers are reported as they are, not adjusted.
+  - Status (21 Nov): ✅ 🤖 15 templates in `data/eval/labels/` (PSVC 42 posts not in the demo sample), instructions in `data/eval/README.md`, `scripts/eval_extraction.py`, `/accuracy` page (shows "no result yet" until labels exist). Scoring checked with a temporary planted label, then removed. ⏳ 👤 Hand-label the 15 adverts, then run the script.
 
 - [ ] **G16. Forms library** 🤖
   - Tasks: versioned forms; officers upload new versions of forms their department owns; Z83 shown as central and read-only, linking to the DPSA source; superseded versions archived, and applicants who saved one are warned.

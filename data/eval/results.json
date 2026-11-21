@@ -1,0 +1,85 @@
+{
+ "run_at": "2026-11-21T15:26:51+00:00",
+ "model": null,
+ "adverts_labelled": 0,
+ "templates_total": 15,
+ "overall_field_accuracy": null,
+ "fields": {
+  "department": {
+   "correct": 0,
+   "total": 0,
+   "accuracy": null
+  },
+  "post_title": {
+   "correct": 0,
+   "total": 0,
+   "accuracy": null
+  },
+  "reference_number": {
+   "correct": 0,
+   "total": 0,
+   "accuracy": null
+  },
+  "closing_date": {
+   "correct": 0,
+   "total": 0,
+   "accuracy": null
+  },
+  "salary": {
+   "correct": 0,
+   "total": 0,
+   "accuracy": null
+  },
+  "location": {
+   "correct": 0,
+   "total": 0,
+   "accuracy": null
+  },
+  "form_required": {
+   "correct": 0,
+   "total": 0,
+   "accuracy": null
+  },
+  "apply_route.email": {
+   "correct": 0,
+   "total": 0,
+   "accuracy": null
+  },
+  "apply_route.portal_url": {
+   "correct": 0,
+   "total": 0,
+   "accuracy": null
+  },
+  "apply_route.postal": {
+   "correct": 0,
+   "total": 0,
+   "accuracy": null
+  },
+  "apply_route.hand_delivery": {
+   "correct": 0,
+   "total": 0,
+   "accuracy": null
+  },
+  "contact.name": {
+   "correct": 0,
+   "total": 0,
+   "accuracy": null
+  },
+  "contact.phone": {
+   "correct": 0,
+   "total": 0,
+   "accuracy": null
+  }
+ },
+ "nulls_kept_null": {
+  "correct": 0,
+  "total": 0,
+  "rate": null
+ },
+ "list_item_recall": {
+  "minimum_requirements": null,
+  "documents_required": null
+ },
+ "evidence_check_failures": 0,
+ "per_advert": []
+}

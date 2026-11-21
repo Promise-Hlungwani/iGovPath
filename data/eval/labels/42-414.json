@@ -1,0 +1,30 @@
+{
+ "source": "psvc-42-2026.pdf",
+ "chunk_ref": "42/414",
+ "page": 287,
+ "labelled_by": null,
+ "labelled_on": null,
+ "instructions": "Fill 'expected' from advert_text only. Use null when the advert does not state it. Dates as YYYY-MM-DD. Copy reference numbers exactly (without '(X2 POSTS)'). Then set labelled_by and labelled_on.",
+ "expected": {
+  "department": null,
+  "post_title": null,
+  "reference_number": null,
+  "closing_date": null,
+  "salary": null,
+  "location": null,
+  "minimum_requirements": [],
+  "documents_required": [],
+  "form_required": null,
+  "apply_route": {
+   "email": null,
+   "portal_url": null,
+   "postal": null,
+   "hand_delivery": null
+  },
+  "contact": {
+   "name": null,
+   "phone": null
+  }
+ },
+ "advert_text": "ANNEXURE Z\n\nPROVINCIAL ADMINISTRATION: KWAZULU NATAL\nDEPARTMENT OF HEALTH\n\nPOST 42/414\n:\nDEPUTY DIRECTOR: FINANCE REF NO: HGHD08/2026\n\n\nRe-advertisement\n\n\nDirectorate: Finance Management\n\nSALARY\n:\nR932 292 per annum (Level 11)\nCENTRE\n:\nHarry Gwala Health District Office\nREQUIREMENTS\n:\nSenior certificate (Grade 12) or equivalent; Bachelor’s Degree B.com in\nAccounting/Degree in Cost Management and Accounting or National Diploma\nin Accounting, National Diploma in Cost Management Accounting or Bachelor\nof Business Administration as recognized by South African Qualification\nAuthority Plus 3 years managerial experience in Finance Management\nComponent (salary level 9 Assistant Director/Assistant Manager/Finance\nManager experience). Unendorsed valid driver’s license. Knowledge, Skills,\nBehavioural Attributes\nand\nCompetencies\nRequired:\nSouth African\nConstitution, Public Service Act, Public Service Regulations 2016, Public\nFinance Management Act, Treasury Regulations and Practice Notes\nPreferential Procurement Policy Framework Act, Batho Pele. Financial\nManagement, Conflict management, Project Management, Organisational,\nInfluencing, Analytical, Motivational, Presentation Computer literacy e.g. MS\nOffice suite, Facilitation, Interpersonal relations, Time management, Planning,\nNegotiation Communication – written and oral, Report writing, Problem solving,\nChange management, Decision making, Self-disciplined and ability to work\nunder pressure with minimum supervision, Independent, Trustworthiness,\nHonesty, Accountability, Commitment to excellence, Continuous learning,\nAmenable to change, Cultural awareness, Innovative, Confidentiality, Pro-\nactive, Reliability, Integrity, Transparency, Professionalism, Working under\npressure.\nDUTIES\n:\nEnsure that the budget is aligned to the Departmental Strategic Plans, Hospital\nand Clinics business plans, monitor and interpret cash flows and report on\nfinancial projections to Hospital Management and other relevant Management\nofficials within the Department. Ensure proper responsibility for the\nmanagement, safeguarding and maintenance of assets and liabilities of the\nHospital and Clinics. Take effective and appropriate steps to ensure maximum\ncollection of revenue due to Hospital and Clinics. Implement and manage and\nefficient, cost effective and integrated Supply Chain Management throughout\nthe Hospital and Clinics. Monitor and manage the use of budget allocated to\nthe Hospitals and Clinics and ensure that financial regulations/procedures and\nproper internal controls are in place and adhered to at all times. Ensure\nappropriate management and utilization of resources allocated to the\ncomponent.\nENQUIRIES\n:\nAll enquiries must be directed to Mrs. B.A Mkhize: District Director Tel No: (039)\n834 1301\nAPPLICATIONS\n:\nAll documents must be posted for: Attention: Mr. Z.N Dotyeni, Harry Gwala\nHealth District Office, Private Bag X502, Ixopo, 3276 OR Dropped off in the\napplications box of Harry Gwala Health District Office, No.1 Northway Drive,\nMorningside,\nIxopo,\n3276.\nFor\nonline\napplications\nplease\nsearch\nwww.jobApp@kznhealth.gov.za\nNOTE\n:\nApplicants who previously applied for the post must re-apply. An application for\nemployment Form (Z83) must be fully completed and forwarded. This is\nobtainable from any Public Service Department or from the website\nwww.kznhealth.gov.za.Updated Curriculum Vitae and clearly indicating job\ntitle/rank of previous employment as well as roles and responsibilities\nperformed. Identity Document, Driver’s license, relevant educational\nQualifications and proof of experience, will only be submitted by shortlisted\ncandidates on the day of interview. People with disabilities should feel free to\napply for the posts. The reference number must be indicated in the column\nprovided on the form Z83, e.g. ref HGHD 08/2026. All shortlisted candidates,\nincluding SMS, shall undertake two pre-entry assessments. One will be a\npractical exercise to determine a candidate’s suitability based on the post’s\ntechnical and generic requirements and the other must be an integrity (ethical\nconduct) assessment. Selection panels shall score both technical exercises as\nan additional criterion in the interview process. Please note that failure to\ncomply with the above instructions will disqualify applicants. Please also note\nthat the selected candidate will be subjected to a pre-employment screening\nand verification process including a CIPC (Companies Intellectual Property\nCommission) screening. Due to the large number of applications we receive,\nreceipt of applications will not be acknowledged. Should you not be advised\nwithin 60 days of the closing date, kindly consider your application as\nunsuccessful. And only shortlisted candidates will be advised of the outcome\n\n\nof interview. Due to financial constraints, there will be no payment of S&T\nClaims covering transport fees to the interview venue. Persons with disability\nare encouraged to apply. The employment equity target is African male\nCLOSING DATE\n:\n04 December 2026 at 16h00."
+}

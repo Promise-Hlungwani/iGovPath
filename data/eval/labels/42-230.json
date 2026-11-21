@@ -1,0 +1,30 @@
+{
+ "source": "psvc-42-2026.pdf",
+ "chunk_ref": "42/230",
+ "page": 183,
+ "labelled_by": null,
+ "labelled_on": null,
+ "instructions": "Fill 'expected' from advert_text only. Use null when the advert does not state it. Dates as YYYY-MM-DD. Copy reference numbers exactly (without '(X2 POSTS)'). Then set labelled_by and labelled_on.",
+ "expected": {
+  "department": null,
+  "post_title": null,
+  "reference_number": null,
+  "closing_date": null,
+  "salary": null,
+  "location": null,
+  "minimum_requirements": [],
+  "documents_required": [],
+  "form_required": null,
+  "apply_route": {
+   "email": null,
+   "portal_url": null,
+   "postal": null,
+   "hand_delivery": null
+  },
+  "contact": {
+   "name": null,
+   "phone": null
+  }
+ },
+ "advert_text": "ANNEXURE Q\n\nSTATISTICS SOUTH AFRICA\nStats SA provides scientific knowledge that enables society to understand complex socio-economic\nphenomena. It draws its mandate from the Statistics Act, 1999 (Act No 6 of 1999). Stats SA strives to\nexcel in the following five competencies: Intellectual capability to lead the scientific work of statistics,\nTechnological competence for purposes of large-scale processing and for complex computations and\naccessibility of information to the public, Logistical competence for deployment of (forward and reverse)\nlogistics of large-scale field operations and for strategic choices regarding operational efficiency and\ncost-effectiveness, Political competence in understanding the political environment without being\npolitical or Politicised (commitment of delivery without fear or favour), Administrative competence: The\nability of bringing it all together.\n\n\n\nAPPLICATIONS\n:\nAll applications must be submitted online on the following link:\nwww.statssa.gov.za/recruitment\nCLOSING DATE\n:\n04 December 2026\nNOTE\n:\nApplications must be submitted online and must be completed in full on all\nfields including the declaration part. Clear indication of the post and reference\nnumber that is being applied for must be selected. The application must include\nonly completed and signed new Form Z83, obtainable from any Public Service\nDepartment or on the internet at www.gov.za, and a detailed Curriculum Vitae.\nSubmission of certified copies of Identity Document, Senior Certificate and the\nhighest required qualification as well as a driver’s license where necessary are\noptional but will only be submitted by shortlisted candidates to HR on or before\nthe day of the interview date. General information: Females, youth and people\nwith disabilities are targeted for these positions and are hereby encouraged to\napply. All shortlisted candidates, including SMS, shall undertake two pre-entry\nassessments. One must be a practical exercise, and other must be an Integrity\n(Ethical Conduct) Assessment. Selection panels shall score both technical\nexercises as an additional criterion in the interview process. All shortlisted\ncandidates for SMS posts will be subjected to a technical exercise and\ninterview. Following the technical exercise and interview, a maximum of three\n(3) SMS candidates will undergo psychometric assessments to assess\ncognitive capabilities, behavioural preferences, emotional intelligence and\nintegrity. The shortlisted candidate(s) must be available for interviews at a date\nand time determined by Statistics South Africa. One of the minimum entry\nrequirements for SMS positions is the pre-entry certificate submitted prior to\nappointment.\nFor\nmore\ndetails\non\nthe\npre-entry\ncourse\nvisit:\nhttps://www.thensg.gov.za/training-course/smspre-entry-programme/.\nThe\nsuccessful candidate(s) will be required to sign an annual performance\nagreement, disclose his/her financial interests and be subjected to security\nclearance. Applications that do not comply with the requirements will not be\ntaken into consideration. If you have not received a response from this\nDepartment within three months of the closing date, please consider your\napplication unsuccessful. Note: Statistics South Africa reserves the right to fill\nor not fill the below-mentioned post.\n\nPOST 42/230\n:\nDEPUTY DIRECTOR: METHODOLOGIST REF NO: 33/11/26HO (X3 POSTS)\n\nSALARY\n:\nR932 292 per annum (Level 11), (all-inclusive remuneration package)\nCENTRE\n:\nHead Office, Pretoria\nREQUIREMENTS\n:\nA Bachelor’s degree (NQF 7) in Statistics / Mathematics / Data Science /\nEconometrics / Economics, Training in Project Management, SAS, MS Office\nSuite, Post-graduate studies in survey methodology, statistics, mathematics,\ndata science, econometrics, economics, Training in survey methodology / data\nanalysis, Minimum of 3 – 4 years’ experience as a methodologist / statistician\n/ data analyst / data scientist / econometrician or related in a research institution\nor statistical agency, Experience in survey processes e.g. data collection,\nanalysis, evaluation and interpretation, Experience in supervising a team,\nKnowledge of statistical production processes, Statistical analysis skills,\nResearch skills and Writing skills, A hard worker who is innovative, Able to\nidentify and solve problems, analytical, Willing to adapt to change, Able to\ncritically evaluate work methods and content, Able to work independently and\naccurately.\nDUTIES\n:\nMonitor and coordinate development sampling frames (i.e. Master Sample and\nStatistical Business Register), Monitor and coordinate the maintenance and\nupdating of sampling frames (i.e. Master Sample and Statistical Business\nRegister), Monitor the development of methodologies and systems for\nweighting, estimation and seasonal adjustment, Monitor the evaluation of\nsurveys and censuses with respect to the methodological dimensions of the\nSouth African Statistical Quality Assessment Framework (SASQAF), Manage\nstaff and other resources, Develop and review frameworks.\nENQUIRIES\n:\nMs R Katjedi Tel No: (012) 310 4797"
+}

@@ -1,0 +1,30 @@
+{
+ "source": "psvc-42-2026.pdf",
+ "chunk_ref": "42/383",
+ "page": 262,
+ "labelled_by": null,
+ "labelled_on": null,
+ "instructions": "Fill 'expected' from advert_text only. Use null when the advert does not state it. Dates as YYYY-MM-DD. Copy reference numbers exactly (without '(X2 POSTS)'). Then set labelled_by and labelled_on.",
+ "expected": {
+  "department": null,
+  "post_title": null,
+  "reference_number": null,
+  "closing_date": null,
+  "salary": null,
+  "location": null,
+  "minimum_requirements": [],
+  "documents_required": [],
+  "form_required": null,
+  "apply_route": {
+   "email": null,
+   "portal_url": null,
+   "postal": null,
+   "hand_delivery": null
+  },
+  "contact": {
+   "name": null,
+   "phone": null
+  }
+ },
+ "advert_text": "ANNEXURE X\n\nPROVINCIAL ADMINISTRATION: FREE STATE\nOFFICE OF THE PREMIER\nFree State Provincial Government is an equal opportunity affirmative action employer.  It is our intention\nto promote representativity (race, gender and disability) in the province through the filling of these posts\nand candidates whose appointment/promotion/transfer will promote representativity will receive\npreference.\n\nPOST 42/383\n:\nINTERNAL AUDITOR REF NO: 26/2026 (X2 POSTS)\n\nSALARY\n:\nR338 106 per annum (Level 07). Note: The successful candidate will be\nrequired to enter into a Performance Agreement within 3 months after\nassumption of duty.\nCENTRE\n:\nBloemfontein\n\n\nREQUIREMENTS\n:\nAppropriate NQF Level 7 qualification in Auditing as recognised by the South\nAfrican Qualification Authority (SAQA) or equivalent. Relevant experience 1 –\n3 years in an Auditing environment. Knowledge of relevant Provincial and\nNational legislation, Public Administration, Policy analysis and development,\nInternal audit mechanisms systems and processes.\nDUTIES\n:\nTo conduct audit assignments, including: Undertake auditing according to the\naudit methodology and IIA standards, collect, analyse, interpret and document\ninformation to determine the following: whether the collection/expenditure of\nfunds is regular and correctly accounted for, whether state money and goods\nhave been applied advantageously and efficiently and whether there are\nirregularities, deviations and shortcomings by applying, amongst others, audit\nprocedures and techniques, interpreting laws and other instructions,\ndetermining procedures and their objectives, examining supporting vouchers\nin conjunction with legal and other directives, as well as budgets,\nauthorisations, agreements and contracts, examining and comparing book\nentries, accounts, statements, vouchers and other records and visit offices\nwhere cash, stock and other items of value are received, kept, issued or paid\nto compare physical stock on hand with returns shown in the records. To assist\nin preparing draft reports to be reviewed by management, including: write\nreports on audit findings, point out irregularities, deviations and shortcomings,\nwrite audit queries, submissions and letters. To evaluate internal control\nmeasures, including: assist with the investigation and evaluation of internal\nchecking and control measures. Including those contained in existing and\nenvisaged accounting systems and procedures by collect, analyse and\nevaluate information on the system, measure or action in the light of the\nexperience and knowledge.\nENQUIRIES\n:\nMs. O.R Mathibela, e-mail: onkhopotse.mathibela@fspremier.gov.za\nAPPLICATIONS\n:\nNotice to applicants for the following posts: Applications must be submitted\nonline at: https://www.erecruitment.fs.gov.za/\nNOTE\n:\nAll applicants must log in/register to apply for positions. The applicant’s profile\non the e - Recruitment is equivalent to the newly approved Z83, and it is the\nresponsibility of applicants to ensure their profiles are fully completed or their\napplications will not be considered, as per the DPSA Practice Note. Applicants\nshould upload their curriculum vitae (CV) onto the e-Recruitment system.\n(Please ensure it is in PDF format & maximum size 3MB). The Curriculum Vitae\nshould be specific regarding the position applying for, ref no, previous positions\noccupied and the start date and end date of the position(s) should be indicated.\nAccompanying relevant documentation required to be uploaded on the system\nsuch as copies of all qualifications including National Senior Certificate/Matric\ncertificate, Driver’s license, ID, etc., such documents need not be certified at\npoint of application, however, certification will be required prior to attending the\ninterview. Applications must be submitted to the address mentioned in the\nadvertisement. All shortlisted candidates, including the SMS, shall undertake\ntwo pre-entry assessments. One will be a practical exercise to determine a\ncandidate’s suitability based on the post’s technical and generic requirements\nand the other must be an integrity (ethical conduct) assessment. Selection\npanels shall score both technical exercises as an additional criterion in the\ninterview process.\nCLOSING DATE\n:\n07 December 2026 @ 16:00"
+}

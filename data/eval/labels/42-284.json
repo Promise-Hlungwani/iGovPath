@@ -1,0 +1,30 @@
+{
+ "source": "psvc-42-2026.pdf",
+ "chunk_ref": "42/284",
+ "page": 213,
+ "labelled_by": null,
+ "labelled_on": null,
+ "instructions": "Fill 'expected' from advert_text only. Use null when the advert does not state it. Dates as YYYY-MM-DD. Copy reference numbers exactly (without '(X2 POSTS)'). Then set labelled_by and labelled_on.",
+ "expected": {
+  "department": null,
+  "post_title": null,
+  "reference_number": null,
+  "closing_date": null,
+  "salary": null,
+  "location": null,
+  "minimum_requirements": [],
+  "documents_required": [],
+  "form_required": null,
+  "apply_route": {
+   "email": null,
+   "portal_url": null,
+   "postal": null,
+   "hand_delivery": null
+  },
+  "contact": {
+   "name": null,
+   "phone": null
+  }
+ },
+ "advert_text": "ANNEXURE U\n\nDEPARTMENT OF WATER AND SANITATION\n\nAPPLICATIONS\n:\nAll\napplications\nto\nbe\nsubmitted\nonline\non\nthe\nfollowing\nlink:\nhttps://erecruitment.dws.gov.za/\nCLOSING DATE\n:\n04 December 2026\nNOTE\n:\nInterested applicants must submit their applications via the online link\nhttps://erecruitment.dws.gov.za Other related documentation such as copies of\nqualifications, identity document, driver’s license etc need not to accompany\nthe application when applying for a post as such documentation must only be\nproduced by shortlisted candidates during the interview date in line with DPSA\ncircular 19 of 2022. With reference to applicants bearing professional or\noccupational registration, fields provided in Part B on the online Z83 must be\ncompleted as these fields are regarded as compulsory. Failure to complete or\ndisclose all required information will automatically disqualify the applicant. No\nlate applications will be accepted. Shortlisted candidates will be subjected to\nsuitability checks (SAQA verification, reference checks criminal and credit\nchecks). SAQA evaluation certificate must accompany foreign qualifications\n(only when shortlisted). Applications that do not comply with the above-\nmentioned requirements will not be considered. All shortlisted candidates for\nSMS posts will be subjected to a technical exercise and interviews. Following\nthe technical exercise and interview, a maximum of three (3) SMS candidates\nwill undergo psychometric assessments to assess cognitive capabilities,\nbehavioural preferences, emotional intelligence, and integrity and a pre-entry\ncertificate obtained from the National School of government is required prior to\nthe appointment. All shortlisted candidates, including the SMS, shall undertake\ntwo pre-entry assessments. One will be a practical exercise to determine a\ncandidate’s suitability based on the post’s technical and generic requirements\nand the other must be an integrity (ethical conduct) assessment. Selection\npanels shall score both technical exercises as an additional criterion in the\ninterview process. Candidates will be required to complete a financial\ndisclosure form and undergo security clearance. Foreigners or dual citizenship\nholders must provide a police clearance certificate from country of origin (only\nwhen shortlisted). The Department of Water Sanitation is an equal opportunity\nemployer. In the filling of vacant posts, the objectives of section 195 (1) (i) of\nthe Constitution of South Africa, 1996 (Act No: 108 of 1996) the Employment\nEquity imperatives as defined by the Employment Equity Act, 1998 (Act No: 55\nof 1998) and relevant Human Resources policies of the Department will be\ntaken into consideration. Correspondence will be limited to short-listed\ncandidates only. If you do not hear from us within three (3) months of this\nadvertisement, please accept that your application has been unsuccessful.\nFaxed applications will not be considered. The department reserves the right\nnot to fill these positions. Women and persons with disabilities are encouraged\nto apply and preference will be given to the EE Targets.\n\nPOST 42/284\n:\nSUPPLY CHAIN CLERK PRODUCTION REF NO: 041226/17\n\n\nBranch: Infrastructure Management: Eastern Operations\n\n\nCD: Water Resource Infrastructure Operations and Maintenance\n\n\nDir: Operations Eastern\n\nSALARY\n:\nR237 453 per annum (Level 05)\nCENTRE\n:\nMidmar Dam\nREQUIREMENTS\n:\nA Senior/Grade 12 certificate or relevant qualification. The disclosure of a valid\nunexpired driver’s license. Basic knowledge of Supply Chain Duties, practices\nas well as the ability to capture SCM related data. Computer Literacy, MS word,\nexcel and outlook. Basic knowledge of SCM work procedures/ working\nenvironment. Working knowledge of and understanding of the legislative\nframework governing the public procurement. Basic knowledge of problem\nsolving and analysis. Client Orientation and customer focus. Good verbal and\nwritten communication skills. Accountability and Ethical focus. Minimum code\n8 driver’s license.\n\n\nDUTIES\n:\nRender demand and acquisition clerical support. Update and maintain supplier\ndatabase. Register suppliers on SAP system. Accessing CSD to verify supplier\ndata and print out CSD reports. Assist with Receiving, register and action\nrequest quotations (RFQ). Capture specifications on the electronic purchasing\nsystem. Assist with generating supplier purchase orders. Assist with receiving\nand screening of bid documents received in line with applicable procedures\nIssue. Provide secretariat or logistical support during the bid consideration and\nconclusion process. Compile draft recommendations documents as required.\nRender logistical support services. Receive and verify goods from suppliers.\nCapture goods received on Sap system. Receive requests for goods from end\nusers and action the requests accordingly in line with the inventory policy.\nAssist with update and maintenance of CSD related suppliers’ data.\nENQUIRIES\n:\nMr Sipho Ngobese Tel No: (033) 239 1900/1301\nNOTE\n:\nNB: Shortlisted candidates will be subjected to practical exercise and integrity\n(Ethical conduct) assessment."
+}

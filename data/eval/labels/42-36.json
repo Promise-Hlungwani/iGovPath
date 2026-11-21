@@ -1,0 +1,30 @@
+{
+ "source": "psvc-42-2026.pdf",
+ "chunk_ref": "42/36",
+ "page": 34,
+ "labelled_by": null,
+ "labelled_on": null,
+ "instructions": "Fill 'expected' from advert_text only. Use null when the advert does not state it. Dates as YYYY-MM-DD. Copy reference numbers exactly (without '(X2 POSTS)'). Then set labelled_by and labelled_on.",
+ "expected": {
+  "department": null,
+  "post_title": null,
+  "reference_number": null,
+  "closing_date": null,
+  "salary": null,
+  "location": null,
+  "minimum_requirements": [],
+  "documents_required": [],
+  "form_required": null,
+  "apply_route": {
+   "email": null,
+   "portal_url": null,
+   "postal": null,
+   "hand_delivery": null
+  },
+  "contact": {
+   "name": null,
+   "phone": null
+  }
+ },
+ "advert_text": "ANNEXURE F\n\nDEPARTMENT OF HIGHER EDUCATION AND TRAINING\n(ORBIT TVET College)\n(Gauteng CET College)\n(Western Cape CET College)\n\nPOST 42/36\n:\nSTATE\nACCOUNTANT:\nMANAGEMENT\nACCOUNTING\nREF\nNO:\nGPCETC04/10/2026\n\nSALARY\n:\nR338 106 per annum (Level 07)\nCENTRE\n:\nGauteng Community Education and Training College (Ormonde)\nREQUIREMENTS\n:\nGrade 12 (Matric) or equivalent qualification. National Diploma (NQF Level 6)\nor Bachelor's Degree (NQF Level 7) in Accounting, Financial Management or\na relevant qualification. At least 2–3 years' relevant experience in management\naccounting, budgeting or financial management. Experience in staff\nsupervision will be an added advantage. Knowledge of the PFMA, Treasury\nRegulations and applicable public-sector financial management prescripts.\nKnowledge of budget preparation, expenditure monitoring, financial planning\nand management reporting. Understanding of budgeting, cash-flow\nmanagement and financial analysis. Proficiency in MS Office, particularly\nadvanced Excel. Knowledge of financial management systems, including\nBusiness Central, will be an added advantage.\n\n\nDUTIES\n:\nCoordinate the preparation and consolidation of annual budgets and\nprojections. Monitor expenditure against approved budgets and analyse\nvariances.\nCoordinate\ncash-flow\nprojections\nand\nmonitor\nfinancial\ncommitments. Prepare monthly and quarterly management accounts and\nfinancial performance reports. Analyse expenditure trends and identify\npotential overspending and cost-saving opportunities. Coordinate budget\nadjustments, virements and reallocations in line with approved delegations.\nMonitor compliance with the PFMA, Treasury Regulations and College\nfinancial policies. Coordinate budget-related audit schedules, supporting\ndocuments and audit responses. Supervise staff, allocate duties and monitor\nperformance. Liaise with internal stakeholders on budgeting, financial planning\nand reporting matters.\nENQUIRIES\n:\nMs. ER Phaladi Tel No: (010) 900 1154 or Mr M Maboe Tel No: (010) 900 1168\nAPPLICATIONS\n:\nApplications can be hand delivered to Gauteng CET College, 100 Northern\nParkway, Ormonde 209, Crown Wood Office Park Block D or submit to the\nfollowing\nemail\nquoting\nthe\nreference\nnumber\nto:\nSTATEACC04@GP.CETC.edu.za\nNOTE\n:\nApplications must be submitted on Z83 form obtainable from any Public\nService Department or on the internet at www.gov.za/Documents and must be\naccompanied by a recently updated comprehensive CV (With Three\nContactable References). A fully completed and signed Z83 form and a detailed\nCurriculum Vitae will be considered (PDF document to a maximum of 10\nmegabytes). The College will not be responsible for server delays. Only\nshortlisted candidates will be required to submit certified documents/copies of\nqualifications and other relevant documents to support the application on or\nbefore the day of the interviews. It is the applicant’s responsibility to have\nforeign qualifications evaluated by the South African Qualifications Authority\n(SAQA). Candidates whose appointments promote representativity in terms of\nrace, gender, and disability will receive preference. The candidate(s) will be\nrequired to sign an annual performance agreement, disclose his/her financial\ninterests, and be subjected to security clearance. If you have not been\ncontacted within three (3) months of the closing date of this advertisement,\nplease accept that your application was unsuccessful. Suitable candidates will\nbe subjected to personnel suitability checks (criminal record check, citizenship\nverification, qualification/study verification, and previous employment\nverification). Applications received after the closing date will not be considered.\nGauteng CET College is committed to providing equal opportunities and\npractising affirmative action. The appointment will be done in line with the\napproved Employment Equity Plan. Persons with disability are encouraged to\napply. It is our intention to promote representativity in terms of (race, gender,\nand disability) in the organisation. Due to the College financial constraints,\ncandidates will be responsible for their traveling and accommodation. The\nCollege reserves the right not to fill vacancies. All shortlisted candidates,\nincluding SMS, shall undertake two pre-entry assessments. One must be a\npractical exercise, and the other must be an Integrity (Ethical Conduct)\nAssessment. Selection panels shall score both technical exercises as an\nadditional criterion in the interview process.\nCLOSING DATE\n:\n04 December 2026 at 12h00"
+}
