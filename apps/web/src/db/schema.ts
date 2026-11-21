@@ -255,6 +255,11 @@ export const applicantProfiles = pgTable("applicant_profiles", {
   province: text("province"),
   languages: jsonb("languages").$type<string[]>().notNull().default([]),
   isSample: boolean("is_sample").notNull().default(true),
+  // AI summary of the person's CV (personal details removed before reading; the file is never stored).
+  cvProfile: jsonb("cv_profile").$type<Record<string, unknown>>(),
+  cvMatches: jsonb("cv_matches").$type<{ id: string; fit: "strong" | "possible"; reasons: string[]; missing: string[] }[]>(),
+  cvUpdatedAt: timestamp("cv_updated_at"),
+  matchesUpdatedAt: timestamp("matches_updated_at"),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 

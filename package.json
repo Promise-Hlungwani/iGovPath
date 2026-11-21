@@ -18,7 +18,8 @@
     "test:ai": "node scripts/python-ai.mjs run pytest -q",
     "ai:setup": "node scripts/python-ai.mjs setup",
     "dev:web": "pnpm --filter web dev",
-    "bootstrap": "pnpm ai:setup && pnpm db:migrate && pnpm db:seed"
+    "bootstrap": "pnpm ai:setup && pnpm db:migrate && pnpm db:seed",
+    "prod": "pnpm build && concurrently -k -n ai,web -c blue,green \"cd services/ai && .venv/bin/uvicorn main:app --port 8000\" \"pnpm --filter web start\""
   },
   "devDependencies": {
     "concurrently": "^9.2.5"

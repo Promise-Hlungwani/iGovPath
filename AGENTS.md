@@ -25,7 +25,7 @@ Hackathon demo on **26–27 November 2026**. The full plan is in [`PLAN.md`](PLA
 - **Sample public data only.** Never use real applicant data or ID numbers. Every record shows its source document and date and is labelled as copied from a public circular. No notice bars, and no "demo" or "hackathon" wording in the product UI (team decision, 21 Nov 2026). `SAMPLE_DATA_ONLY` still blocks non-sample data from reaching the AI.
 - **AI never ranks, scores, shortlists or rejects applicants** (POPIA s71). Matching says "looks like a fit" / "you may be missing X". Never "eligible", never a numeric score shown about a person.
 - Dashboards show aggregated, anonymised counts only: no names, emails or IDs.
-- Never send anything to an LLM that is not sample data.
+- Never send anything to an LLM that is not sample data, with one exception: a CV the person uploaded on "What can I apply for?", only after they tick consent and `services/ai/cv.py` has removed name, ID, contact details and address. CV files are never stored and CV calls are never cached.
 
 ### AI behaviour
 - **AI proposes, an officer approves.** No AI output reaches applicants without officer approval.
@@ -60,7 +60,8 @@ Conventions:
 - Python: type hints, Pydantic models for every request, response and LLM output.
 - Keep it simple: no new library or service without a reason noted in the commit or `PLAN.md`. Hackathon scope: no microservices beyond the two above.
 - UI text in plain English (about grade 8); dates shown as `5 December 2026`.
-- Visual style uses SITA's public website colours (navy `#002c42`, green `#009673`, teal `#003e4f`, slate `#455565`, cyan `#28b8dc`) and Roboto, defined as tokens in `apps/web/src/app/globals.css`. Never use the SITA logo or present the site as SITA's own.
+- One uniform style on every page: literal white background, black for text and buttons, greys for secondary text, a few see-through surfaces (header, chips). No other colours, except the logo ("iGov" cyan `#28b8dc`). Tokens live in `apps/web/src/app/globals.css`; use them, never raw colours. Never use the SITA logo or present the site as SITA's own.
+- Every click must show feedback: links trigger the top progress bar, forms use `SubmitButton` (pending text), and each route group has a `loading.tsx` skeleton.
 
 ## LLM usage limits (free tier)
 

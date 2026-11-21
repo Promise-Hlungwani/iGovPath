@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
+import { NavProgress } from "@/components/nav-progress";
+import { Suspense } from "react";
 
 const roboto = Roboto({ variable: "--font-roboto", subsets: ["latin"], weight: ["400", "500", "700"] });
 
@@ -15,11 +17,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body className={`${roboto.variable} antialiased min-h-screen flex flex-col`}>
+        <Suspense fallback={null}>
+          <NavProgress />
+        </Suspense>
         <SiteHeader />
         <main className="flex-1 w-full max-w-6xl mx-auto px-4 py-8">{children}</main>
-        <footer className="bg-navy text-navy-ink/80 text-sm">
+        <footer className="border-t border-black/10 text-muted text-sm">
           <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row gap-3 justify-between">
-            <span><strong className="text-white">iGovPath</strong> by SPH.NC</span>
+            <span><strong className="text-black">iGovPath</strong> by SPH.NC</span>
             <span>AI proposes, a named official approves. Always check the original advert.</span>
           </div>
         </footer>

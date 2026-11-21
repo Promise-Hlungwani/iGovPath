@@ -138,6 +138,8 @@ pnpm dev                     # web app http://localhost:3000 (applicant) · /por
 
 To run only one part: `pnpm dev:web` or `pnpm ai`.
 
+For a fast, production-like run (pages are pre-built, so clicks are much quicker than in `pnpm dev`): `pnpm prod`.
+
 Sign up with the `ADMIN_EMAIL` address first to become admin. Officers sign up, request access on their account page, and an admin approves them.
 
 ### Useful commands

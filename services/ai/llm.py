@@ -31,8 +31,9 @@ class SampleDataViolation(PermissionError):
     """Raised when non-sample data would be sent while SAMPLE_DATA_ONLY is on."""
 
 
-def assert_sample(is_sample: bool) -> None:
-    if config.SAMPLE_DATA_ONLY and not is_sample:
+def assert_sample(is_sample: bool, personal_consent: bool = False) -> None:
+    """Non-sample data may only be sent when the person has agreed and personal details were removed in code (cv.py)."""
+    if config.SAMPLE_DATA_ONLY and not is_sample and not personal_consent:
         raise SampleDataViolation(
             "Refused: SAMPLE_DATA_ONLY is on and this payload is not marked as sample data. "
             "Only public sample data may be sent to the AI model during the hackathon."
@@ -72,13 +73,14 @@ def chat_json(
     *,
     is_sample: bool,
     task: str,
+    personal_consent: bool = False,
     max_retries: int = 4,
     use_cache: bool = True,
     temperature: float = 0.0,
     max_tokens: int = 4096,
 ) -> dict[str, Any]:
     """Send one chat request that must return a JSON object. Returns the parsed object."""
-    assert_sample(is_sample)
+    assert_sample(is_sample, personal_consent)
     name, p = _provider()
     messages = [{"role": "system", "content": system}, {"role": "user", "content": user}]
     key = hashlib.sha256(json.dumps([name, p["model"], task, messages], ensure_ascii=False).encode()).hexdigest()
@@ -118,7 +120,8 @@ def chat_json(
                 raise LLMError(f"Model returned invalid JSON for task {task}: {e}") from e
             if not isinstance(data, dict):
                 raise LLMError(f"Model returned JSON that is not an object for task {task}")
-            path.write_text(json.dumps(data, ensure_ascii=False, indent=1))
+            if use_cache:
+                path.write_text(json.dumps(data, ensure_ascii=False, indent=1))
             return data
         except openai.RateLimitError as e:
             last_err = e

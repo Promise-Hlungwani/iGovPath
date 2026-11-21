@@ -2,11 +2,13 @@ import Link from "next/link";
 import { Badge, ButtonLink, Card, Notice, PageTitle } from "@/components/ui";
 import { SignOutButton } from "@/components/sign-out-button";
 import { requireUser } from "@/lib/session";
+import { DeleteAccount } from "@/components/delete-account";
 
 const roleLabel = { applicant: "Applicant", officer: "Government officer", admin: "Admin" };
 
-export default async function AccountPage() {
+export default async function AccountPage({ searchParams }: { searchParams: Promise<{ deleteError?: string }> }) {
   const u = await requireUser("/account");
+  const { deleteError } = await searchParams;
   return (
     <div className="max-w-2xl space-y-6">
       <PageTitle sub={u.email}>Hello, {u.name}</PageTitle>
@@ -42,6 +44,7 @@ export default async function AccountPage() {
         {u.role === "applicant" && <ButtonLink href="/saved" variant="secondary">My saved posts</ButtonLink>}
         <SignOutButton />
       </div>
+      <DeleteAccount isOfficer={u.role !== "applicant"} error={!!deleteError} />
     </div>
   );
 }

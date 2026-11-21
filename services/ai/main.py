@@ -111,3 +111,28 @@ class FormDetailsRequest(BaseModel):
 @app.post("/form-details")
 def form_details(req: FormDetailsRequest) -> dict:
     return {**generate.form_details(req.text, is_sample=req.is_sample), "model": llm.provider_info()["model"]}
+
+
+# ───────────── CV matching ─────────────
+import cv as cv_mod  # noqa: E402
+
+
+@app.post("/cv/profile")
+async def cv_profile(file: UploadFile = File(...), consent: bool = Form(False)) -> dict:
+    data = await file.read()
+    if len(data) > 5 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="The CV must be smaller than 5 MB.")
+    prof, removed = cv_mod.profile_from_cv(data, file.filename or "cv", consent=consent)
+    return {"profile": prof.model_dump(), "personal_details_removed": removed, "model": llm.provider_info()["model"]}
+
+
+class MatchRequest(BaseModel):
+    profile: dict
+    posts: list[dict]
+    consent: bool = False
+
+
+@app.post("/cv/match")
+def cv_match(req: MatchRequest) -> dict:
+    return {"matches": [m.model_dump() for m in cv_mod.match_posts(req.profile, req.posts, consent=req.consent)],
+            "model": llm.provider_info()["model"]}
