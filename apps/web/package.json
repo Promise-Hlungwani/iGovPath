@@ -11,7 +11,9 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "tsx --conditions=react-server src/db/seed.ts",
-    "db:reset": "tsx --conditions=react-server src/db/reset.ts"
+    "db:reset": "tsx --conditions=react-server src/db/reset.ts",
+    "demo:reset": "tsx --conditions=react-server src/db/demo.ts",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "better-auth": "^1.7.27",

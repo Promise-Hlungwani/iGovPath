@@ -121,20 +121,46 @@ curl -s http://localhost:11434/api/tags
 
 ## Running the project
 
-> Code scaffolding is the next step in [`PLAN.md`](PLAN.md) (Phase 1). These commands will work once it lands.
+First time (needs Node 20+, pnpm and Python 3.12):
 
 ```bash
 pnpm install                 # web app dependencies
+pnpm ai:setup                # Python venv + AI service dependencies
 pnpm db:migrate              # create tables in Neon (uses DATABASE_URL, direct)
-pnpm db:seed                 # load sample opportunities from data/sample
-pnpm dev                     # http://localhost:3000 (applicant) · /portal (officer)
-
-cd services/ai && python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn main:app --reload --port 8000
+pnpm db:seed                 # departments, Z83 form and 18 sample opportunities
 ```
 
----
+Every time, in two terminals:
+
+```bash
+pnpm ai                      # AI service on http://localhost:8000 (check /health)
+pnpm dev                     # web app on http://localhost:3000 (applicant) · /portal (officer) · /admin/users (admin)
+```
+
+Sign up with the `ADMIN_EMAIL` address first to become admin. Officers sign up, request access on their account page, and an admin approves them.
+
+### Useful commands
+
+| Command | What it does |
+|---|---|
+| `pnpm demo:reset` | Clean demo state + demo accounts (see `docs/DEMO.md`) |
+| `pnpm db:reset` | Clear content (keeps users and the audit log) and re-seed |
+| `pnpm test:ai` | AI service unit tests (no live AI calls) |
+| `pnpm test:e2e` | Browser tests for every goal (needs both services running; uses the live Groq key) |
+| `pnpm lint` / `pnpm typecheck` | Code checks |
+| `services/ai/.venv/bin/python -I scripts/build_samples.py` | Re-extract the sample adverts through the AI pipeline |
+| `services/ai/.venv/bin/python -I scripts/eval_extraction.py` | Accuracy against the hand-labelled set in `data/eval/` |
+
+### What's where
+
+| Path | Contents |
+|---|---|
+| `apps/web` | Next.js app: applicant pages, officer portal, admin, server actions, Drizzle schema (`src/db`) |
+| `services/ai` | FastAPI: PDF intake, circular splitter, extraction guardrails, checklist, explainer, draft check, assistant; prompts in `prompts/` |
+| `data/sources` | Public source PDFs (PSVC 39 and 42 of 2026, Z83) and small demo excerpts |
+| `data/sample` | The 18 sample opportunities chosen for the demo and their pipeline extractions |
+| `data/eval` | Accuracy test set to be labelled by people |
+| `docs/DEMO.md` | The pitch script with exact clicks |
 
 ## Privacy and limits
 

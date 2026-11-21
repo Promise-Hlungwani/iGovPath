@@ -71,20 +71,19 @@ Groq's free tier is roughly 30 requests a minute, 1,000 a day and 6–12K tokens
 
 ## Commands
 
-Commands for the parts that exist yet; update this list as goals land.
-
 ```bash
 cp .env.example .env              # first time only, then fill in the values
-pnpm install
-pnpm db:migrate                   # create or update tables in Neon
-pnpm db:seed                      # load sample data
+pnpm install && pnpm ai:setup     # first time only
+pnpm db:migrate && pnpm db:seed   # create tables, load sample data
+pnpm ai                           # AI service on http://localhost:8000
 pnpm dev                          # web app on http://localhost:3000
 pnpm lint && pnpm typecheck
-
-cd services/ai && source .venv/bin/activate
-uvicorn main:app --reload --port 8000
-pytest
+pnpm test:ai                      # Python unit tests (no live LLM calls)
+pnpm test:e2e                     # Playwright browser tests (both services running)
+pnpm demo:reset                   # clean demo state + demo accounts
 ```
+
+Schema changes: edit `apps/web/src/db/schema.ts`, then `pnpm --filter web db:generate` and `pnpm db:migrate`.
 
 ## Git
 

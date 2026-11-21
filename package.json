@@ -12,6 +12,10 @@
     "db:migrate": "pnpm --filter web db:migrate",
     "db:seed": "pnpm --filter web db:seed",
     "db:reset": "pnpm --filter web db:reset",
-    "ai": "cd services/ai && .venv/bin/uvicorn main:app --reload --port 8000"
+    "ai": "cd services/ai && .venv/bin/uvicorn main:app --reload --port 8000",
+    "demo:reset": "pnpm --filter web demo:reset",
+    "test:e2e": "pnpm --filter web test:e2e",
+    "test:ai": "cd services/ai && .venv/bin/pytest -q",
+    "ai:setup": "cd services/ai && python3.12 -m venv .venv && .venv/bin/pip install -q -r requirements.txt"
   }
 }

@@ -409,6 +409,7 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
 - [ ] **G20. Demo readiness** 🤝
   - Tasks: 🤖 one command that resets the database to a clean demo state (seed + demo accounts); demo checklist in `docs/DEMO.md`; full end-to-end run with no errors in the browser console or server logs. 👤 creates the demo officer and applicant accounts with real team names, records the backup video and rehearses the pitch three times.
   - Done when: from a clean checkout, someone new on the team can follow the README and run the full demo script in §8 without help.
+  - Status (21 Nov): ✅ 🤖 `pnpm demo:reset` (reset + demo accounts from `.env`), `docs/DEMO.md` (pitch script with exact clicks), README run guide, smoke test over every page with no console/server errors, all 9 browser tests + 23 unit tests passing, production build passing. ⏳ 👤 Set the demo accounts in `.env`, have a new teammate follow the README, record the backup video, rehearse three times.
 
 ### Human inputs the build depends on
 
