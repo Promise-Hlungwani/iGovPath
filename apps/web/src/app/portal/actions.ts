@@ -1,5 +1,7 @@
 "use server";
 
+import { safely } from "@/lib/safe-action";
+
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { and, eq } from "drizzle-orm";
@@ -19,7 +21,7 @@ const uploadSchema = z.object({
   confirmPublic: z.literal("on").optional(),
 });
 
-export async function uploadDocument(formData: FormData) {
+async function uploadDocumentImpl(formData: FormData) {
   const u = await requireOfficer();
   const parsed = uploadSchema.safeParse(Object.fromEntries(formData));
   const file = formData.get("file");
@@ -60,7 +62,7 @@ export async function uploadDocument(formData: FormData) {
   redirect(target);
 }
 
-export async function extractChunkAction(formData: FormData) {
+async function extractChunkActionImpl(formData: FormData) {
   const u = await requireOfficer();
   const docId = z.string().uuid().parse(formData.get("docId"));
   const ref = z.string().min(1).parse(formData.get("chunkRef"));
@@ -109,7 +111,7 @@ function recordFromForm(fd: FormData, original: AdvertRecord): AdvertRecord {
   };
 }
 
-export async function approveAction(formData: FormData) {
+async function approveActionImpl(formData: FormData) {
   const u = await requireOfficer();
   const id = z.string().uuid().parse(formData.get("extractionId"));
   const note = val(formData.get("note"));
@@ -133,7 +135,7 @@ export async function approveAction(formData: FormData) {
   redirect(`/portal/review/${id}?approved=${oppId}`);
 }
 
-export async function rejectAction(formData: FormData) {
+async function rejectActionImpl(formData: FormData) {
   const u = await requireOfficer();
   const id = z.string().uuid().parse(formData.get("extractionId"));
   const note = val(formData.get("note")) ?? "Rejected by officer";
@@ -181,3 +183,21 @@ export async function approveAllClean(
   revalidatePath("/search");
   return { approved: done, failed };
 }
+
+// Guarded entry points: a failure shows a message instead of crashing the app.
+export async function uploadDocument(formData?: FormData) {
+  return safely(() => uploadDocumentImpl(formData as FormData), "/portal/upload");
+}
+
+export async function extractChunkAction(formData?: FormData) {
+  return safely(() => extractChunkActionImpl(formData as FormData), (formData ? `/portal/documents/${formData.get("docId") ?? ""}` : "/portal"));
+}
+
+export async function approveAction(formData?: FormData) {
+  return safely(() => approveActionImpl(formData as FormData), `/portal/review/${formData?.get("extractionId") ?? ""}`);
+}
+
+export async function rejectAction(formData?: FormData) {
+  return safely(() => rejectActionImpl(formData as FormData), `/portal/review/${formData?.get("extractionId") ?? ""}`);
+}
+

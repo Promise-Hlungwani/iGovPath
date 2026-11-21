@@ -1,5 +1,7 @@
 "use server";
 
+import { safely } from "@/lib/safe-action";
+
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { and, eq, gte, inArray } from "drizzle-orm";
@@ -19,7 +21,7 @@ const s = z.object({
 });
 
 /** Register a new version of a department-owned form. Central forms (Z83) can never be changed here. */
-export async function publishFormVersion(formData: FormData) {
+async function publishFormVersionImpl(formData: FormData) {
   const u = await requireOfficer();
   const p = s.safeParse(Object.fromEntries(formData));
   if (!p.success) redirect(`/portal/forms?doc=${formData.get("docId")}&error=${encodeURIComponent("Fill in every field.")}`);
@@ -64,4 +66,9 @@ export async function publishFormVersion(formData: FormData) {
   });
   revalidatePath("/portal/forms");
   redirect("/portal/forms?published=1");
+}
+
+// Guarded entry points: a failure shows a message instead of crashing the app.
+export async function publishFormVersion(formData?: FormData) {
+  return safely(() => publishFormVersionImpl(formData as FormData), "/portal/forms");
 }

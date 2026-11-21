@@ -7,6 +7,8 @@ import { formatDate } from "@/lib/format";
 import { requireUser } from "@/lib/session";
 import { pendingOfficerCount, reviewQueueCount } from "@/lib/queue";
 import { CountBadge } from "@/components/count-badge";
+import { Suspense } from "react";
+import { UrlError } from "@/components/url-error";
 
 const roleLabel = { applicant: "Applicant", officer: "Government officer", admin: "Admin" };
 
@@ -39,6 +41,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         </div>
       </section>
 
+      <Suspense fallback={null}><UrlError /></Suspense>
       {deleteError && <Notice tone="danger">To delete your account, type DELETE in capital letters.</Notice>}
       {u.status === "deactivated" && <Notice tone="danger">This account has been deactivated. Contact the platform admin.</Notice>}
       {u.role === "officer" && u.status === "pending" && (

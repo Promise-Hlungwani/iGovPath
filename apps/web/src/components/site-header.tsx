@@ -8,9 +8,14 @@ import { pendingOfficerCount, reviewQueueCount } from "@/lib/queue";
 const ROLE_LABEL = { applicant: "Applicant", officer: "Government officer", admin: "Admin" } as const;
 
 export async function SiteHeader() {
-  const u = await getCurrentUser();
+  const u = await getCurrentUser().catch(() => null);
+  // Counts are nice-to-have: if the database hiccups, show the header without them.
   const [unread, queue, officerRequests] = u
-    ? await Promise.all([remindersAndUnread(u.id), reviewQueueCount(u), pendingOfficerCount(u)])
+    ? await Promise.all([
+        remindersAndUnread(u.id).catch(() => 0),
+        reviewQueueCount(u).catch(() => 0),
+        pendingOfficerCount(u).catch(() => 0),
+      ])
     : [0, 0, 0];
   return (
     <header className="bg-navy backdrop-blur-md text-navy-ink border-b border-black/10 sticky top-0 z-40">

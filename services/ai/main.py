@@ -37,6 +37,18 @@ async def _sample_violation(_: Request, exc: llm.SampleDataViolation):
     return JSONResponse(status_code=403, content={"error": str(exc)})
 
 
+@app.exception_handler(Exception)
+async def _any_error(_: Request, exc: Exception):
+    """Any unexpected error becomes a clear JSON message; the service keeps running."""
+    import logging
+
+    logging.getLogger("igovpath").exception("unhandled error: %s", exc)
+    msg = "The AI service couldn't finish that request. Please try again."
+    if "fitz" in type(exc).__module__ or "pdf" in str(exc).lower():
+        msg = "We couldn't read that PDF. Check it isn't password-protected or damaged, then try again."
+    return JSONResponse(status_code=500, content={"error": msg})
+
+
 @app.exception_handler(llm.LLMError)
 async def _llm_error(_: Request, exc: llm.LLMError):
     return JSONResponse(status_code=503, content={"error": str(exc)})

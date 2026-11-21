@@ -8,6 +8,7 @@ import { toggleSave } from "@/app/posts/actions";
 export function SaveButton({ opportunityId, saved, signedIn }: { opportunityId: string; saved: boolean; signedIn: boolean }) {
   const [isSaved, setSaved] = useState(saved);
   const [pending, start] = useTransition();
+  const [error, setError] = useState<string | null>(null);
   if (!signedIn) {
     return (
       <ButtonLink href={`/sign-in?next=/posts/${opportunityId}`} className="w-full">
@@ -21,10 +22,20 @@ export function SaveButton({ opportunityId, saved, signedIn }: { opportunityId: 
         className="w-full"
         variant={isSaved ? "secondary" : "primary"}
         disabled={pending}
-        onClick={() => start(async () => setSaved(await toggleSave(opportunityId)))}
+        onClick={() =>
+          start(async () => {
+            setError(null);
+            try {
+              setSaved(await toggleSave(opportunityId));
+            } catch {
+              setError("Couldn't save just now. Please try again.");
+            }
+          })
+        }
       >
         {isSaved ? "Saved ✓ (remove)" : "Save and get reminders"}
       </Button>
+      {error && <p role="alert" className="text-xs text-danger text-center">{error}</p>}
       {isSaved && <p className="text-xs text-muted text-center"><Link href="/saved" className="underline">See my saved posts</Link></p>}
     </div>
   );

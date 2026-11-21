@@ -27,7 +27,11 @@ async function call<T>(path: string, body: unknown, timeoutMs = 120_000): Promis
     } catch {}
     throw new AiServiceError(typeof msg === "string" ? msg : JSON.stringify(msg));
   }
-  return (await res.json()) as T;
+  try {
+    return (await res.json()) as T;
+  } catch {
+    throw new AiServiceError("The AI service sent back something we couldn't read. Please try again.");
+  }
 }
 
 export type Flag = { field: string; level: "error" | "warning"; message: string };

@@ -6,6 +6,8 @@ import { formatDateTime } from "@/lib/format";
 import { departmentScope, requireOfficer } from "@/lib/session";
 import { displayTitle } from "@/lib/text";
 import { ApproveAllButton } from "@/components/approve-all";
+import { Suspense } from "react";
+import { UrlError } from "@/components/url-error";
 
 // Approving many records can take a while.
 export const maxDuration = 60;
@@ -25,7 +27,8 @@ export default async function ReviewQueue() {
   return (
     <div>
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <PageTitle sub="AI-prepared records waiting for an officer. Check each one against the source before approving.">Review queue</PageTitle>
+        <Suspense fallback={null}><UrlError /></Suspense>
+      <PageTitle sub="AI-prepared records waiting for an officer. Check each one against the source before approving.">Review queue</PageTitle>
         <div className="flex flex-wrap gap-3">
           <ApproveAllButton
             count={rows.filter(({ e }) => e.mode === "new" && e.status === "draft" && !e.flags.some((f) => f.level === "error")).length}

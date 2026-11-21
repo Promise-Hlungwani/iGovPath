@@ -1,5 +1,7 @@
 "use server";
 
+import { safely } from "@/lib/safe-action";
+
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { and, asc, eq, gte, ne } from "drizzle-orm";
@@ -32,7 +34,7 @@ async function computeMatches(userId: string, profile: CvProfile) {
 }
 
 /** Read the uploaded CV with AI and find matching posts. The file itself is never stored. */
-export async function uploadCv(formData: FormData) {
+async function uploadCvImpl(formData: FormData) {
   const u = await requireUser("/match");
   const file = formData.get("cv");
   if (formData.get("consent") !== "on") fail("Please tick the box to agree to your CV being read by AI.");
@@ -57,7 +59,7 @@ export async function uploadCv(formData: FormData) {
   redirect("/match");
 }
 
-export async function refreshMatches() {
+async function refreshMatchesImpl() {
   const u = await requireUser("/match");
   const [p] = await db.select().from(schema.applicantProfiles).where(eq(schema.applicantProfiles.userId, u.id));
   if (!p?.cvProfile) redirect("/match");
@@ -71,10 +73,23 @@ export async function refreshMatches() {
   redirect("/match");
 }
 
-export async function removeCv() {
+async function removeCvImpl() {
   const u = await requireUser("/match");
   await db.delete(schema.applicantProfiles).where(eq(schema.applicantProfiles.userId, u.id));
   await logAudit({ actor: toActor(u), action: "profile.update", entity: "applicant_profile", entityId: u.id, after: { cv: "removed" } });
   revalidatePath("/match");
   redirect("/match?removed=1");
+}
+
+// Guarded entry points: a failure shows a message instead of crashing the app.
+export async function uploadCv(formData?: FormData) {
+  return safely(() => uploadCvImpl(formData as FormData), "/match");
+}
+
+export async function refreshMatches() {
+  return safely(() => refreshMatchesImpl(), "/match");
+}
+
+export async function removeCv() {
+  return safely(() => removeCvImpl(), "/match");
 }

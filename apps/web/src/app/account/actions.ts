@@ -1,5 +1,7 @@
 "use server";
 
+import { safely } from "@/lib/safe-action";
+
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
@@ -17,7 +19,7 @@ const requestSchema = z.object({
 const MAX_WRONG_CODES_PER_HOUR = 5;
 
 /** Applicant asks for officer access. Status stays "pending" until an admin approves. */
-export async function requestOfficerAccess(formData: FormData) {
+async function requestOfficerAccessImpl(formData: FormData) {
   const u = await requireUser("/account/request-officer-access");
   if (u.role !== "applicant" && !(u.role === "officer" && u.status === "rejected")) {
     redirect("/account");
@@ -35,6 +37,7 @@ export async function requestOfficerAccess(formData: FormData) {
   // Optional officer code: a correct code gives access straight away; wrong guesses are limited.
   const code = parsed.data.officerCode;
   let byCode = false;
+  let asAdmin = false;
   if (code) {
     const { env } = await import("@/lib/env");
     const { and, count, gte } = await import("drizzle-orm");
@@ -45,7 +48,8 @@ export async function requestOfficerAccess(formData: FormData) {
     if (n >= MAX_WRONG_CODES_PER_HOUR) redirect("/account/request-officer-access?error=locked");
     const crypto = await import("node:crypto");
     const same = (a: string, b: string) => a.length === b.length && crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
-    byCode = !!env.OFFICER_CODE && same(env.OFFICER_CODE, code);
+    asAdmin = !!env.ADMIN_CODE && same(env.ADMIN_CODE, code);
+    byCode = asAdmin || (!!env.OFFICER_CODE && same(env.OFFICER_CODE, code));
     if (!byCode) {
       await logAudit({ actor: toActor(u), action: "role.officer_code_wrong", entity: "user", entityId: u.id });
       redirect("/account/request-officer-access?error=code");
@@ -53,14 +57,23 @@ export async function requestOfficerAccess(formData: FormData) {
   }
 
   const before = { role: u.role, status: u.status, departmentId: u.departmentId };
-  const after = { role: "officer" as const, status: byCode ? ("active" as const) : ("pending" as const), departmentId: dept.id, jobTitle: parsed.data.jobTitle };
+  const after = {
+    role: asAdmin ? ("admin" as const) : ("officer" as const),
+    status: byCode ? ("active" as const) : ("pending" as const),
+    departmentId: dept.id,
+    jobTitle: parsed.data.jobTitle,
+  };
   await db
     .update(schema.userRoles)
     .set({ ...after, requestedAt: new Date(), approvedAt: byCode ? new Date() : null, approvedBy: null })
     .where(eq(schema.userRoles.userId, u.id));
-  await logAudit({ actor: toActor(u), action: byCode ? "role.officer_by_code" : "role.request_officer", entity: "user", entityId: u.id, before, after });
+  await logAudit({
+    actor: toActor(u),
+    action: asAdmin ? "role.admin_by_code" : byCode ? "role.officer_by_code" : "role.request_officer",
+    entity: "user", entityId: u.id, before, after,
+  });
   revalidatePath("/account");
-  redirect(byCode ? "/portal" : "/account");
+  redirect(asAdmin ? "/admin/users" : byCode ? "/portal" : "/account");
 }
 
 /**
@@ -69,7 +82,7 @@ export async function requestOfficerAccess(formData: FormData) {
  * their anonymous funnel events, and audit entries about them or their personal activity.
  * Records they approved as an officer stay (department records) but no longer name them.
  */
-export async function deleteMyAccount(formData: FormData) {
+async function deleteMyAccountImpl(formData: FormData) {
   const u = await requireUser("/account");
   if (String(formData.get("confirm") ?? "").trim().toUpperCase() !== "DELETE") {
     redirect("/account?deleteError=1");
@@ -103,4 +116,13 @@ export async function deleteMyAccount(formData: FormData) {
   const jar = await cookies();
   for (const c of jar.getAll()) if (c.name.includes("better-auth")) jar.delete(c.name);
   redirect("/?flash=deleted");
+}
+
+// Guarded entry points: a failure shows a message instead of crashing the app.
+export async function requestOfficerAccess(formData?: FormData) {
+  return safely(() => requestOfficerAccessImpl(formData as FormData), "/account/request-officer-access");
+}
+
+export async function deleteMyAccount(formData?: FormData) {
+  return safely(() => deleteMyAccountImpl(formData as FormData), "/account");
 }

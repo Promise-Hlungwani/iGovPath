@@ -9,6 +9,7 @@ type Item = { group: string; item: string; source: string; key: string };
 export function Checklist({ opportunityId, items, initial, signedIn }: { opportunityId: string; items: Item[]; initial: Record<string, boolean>; signedIn: boolean }) {
   const [state, setState] = useState(initial);
   const [, start] = useTransition();
+  const [error, setError] = useState<string | null>(null);
   const groups = Array.from(new Set(items.map((i) => i.group)));
   const done = items.filter((i) => state[i.key]).length;
   return (
@@ -22,6 +23,7 @@ export function Checklist({ opportunityId, items, initial, signedIn }: { opportu
           <div className="h-full bg-brand transition-all" style={{ width: `${items.length ? (done / items.length) * 100 : 0}%` }} />
         </div>
       </div>
+      {error && <p role="alert" className="rounded-lg border border-danger/30 bg-danger-soft px-4 py-3 text-sm text-danger">{error}</p>}
       {groups.map((g) => (
         <section key={g}>
           <h2 className="font-semibold mb-2">{g}</h2>
@@ -38,7 +40,13 @@ export function Checklist({ opportunityId, items, initial, signedIn }: { opportu
                     const v = e.target.checked;
                     setState((s) => ({ ...s, [i.key]: v }));
                     start(async () => {
-                      await setChecklistItem({ opportunityId, key: i.key, done: v });
+                      setError(null);
+                      try {
+                        await setChecklistItem({ opportunityId, key: i.key, done: v });
+                      } catch {
+                        setState((s) => ({ ...s, [i.key]: !v }));
+                        setError("Couldn't save that tick. Please try again.");
+                      }
                     });
                   }}
                 />

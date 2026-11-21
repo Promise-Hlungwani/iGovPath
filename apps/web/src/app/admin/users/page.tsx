@@ -4,6 +4,9 @@ import { Badge, Button, Card, PageTitle, Select } from "@/components/ui";
 import { formatDateTime } from "@/lib/format";
 import { requireAdmin } from "@/lib/session";
 import { approveOfficer, changeDepartment, rejectOfficer, setDeactivated } from "./actions";
+import { Suspense } from "react";
+import { UrlError } from "@/components/url-error";
+import { AdminToggle } from "@/components/admin-toggle";
 
 export default async function AdminUsersPage() {
   const me = await requireAdmin();
@@ -30,6 +33,7 @@ export default async function AdminUsersPage() {
 
   return (
     <div className="space-y-8">
+      <Suspense fallback={null}><UrlError /></Suspense>
       <PageTitle sub="Approve government officers before they can review and publish records.">Manage users</PageTitle>
 
       <section>
@@ -99,6 +103,8 @@ export default async function AdminUsersPage() {
                   <td className="p-3 text-muted whitespace-nowrap">{formatDateTime(r.createdAt)}</td>
                   <td className="p-3">
                     {r.id !== me.id && (
+                      <div className="flex flex-wrap items-center gap-2">
+                      {r.status !== "deactivated" && <AdminToggle userId={r.id} name={r.name} isAdmin={r.role === "admin"} />}
                       <form action={setDeactivated}>
                         <input type="hidden" name="userId" value={r.id} />
                         <input type="hidden" name="deactivate" value={r.status === "deactivated" ? "0" : "1"} />
@@ -106,7 +112,9 @@ export default async function AdminUsersPage() {
                           {r.status === "deactivated" ? "Reactivate" : "Deactivate"}
                         </Button>
                       </form>
+                      </div>
                     )}
+                    {r.id === me.id && <span className="text-sm text-muted">You</span>}
                   </td>
                 </tr>
               ))}

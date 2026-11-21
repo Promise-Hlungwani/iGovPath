@@ -27,12 +27,13 @@ export default async function RequestOfficerAccess({ searchParams }: { searchPar
             <Input id="jobTitle" name="jobTitle" required minLength={2} placeholder="e.g. HR Practitioner" />
           </div>
           <div>
-            <Label htmlFor="officerCode">Officer code (if you have one)</Label>
+            <Label htmlFor="officerCode">Officer or admin code (if you have one)</Label>
             <Input id="officerCode" name="officerCode" inputMode="numeric" autoComplete="off" placeholder="e.g. 12345" className="max-w-xs" />
             <p className="text-xs text-muted mt-1">Leave it empty to wait for an admin to approve you.</p>
           </div>
           {error === "1" && <Notice tone="danger">Please choose a department and enter your job title.</Notice>}
           {error === "code" && <Notice tone="danger">Incorrect code.</Notice>}
+          {error && !["1", "code", "locked"].includes(error) && <Notice tone="danger">{error}</Notice>}
           {error === "locked" && <Notice tone="danger">Too many wrong codes. Please wait an hour, or leave the code empty to wait for an admin.</Notice>}
           <Button type="submit">Send request</Button>
         </form>

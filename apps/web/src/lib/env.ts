@@ -17,6 +17,8 @@ const schema = z.object({
   AI_SERVICE_KEY: z.string().trim().default(""),
   // Officer code: entering it gives officer access straight away. Empty means admin approval only.
   OFFICER_CODE: z.string().trim().default(""),
+  // Admin code: entering it on the officer access page makes the person an admin straight away.
+  ADMIN_CODE: z.string().trim().default(""),
   APP_URL: z.string().url().default("http://localhost:3000"),
   SAMPLE_DATA_ONLY: z
     .string()
