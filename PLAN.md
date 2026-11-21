@@ -339,21 +339,22 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
   - Also: while `SAMPLE_DATA_ONLY=true`, the client refuses (with a clear error) any payload not marked sample, before it leaves the server.
   - Done when: a non-sample payload is refused while the switch is on; the same test prompt succeeds with `LLM_PROVIDER=groq`; changing the variable switches provider with no code change; a forced 429 is retried and then reported clearly.
 
-- [ ] **G6. Document intake** 🤖
+- [x] **G6. Document intake** 🤖
   - Tasks: upload endpoint stores the PDF, records sha256 and page count; PyMuPDF text blocks with page + position; Tesseract fallback for pages with no text; `split_psvc.py` splits a circular into per-post chunks.
   - Done when: uploading PSVC 42 produces text blocks with page numbers; the splitter finds the posts in at least one annexure, matched against a manual count.
 
-- [ ] **G7. Extraction with guardrails** 🤖
+- [x] **G7. Extraction with guardrails** 🤖
   - Tasks: Prompt 1 verbatim; Pydantic schema; evidence check (each quote must exist in the source text, otherwise the field is blanked and flagged); rule checks (ISO dates, closing date after circular date, reference format, URLs/emails, Z83 mapped to the central form); one retry with errors fed back; result stored as an `extractions` row with status.
   - Done when: on 3 real adverts every non-null field has a quote that exists in the source; a deliberately wrong quote is caught and blanked; a missing salary comes back null ("not stated in the advert").
 
-- [ ] **G8. Officer review and publish** 🤖
+- [x] **G8. Officer review and publish** 🤖
   - Tasks: review queue (drafts with flags); review screen with the PDF page on the left, evidence highlighted, editable fields on the right; Approve / Reject recorded with the signed-in officer; approval creates or updates the `opportunities` row and an `opportunity_versions` row; audit log entry.
   - Done when: an officer uploads an advert, edits one field, approves it, and it appears in applicant search within seconds; the audit log shows the officer's name, department and the change.
 
-- [ ] **G9. Pre-extract the sample set** 🤝
+- [x] **G9. Pre-extract the sample set** 🤝
   - Tasks: 🤖 batch script runs G7 over all sample adverts, paced under Groq's tokens-per-minute limit, saves results to `data/sample/`; 👤 reviews and approves them in the portal like a real officer.
   - Done when: all sample adverts exist as approved records extracted by the pipeline, not typed by hand.
+  - Status (21 Nov): ✅ 18 adverts extracted by the pipeline (`scripts/build_samples.py`, 0 guardrail errors, 182/182 filled fields have an exact source quote) and approved by the seed script. ⏳ 👤 Still to do: a team member reviews each one in the portal.
 
 ### Phase 3: Applicant features
 

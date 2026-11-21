@@ -128,7 +128,7 @@ export async function seed() {
   return { departments: Object.keys(deptIds).length, opportunities: created };
 }
 
-if (process.argv[1]?.endsWith("seed.ts")) {
+if (process.argv[1]?.endsWith("seed.ts") && !process.env.SEED_IMPORTED) {
   seed()
     .then((r) => {
       console.log(`Seed done: ${r.departments} departments, ${r.opportunities} new opportunities.`);

@@ -52,7 +52,10 @@
     "documents_required": "Applicants are not required to submit copies of qualifications and other relevant documents upon application but must submit a fully completed Z83 form and detailed Curriculum Vitae.",
     "form_required": "NOTE :\nApplications must be submitted on a duly completed New Z83 form (effective from 01 January 2021)",
     "apply_route": "Applicants must strictly apply using only the provincial e-Recruitment system which is available on www.ecprov.gov.za, or https://www.ecprov.gov.za or https://erecruitment.ecotp.gov.za/.",
-    "contact": "ENQUIRIES :\nMr Y Singqandu Tel No: (043) 605 5042 or Ms Q Blayi Tel No: (043) 605 5048."
+    "contact": "ENQUIRIES :\nMr Y Singqandu Tel No: (043) 605 5042 or Ms Q Blayi Tel No: (043) 605 5048.",
+    "apply_route.portal_url": "Applicants must strictly apply using only the provincial e-Recruitment system which is available on www.ecprov.gov.za, or https://www.ecprov.gov.za or https://erecruitment.ecotp.gov.za/.",
+    "contact.name": "ENQUIRIES :\nMr Y Singqandu Tel No: (043) 605 5042 or Ms Q Blayi Tel No: (043) 605 5048.",
+    "contact.phone": "ENQUIRIES :\nMr Y Singqandu Tel No: (043) 605 5042 or Ms Q Blayi Tel No: (043) 605 5048."
    }
   },
   "flags": [
@@ -124,7 +127,10 @@
     "documents_required": "Attach only a copy of CV and completed Z83.",
     "form_required": "Each post(s) advert must be accompanied by its own application form for employment and must be fully completed, initiated and signed by the applicant as instructed below.",
     "hand_delivery": "All applications must be hand-delivered at: 389 Sophie De Bruyn Street, Pretoria.",
-    "contact": "ENQUIRIES : Dr. L Mahlasela Tel No: (012) 748 6364"
+    "contact": "ENQUIRIES : Dr. L Mahlasela Tel No: (012) 748 6364",
+    "apply_route.hand_delivery": "All applications must be hand-delivered at: 389 Sophie De Bruyn Street, Pretoria.",
+    "contact.name": "ENQUIRIES : Dr. L Mahlasela Tel No: (012) 748 6364",
+    "contact.phone": "ENQUIRIES : Dr. L Mahlasela Tel No: (012) 748 6364"
    }
   },
   "flags": [],
@@ -184,7 +190,9 @@
     "documents_required": "Applicants submitting applications in a printed hard copy (manual or hand delivery) must utilize the most recent Z83 application for employment form ... The application must include only completed and signed Z83 form and a recently updated comprehensive CV (with detailed previous experience). Certified copies of Identity Document, Senior Certificate and the highest required qualification as well as a driver's license where necessary",
     "form_required": "Applicants submitting applications in a printed hard copy (manual or hand delivery) must utilize the most recent Z83 application for employment form ... The application must include only completed and signed Z83 form",
     "apply_route": "Applicants using electronic format must quote the relevant reference number on the application and apply on the following website:\nhttps://erecruitment.limpopo.gov.za",
-    "contact": "ENQUIRIES :\nCapricorn District: Mr. Masera Tel No: (015) 632 8625, Mr. Mphahlele STG Tel No: (015) 632 8600 or Ms. Matlou MT Tel No: (015) 632 8600"
+    "contact": "ENQUIRIES :\nCapricorn District: Mr. Masera Tel No: (015) 632 8625, Mr. Mphahlele STG Tel No: (015) 632 8600 or Ms. Matlou MT Tel No: (015) 632 8600",
+    "apply_route.portal_url": "Applicants using electronic format must quote the relevant reference number on the application and apply on the following website:\nhttps://erecruitment.limpopo.gov.za",
+    "contact.phone": "ENQUIRIES :\nCapricorn District: Mr. Masera Tel No: (015) 632 8625, Mr. Mphahlele STG Tel No: (015) 632 8600 or Ms. Matlou MT Tel No: (015) 632 8600"
    }
   },
   "flags": [],
@@ -242,7 +250,8 @@
     "form_required": "Z83 form",
     "portal_url": "https://erecruitment.limpopo.gov.za",
     "province": "PROVINCIAL ADMINISTRATION: LIMPOPO",
-    "opportunity_type": "POST 42/446"
+    "opportunity_type": "POST 42/446",
+    "apply_route.portal_url": "https://erecruitment.limpopo.gov.za"
    }
   },
   "flags": [],
@@ -308,7 +317,11 @@
     "documents_required": "The application must include only completed and signed Z83 form and a recently updated comprehensive CV (with detailed previous experience). Certified copies of Identity Document, Senior Certificate and the highest required qualification as well as a driver's license where necessary",
     "form_required": "Applicants submitting applications in a printed hard copy (manual or hand delivery) must utilize the most recent Z83 application for employment form",
     "apply_route": "Applicants using electronic format must quote the relevant reference number on the application and apply on the following website: https://erecruitment.limpopo.gov.za",
-    "contact": "ENQUIRIES\n:\nMs Modiba MM Tel No: (015) 294 3170, Ms. Mothapo RL Tel No: (015) 294 3235 or Ms. Kgobe MA Tel No: (015) 294 3347."
+    "contact": "ENQUIRIES\n:\nMs Modiba MM Tel No: (015) 294 3170, Ms. Mothapo RL Tel No: (015) 294 3235 or Ms. Kgobe MA Tel No: (015) 294 3347.",
+    "apply_route.portal_url": "Applicants using electronic format must quote the relevant reference number on the application and apply on the following website: https://erecruitment.limpopo.gov.za",
+    "apply_route.hand_delivery": "Applicants using electronic format must quote the relevant reference number on the application and apply on the following website: https://erecruitment.limpopo.gov.za",
+    "contact.name": "ENQUIRIES\n:\nMs Modiba MM Tel No: (015) 294 3170, Ms. Mothapo RL Tel No: (015) 294 3235 or Ms. Kgobe MA Tel No: (015) 294 3347.",
+    "contact.phone": "ENQUIRIES\n:\nMs Modiba MM Tel No: (015) 294 3170, Ms. Mothapo RL Tel No: (015) 294 3235 or Ms. Kgobe MA Tel No: (015) 294 3347."
    }
   },
   "flags": [],
@@ -369,7 +382,8 @@
     "minimum_requirements": "Grade 12 qualification or equivalent appropriate tertiary qualification as recognised by SAQA. Able to operate switchboard machines. Able to handle confidential information. Able to read and write. Good communication and interpersonal skills. Knowledge of Batho Pele Principle.",
     "documents_required": "The application must include only completed and signed Z83 form and a recently updated comprehensive CV (with detailed previous experience). Certified copies of Identity Document, Senior Certificate and the highest required qualification as well as a driver's license where necessary",
     "form_required": "Applicants submitting applications in a printed hard copy (manual or hand delivery) must utilize the most recent Z83 application for employment form",
-    "apply_route": "Applicants using electronic format must quote the relevant reference number on the application and apply on the following website: https://erecruitment.limpopo.gov.za"
+    "apply_route": "Applicants using electronic format must quote the relevant reference number on the application and apply on the following website: https://erecruitment.limpopo.gov.za",
+    "apply_route.portal_url": "Applicants using electronic format must quote the relevant reference number on the application and apply on the following website: https://erecruitment.limpopo.gov.za"
    }
   },
   "flags": [],
@@ -420,7 +434,10 @@
     "documents_required": "Applicants must apply for this post by using e-Recruitment system https://erecruitment.ecotp.gov.za/",
     "form_required": "Applications must be submitted on a duly completed New Z83 form (effective\nfrom 01 January 2021)",
     "apply_route": "Applicants must apply for this post by using e-Recruitment system https://erecruitment.ecotp.gov.za/",
-    "contact": "ENQUIRIES\n:\nMs VP Makonco Tel No: (040) 608 1523/21"
+    "contact": "ENQUIRIES\n:\nMs VP Makonco Tel No: (040) 608 1523/21",
+    "apply_route.portal_url": "Applicants must apply for this post by using e-Recruitment system https://erecruitment.ecotp.gov.za/",
+    "contact.name": "ENQUIRIES\n:\nMs VP Makonco Tel No: (040) 608 1523/21",
+    "contact.phone": "ENQUIRIES\n:\nMs VP Makonco Tel No: (040) 608 1523/21"
    }
   },
   "flags": [
@@ -486,7 +503,10 @@
     "form_required": "Applications must be submitted on a duly completed New Z83 form",
     "apply_route": "Applications must be submitted via the provincial e-recruitment system accessible at: https://erecruitment.ecotp.gov.za",
     "contact": "ENQUIRIES :\nMs VP Makonco Tel No: (040) 608 1523/21",
-    "conditional_items": "Shortlisted candidates will be required to submit certified copies of qualifications, and other relevant documents ... on or before the interview date."
+    "conditional_items": "Shortlisted candidates will be required to submit certified copies of qualifications, and other relevant documents ... on or before the interview date.",
+    "apply_route.portal_url": "https://erecruitment.ecotp.gov.za/",
+    "contact.name": "ENQUIRIES :\nMs VP Makonco Tel No: (040) 608 1523/21",
+    "contact.phone": "ENQUIRIES :\nMs VP Makonco Tel No: (040) 608 1523/21"
    }
   },
   "flags": [],
@@ -557,7 +577,12 @@
     "contact_name": "ENQUIRIES : Mr T.D. Molo",
     "contact_phone": "(066) 025 2014",
     "conditional_items_0": "Only shortlisted candidates will be required to submit certified copies of qualifications and other related documents on or before the day of the interview",
-    "conditional_items_1": "If you have not been contacted within four (4) months after the closing date of this advertisement, please accept that your application was unsuccessful"
+    "conditional_items_1": "If you have not been contacted within four (4) months after the closing date of this advertisement, please accept that your application was unsuccessful",
+    "apply_route.email": "Email: recruitment@dard.gov.za",
+    "apply_route.postal": "Applications must be forwarded to Mrs S Hlekiso, Private Bag X02, Bloemfontein, 9301",
+    "apply_route.hand_delivery": "delivered by Hand to Mrs S Hlekiso in Room 228, 2nd Floor, Admin Building, Glen",
+    "contact.name": "ENQUIRIES : Mr T.D. Molo",
+    "contact.phone": "(066) 025 2014"
    }
   },
   "flags": [
@@ -623,7 +648,11 @@
     "documents_required": "Applications must be submitted on Z83 form obtainable from any Public Service Department or on the internet ... and must be accompanied by a recently updated comprehensive CV (with three contactable references).",
     "form_required": "Z83 form obtainable from any Public Service Department or on the internet at www.gov.za/Documents",
     "apply_route": "Applications can be hand delivered to Gauteng CET College, 100 Northern Parkway, Ormonde 209, Crown Wood Office Park Block D or submit to the following email quoting the reference number to: STATEACC03@GP.CETC.edu.za",
-    "contact": "ENQUIRIES : Ms. ER Phaladi Tel No: (010) 900 1154 or Mr M Maboe Tel No: (010) 900 1168"
+    "contact": "ENQUIRIES : Ms. ER Phaladi Tel No: (010) 900 1154 or Mr M Maboe Tel No: (010) 900 1168",
+    "apply_route.email": "Applications can be hand delivered to Gauteng CET College, 100 Northern Parkway, Ormonde 209, Crown Wood Office Park Block D or submit to the following email quoting the reference number to: STATEACC03@GP.CETC.edu.za",
+    "apply_route.hand_delivery": "Applications can be hand delivered to Gauteng CET College, 100 Northern Parkway, Ormonde 209, Crown Wood Office Park Block D or submit to the following email quoting the reference number to: STATEACC03@GP.CETC.edu.za",
+    "contact.name": "ENQUIRIES : Ms. ER Phaladi Tel No: (010) 900 1154 or Mr M Maboe Tel No: (010) 900 1168",
+    "contact.phone": "ENQUIRIES : Ms. ER Phaladi Tel No: (010) 900 1154 or Mr M Maboe Tel No: (010) 900 1168"
    }
   },
   "flags": [],
@@ -687,7 +716,11 @@
     "form_required": "Application for Employment Form (New Z83, effective from 1 January 2021, obtainable at www.dpsa.gov.za)",
     "apply_route": "Applications ... must be submitted online at https://erecruitment.dha.gov.za or ccssrecruitment@dha.gov.za",
     "contact": "Head Office: Ms V Motshegoe Tel No: (012) 406 4252",
-    "conditional_items": "Valid driver’s license (if specified as a job requirement)"
+    "conditional_items": "Valid driver’s license (if specified as a job requirement)",
+    "apply_route.email": "Applications ... must be submitted online at https://erecruitment.dha.gov.za or ccssrecruitment@dha.gov.za",
+    "apply_route.portal_url": "Applications ... must be submitted online at https://erecruitment.dha.gov.za or ccssrecruitment@dha.gov.za",
+    "contact.name": "Head Office: Ms V Motshegoe Tel No: (012) 406 4252",
+    "contact.phone": "Head Office: Ms V Motshegoe Tel No: (012) 406 4252"
    }
   },
   "flags": [
@@ -839,7 +872,10 @@
     "form_required": "Candidates will be required to complete a financial disclosure form",
     "apply_route": "All applications to be submitted online on the following link: https://erecruitment.dws.gov.za/",
     "contact": "ENQUIRIES : Mr Sipho Ngobese Tel No: (033) 239 1900/1301",
-    "conditional_items": "SAQA evaluation certificate must accompany foreign qualifications (only when shortlisted). Foreigners or dual citizenship holders must provide a police clearance certificate from country of origin (only when shortlisted)."
+    "conditional_items": "SAQA evaluation certificate must accompany foreign qualifications (only when shortlisted). Foreigners or dual citizenship holders must provide a police clearance certificate from country of origin (only when shortlisted).",
+    "apply_route.portal_url": "All applications to be submitted online on the following link: https://erecruitment.dws.gov.za/",
+    "contact.name": "ENQUIRIES : Mr Sipho Ngobese Tel No: (033) 239 1900/1301",
+    "contact.phone": "ENQUIRIES : Mr Sipho Ngobese Tel No: (033) 239 1900/1301"
    }
   },
   "flags": [
@@ -919,7 +955,10 @@
     "form_required": "Candidates will be required to complete a financial disclosure form",
     "apply_route": "All applications to be submitted online on the following link: https://erecruitment.dws.gov.za/",
     "contact": "ENQUIRIES : Ms KJ Mokoena Tel No: (051) 405 9000",
-    "conditional_items": "SAQA evaluation certificate must accompany foreign qualifications (only when shortlisted). Foreigners or dual citizenship holders must provide a police clearance certificate from country of origin (only when shortlisted)."
+    "conditional_items": "SAQA evaluation certificate must accompany foreign qualifications (only when shortlisted). Foreigners or dual citizenship holders must provide a police clearance certificate from country of origin (only when shortlisted).",
+    "apply_route.portal_url": "All applications to be submitted online on the following link: https://erecruitment.dws.gov.za/",
+    "contact.name": "ENQUIRIES : Ms KJ Mokoena Tel No: (051) 405 9000",
+    "contact.phone": "ENQUIRIES : Ms KJ Mokoena Tel No: (051) 405 9000"
    }
   },
   "flags": [
@@ -1000,7 +1039,10 @@
     "form_required": "completed and signed new Form Z83",
     "apply_route": "All applications must be submitted online on the following link: www.statssa.gov.za/recruitment",
     "contact": "Ms S Ringane Tel No: (012) 310 8097",
-    "conditional_items": "Submission of certified copies of Identity Document, Senior Certificate and the highest required qualification as well as a driver’s license where necessary are optional but will only be submitted by shortlisted candidates to HR on or before the day of the interview date."
+    "conditional_items": "Submission of certified copies of Identity Document, Senior Certificate and the highest required qualification as well as a driver’s license where necessary are optional but will only be submitted by shortlisted candidates to HR on or before the day of the interview date.",
+    "apply_route.portal_url": "All applications must be submitted online on the following link: www.statssa.gov.za/recruitment",
+    "contact.name": "Ms S Ringane Tel No: (012) 310 8097",
+    "contact.phone": "Ms S Ringane Tel No: (012) 310 8097"
    }
   },
   "flags": [],
@@ -1061,7 +1103,11 @@
     "form_required": "new prescribed Z83 form",
     "apply_route": "Applicants must submit their applications via the link http://erecruitment.gcis.gov.za or hand deliver applications to Tshedimosetso House, 1035 cnr Francis Baard & Festival streets, Hatfield, Pretoria.",
     "contact": "ENQUIRIES : Ms Neli Shuping Tel No: (012) 473 0407",
-    "conditional_items": "Only shortlisted candidates will be required to submit certified documents on or before the day of the interview"
+    "conditional_items": "Only shortlisted candidates will be required to submit certified documents on or before the day of the interview",
+    "apply_route.portal_url": "Applicants must submit their applications via the link http://erecruitment.gcis.gov.za or hand deliver applications to Tshedimosetso House, 1035 cnr Francis Baard & Festival streets, Hatfield, Pretoria.",
+    "apply_route.hand_delivery": "Applicants must submit their applications via the link http://erecruitment.gcis.gov.za or hand deliver applications to Tshedimosetso House, 1035 cnr Francis Baard & Festival streets, Hatfield, Pretoria.",
+    "contact.name": "ENQUIRIES : Ms Neli Shuping Tel No: (012) 473 0407",
+    "contact.phone": "ENQUIRIES : Ms Neli Shuping Tel No: (012) 473 0407"
    }
   },
   "flags": [],
@@ -1127,7 +1173,10 @@
     "form_required": "NOTE\n:\nThe new Z83 must be fully completed (please refer on the left side of Z83 special notes for clarity), it must be initialled and signed.",
     "apply_route": "Applications can be submitted by email HJHrecruitment@gauteng.gov.za.",
     "contact": "ENQUIRIES\n:\nMr M Mayekiso Tel No: (011) 489 0897 / 6",
-    "conditional_items": "Only shortlisted candidates will be required/requested to submit certified copies of qualifications and other relevant documents on or before the interview.\nCandidates in possession of a foreign qualification must furnish the Department with an evaluation certificate from the South African Qualifications Authority (SAQA) (Only when shortlisted)."
+    "conditional_items": "Only shortlisted candidates will be required/requested to submit certified copies of qualifications and other relevant documents on or before the interview.\nCandidates in possession of a foreign qualification must furnish the Department with an evaluation certificate from the South African Qualifications Authority (SAQA) (Only when shortlisted).",
+    "apply_route.email": "Applications can be submitted by email HJHrecruitment@gauteng.gov.za.",
+    "contact.name": "ENQUIRIES\n:\nMr M Mayekiso Tel No: (011) 489 0897 / 6",
+    "contact.phone": "ENQUIRIES\n:\nMr M Mayekiso Tel No: (011) 489 0897 / 6"
    }
   },
   "flags": [
@@ -1209,7 +1258,12 @@
     "form_required": "Application for employment form (Form Z83)",
     "apply_route": "All applications should be forwarded to: Assistant Director: HRM, Private Bag X9371, Vryheid, 3100 or be hand delivered at Coswald Brown Street, Vryheid 3100, ... email to VryheidHospital.HRJobApplication@kznhealth.gov.za",
     "contact": "ENQUIRIES\n:\nMs. ATS Sibiya Tel No: (034) 982 2111, EXT. 4692",
-    "conditional_items": "Only shortlisted candidate will be required to produce certified copies of documents, only shortlisted candidate will be required to produce certified copies of documents"
+    "conditional_items": "Only shortlisted candidate will be required to produce certified copies of documents, only shortlisted candidate will be required to produce certified copies of documents",
+    "apply_route.email": "All applications should be forwarded to: Assistant Director: HRM, Private Bag X9371, Vryheid, 3100 or be hand delivered at Coswald Brown Street, Vryheid 3100, ... email to VryheidHospital.HRJobApplication@kznhealth.gov.za",
+    "apply_route.postal": "All applications should be forwarded to: Assistant Director: HRM, Private Bag X9371, Vryheid, 3100 or be hand delivered at Coswald Brown Street, Vryheid 3100, ... email to VryheidHospital.HRJobApplication@kznhealth.gov.za",
+    "apply_route.hand_delivery": "All applications should be forwarded to: Assistant Director: HRM, Private Bag X9371, Vryheid, 3100 or be hand delivered at Coswald Brown Street, Vryheid 3100, ... email to VryheidHospital.HRJobApplication@kznhealth.gov.za",
+    "contact.name": "ENQUIRIES\n:\nMs. ATS Sibiya Tel No: (034) 982 2111, EXT. 4692",
+    "contact.phone": "ENQUIRIES\n:\nMs. ATS Sibiya Tel No: (034) 982 2111, EXT. 4692"
    }
   },
   "flags": [

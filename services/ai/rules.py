@@ -69,12 +69,19 @@ def check_record(rec: AdvertRecord, source: str, document_date: str | None = Non
     src = norm(source)
     data = rec.model_dump()
 
+    evidence = dict(rec.evidence)
+
     def supported(key: str, value: str) -> bool:
         ev = _evidence_for(rec, key)
         if ev and quote_in_source(ev, src):
+            evidence.setdefault(key, ev)
             return True
-        # The value itself appearing verbatim in the source is also acceptable support.
-        return bool(value) and len(value) >= 3 and norm(value) in src
+        # The value itself appearing verbatim in the source is also acceptable support;
+        # record it as the field's evidence quote so every field has one.
+        if bool(value) and len(value) >= 3 and norm(value) in src:
+            evidence[key] = value
+            return True
+        return False
 
     # Scalars
     for f in SCALAR_FIELDS:
@@ -165,4 +172,5 @@ def check_record(rec: AdvertRecord, source: str, document_date: str | None = Non
     if form and "z83" in form.lower().replace(" ", ""):
         data["form_required"] = "Z83"
 
+    data["evidence"] = evidence
     return AdvertRecord.model_validate(data), flags
