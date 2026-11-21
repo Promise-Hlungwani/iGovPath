@@ -15,7 +15,7 @@ Hackathon demo on **26–27 November 2026**. The full plan is in [`PLAN.md`](PLA
 1. **The backlog is the source of truth:** `PLAN.md` §12 lists goals G1–G20 in build order. Work on the first goal whose box is not ticked, unless a person asks for something else.
 2. **Finish a goal properly:** implement the tasks, then **run** every "done when" check (start the app, call the endpoint, click through the flow). Reading the code is not verification.
 3. **Tick the box** in `PLAN.md` only when every "done when" line passed. If something could not be checked, say so and leave it unticked.
-4. **Commit per goal** (or smaller), with the goal id in the message: `G3: officer access requests and admin approval`. The app must still start after every commit.
+4. **Never commit or push.** The project owner makes every commit and push. Leave changes uncommitted and say what changed, unless the owner explicitly asks you to commit or push. The app must still start after your changes.
 5. **Ask a person** when a goal depends on a 👤 input (see the "Human inputs" table in §12) or when a decision isn't covered by `PLAN.md`. Don't invent sample data, labels or translations a person is meant to supply.
 6. Keep `PLAN.md`, `README.md` and `.env.example` up to date when a decision, command or variable changes.
 
@@ -88,6 +88,5 @@ Schema changes: edit `apps/web/src/db/schema.ts`, then `pnpm --filter web db:gen
 
 ## Git
 
-- Small commits per goal, message `G<n>: <what changed>`.
-- Never force-push to `main`. Never rewrite published history.
+- **AI assistants never run `git commit` or `git push` in this repo.** The owner does all commits and pushes. Only do it when the owner explicitly asks in the conversation. Read-only commands (`git status`, `git diff`, `git log`) are fine.
 - Never commit `.env`, uploaded documents in `data/uploads/`, or generated build output.

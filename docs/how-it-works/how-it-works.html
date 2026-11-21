@@ -6,8 +6,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap">
 <style>
   :root {
-    --navy: #002c42; --teal: #0f262c; --green: #009673; --mint: #9be8c6; --cyan: #28b8dc;
-    --ink: #1d2b36; --muted: #455565; --line: #dbe3e8; --paper: #ffffff; --soft: #f1f6f5; --warn: #b26b00;
+    --navy: #000000; --teal: #111111; --green: #000000; --mint: #ffffff; --cyan: #28b8dc;
+    --ink: #111111; --muted: #555555; --line: #dddddd; --paper: #ffffff; --soft: #f4f4f4; --warn: #b26b00;
   }
   @page { size: A4; margin: 0; }
   * { box-sizing: border-box; }
@@ -23,18 +23,18 @@
   .muted { color: var(--muted); }
 
   /* Cover band */
-  .cover { background: radial-gradient(ellipse at 80% 20%, #1d4a50 0%, var(--teal) 55%, #0b1c21 100%); color: #fff; border-radius: 4mm; padding: 11mm 11mm 10mm; margin-bottom: 7mm; }
-  .cover .eyebrow { color: var(--mint); }
+  .cover { background: #000000; color: #fff; border-radius: 4mm; padding: 11mm 11mm 10mm; margin-bottom: 7mm; }
+  .cover .eyebrow { color: #bbbbbb; }
   .cover h1 { color: #fff; font-size: 27pt; line-height: 1.05; font-weight: 900; letter-spacing: -.01em; margin-top: 3mm; }
-  .cover h1 span { color: var(--mint); }
+  .cover h1 span { color: #9a9a9a; }
   .cover p { color: rgba(255,255,255,.78); margin-top: 4mm; max-width: 150mm; font-size: 11pt; }
-  .principle { display: inline-block; margin-top: 4mm; padding: 2mm 4mm; border: 1px solid rgba(155,232,198,.5); border-radius: 2mm; color: var(--mint); font-weight: 500; font-size: 9.5pt; }
+  .principle { display: inline-block; margin-top: 4mm; padding: 2mm 4mm; border: 1px solid rgba(255,255,255,.5); border-radius: 2mm; color: #ffffff; font-weight: 500; font-size: 9.5pt; }
 
   .diagram { width: 100%; border: 1px solid var(--line); border-radius: 3mm; padding: 3mm; background: var(--soft); }
   .legend { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; margin-top: 5mm; }
   .legend div { border-top: 3px solid var(--green); padding-top: 2mm; }
-  .legend div:nth-child(2) { border-color: var(--cyan); }
-  .legend div:nth-child(3) { border-color: var(--navy); }
+  .legend div:nth-child(2) { border-color: #777777; }
+  .legend div:nth-child(3) { border-color: #bbbbbb; }
   .legend p { font-size: 9.5pt; color: var(--muted); }
 
   /* Flows */
@@ -44,21 +44,21 @@
   .step .body { padding-bottom: 3.2mm; border-left: 2px solid var(--line); margin-left: -7.5mm; padding-left: 7.5mm; }
   .step:last-child .body { border-left-color: transparent; }
   .who { display: inline-block; font-size: 7.5pt; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: .5mm 2mm; border-radius: 1mm; margin-right: 2mm; }
-  .who.officer { background: #e3f4fa; color: #00597a; }
-  .who.ai { background: #e1f3ee; color: #006b52; }
-  .who.groq { background: #efe9fb; color: #5b3aa8; }
-  .who.db { background: #e8edf2; color: var(--navy); }
-  .who.app { background: #fff2dc; color: #8a5300; }
-  .who.applicant { background: #fde8ec; color: #9c2343; }
-  .gate { background: #fff7e8; border: 1px solid #f2d39a; border-radius: 2mm; padding: 2.5mm 3.5mm; font-size: 9.5pt; margin: 0 0 5mm; }
+  .who.officer { background: #ececec; color: #111111; border: 1px solid #cfcfcf; }
+  .who.ai { background: #ececec; color: #111111; border: 1px solid #cfcfcf; }
+  .who.groq { background: #ececec; color: #111111; border: 1px solid #cfcfcf; }
+  .who.db { background: #ececec; color: #111111; border: 1px solid #cfcfcf; }
+  .who.app { background: #ececec; color: #111111; border: 1px solid #cfcfcf; }
+  .who.applicant { background: #ececec; color: #111111; border: 1px solid #cfcfcf; }
+  .gate { background: #f4f4f4; border: 1px solid #d0d0d0; border-radius: 2mm; padding: 2.5mm 3.5mm; font-size: 9.5pt; margin: 0 0 5mm; }
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 7mm; }
 
-  table { width: 100%; border-collapse: collapse; font-size: 9.5pt; margin: 2mm 0 5mm; }
+  table { width: 100%; border-collapse: collapse; font-size: 9.5pt; margin: 1.5mm 0 4mm; }
   th { text-align: left; color: var(--navy); font-weight: 700; border-bottom: 2px solid var(--navy); padding: 1.8mm 2mm; }
-  td { border-bottom: 1px solid var(--line); padding: 1.8mm 2mm; vertical-align: top; }
+  td { border-bottom: 1px solid var(--line); padding: 1.3mm 2mm; vertical-align: top; }
   td:first-child { font-weight: 500; white-space: nowrap; }
   code { font-family: "SFMono-Regular", Menlo, Consolas, monospace; font-size: 8.8pt; background: var(--soft); padding: .3mm 1.2mm; border-radius: 1mm; color: var(--navy); }
-  .cmd { background: var(--teal); color: #e6f2ef; border-radius: 2.5mm; padding: 4mm 5mm; font-family: Menlo, Consolas, monospace; font-size: 9.5pt; line-height: 1.7; }
+  .cmd { background: var(--teal); color: #e6f2ef; border-radius: 2.5mm; padding: 3mm 5mm; font-family: Menlo, Consolas, monospace; font-size: 9.5pt; line-height: 1.7; }
   .cmd b { color: var(--mint); font-weight: 400; }
   .cmd i { color: rgba(255,255,255,.5); font-style: normal; }
   .box { border: 1px solid var(--line); border-radius: 3mm; padding: 4mm 5mm; }
@@ -81,46 +81,46 @@
   <div class="diagram">
     <svg viewBox="0 0 700 330" width="100%" role="img" aria-label="Architecture diagram">
       <defs>
-        <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#455565"/></marker>
+        <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#555555"/></marker>
       </defs>
       <!-- Browser -->
-      <rect x="250" y="8" width="200" height="44" rx="8" fill="#ffffff" stroke="#455565"/>
-      <text x="350" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#002c42">Your browser</text>
-      <text x="350" y="44" text-anchor="middle" font-size="10.5" fill="#455565">applicants · officers · admins</text>
-      <line x1="350" y1="52" x2="350" y2="88" stroke="#455565" stroke-width="1.6" marker-end="url(#a)" marker-start="url(#a)"/>
+      <rect x="250" y="8" width="200" height="44" rx="8" fill="#ffffff" stroke="#555555"/>
+      <text x="350" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#000000">Your browser</text>
+      <text x="350" y="44" text-anchor="middle" font-size="10.5" fill="#555555">applicants · officers · admins</text>
+      <line x1="350" y1="52" x2="350" y2="88" stroke="#555555" stroke-width="1.6" marker-end="url(#a)" marker-start="url(#a)"/>
       <!-- Web app -->
-      <rect x="20" y="92" width="300" height="118" rx="10" fill="#ffffff" stroke="#009673" stroke-width="2.4"/>
-      <rect x="20" y="92" width="300" height="30" rx="10" fill="#009673"/><rect x="20" y="110" width="300" height="12" fill="#009673"/>
+      <rect x="20" y="92" width="300" height="118" rx="10" fill="#ffffff" stroke="#000000" stroke-width="2.4"/>
+      <rect x="20" y="92" width="300" height="30" rx="10" fill="#000000"/><rect x="20" y="110" width="300" height="12" fill="#000000"/>
       <text x="36" y="112" font-size="13" font-weight="700" fill="#fff">1  Web app (Next.js)</text>
-      <text x="36" y="142" font-size="11" fill="#1d2b36">apps/web · localhost:3000</text>
-      <text x="36" y="162" font-size="11" fill="#455565">Every page you see and click</text>
-      <text x="36" y="179" font-size="11" fill="#455565">Logins, roles, approvals, notifications</text>
-      <text x="36" y="196" font-size="11" fill="#455565">Writes every change to the audit log</text>
+      <text x="36" y="142" font-size="11" fill="#111111">apps/web · localhost:3000</text>
+      <text x="36" y="162" font-size="11" fill="#555555">Every page you see and click</text>
+      <text x="36" y="179" font-size="11" fill="#555555">Logins, roles, approvals, notifications</text>
+      <text x="36" y="196" font-size="11" fill="#555555">Writes every change to the audit log</text>
       <!-- AI service -->
-      <rect x="380" y="92" width="300" height="118" rx="10" fill="#ffffff" stroke="#28b8dc" stroke-width="2.4"/>
-      <rect x="380" y="92" width="300" height="30" rx="10" fill="#28b8dc"/><rect x="380" y="110" width="300" height="12" fill="#28b8dc"/>
-      <text x="396" y="112" font-size="13" font-weight="700" fill="#002c42">2  AI service (Python)</text>
-      <text x="396" y="142" font-size="11" fill="#1d2b36">services/ai · localhost:8000</text>
-      <text x="396" y="162" font-size="11" fill="#455565">Reads PDFs, splits circulars into posts</text>
-      <text x="396" y="179" font-size="11" fill="#455565">Runs the AI prompts</text>
-      <text x="396" y="196" font-size="11" fill="#455565">Checks every AI answer before returning it</text>
+      <rect x="380" y="92" width="300" height="118" rx="10" fill="#ffffff" stroke="#555555" stroke-width="2.4"/>
+      <rect x="380" y="92" width="300" height="30" rx="10" fill="#555555"/><rect x="380" y="110" width="300" height="12" fill="#555555"/>
+      <text x="396" y="112" font-size="13" font-weight="700" fill="#ffffff">2  AI service (Python)</text>
+      <text x="396" y="142" font-size="11" fill="#111111">services/ai · localhost:8000</text>
+      <text x="396" y="162" font-size="11" fill="#555555">Reads PDFs, splits circulars into posts</text>
+      <text x="396" y="179" font-size="11" fill="#555555">Runs the AI prompts</text>
+      <text x="396" y="196" font-size="11" fill="#555555">Checks every AI answer before returning it</text>
       <!-- arrows web<->ai -->
-      <line x1="320" y1="140" x2="378" y2="140" stroke="#455565" stroke-width="1.6" marker-end="url(#a)"/>
-      <line x1="378" y1="168" x2="322" y2="168" stroke="#455565" stroke-width="1.6" marker-end="url(#a)"/>
-      <text x="349" y="134" text-anchor="middle" font-size="9" fill="#455565">task</text>
-      <text x="349" y="183" text-anchor="middle" font-size="9" fill="#455565">result</text>
+      <line x1="320" y1="140" x2="378" y2="140" stroke="#555555" stroke-width="1.6" marker-end="url(#a)"/>
+      <line x1="378" y1="168" x2="322" y2="168" stroke="#555555" stroke-width="1.6" marker-end="url(#a)"/>
+      <text x="349" y="134" text-anchor="middle" font-size="9" fill="#555555">task</text>
+      <text x="349" y="183" text-anchor="middle" font-size="9" fill="#555555">result</text>
       <!-- DB -->
-      <line x1="170" y1="210" x2="170" y2="246" stroke="#455565" stroke-width="1.6" marker-end="url(#a)" marker-start="url(#a)"/>
-      <rect x="20" y="250" width="300" height="70" rx="10" fill="#002c42"/>
+      <line x1="170" y1="210" x2="170" y2="246" stroke="#555555" stroke-width="1.6" marker-end="url(#a)" marker-start="url(#a)"/>
+      <rect x="20" y="250" width="300" height="70" rx="10" fill="#111111"/>
       <text x="36" y="274" font-size="13" font-weight="700" fill="#ffffff">3  Database (Neon, online)</text>
-      <text x="36" y="293" font-size="11" fill="#cfe3ea">posts, versions, users, checklists,</text>
-      <text x="36" y="309" font-size="11" fill="#cfe3ea">notifications, audit log</text>
+      <text x="36" y="293" font-size="11" fill="#cccccc">posts, versions, users, checklists,</text>
+      <text x="36" y="309" font-size="11" fill="#cccccc">notifications, audit log</text>
       <!-- Groq -->
-      <line x1="530" y1="210" x2="530" y2="246" stroke="#455565" stroke-width="1.6" marker-end="url(#a)" marker-start="url(#a)"/>
-      <rect x="380" y="250" width="300" height="70" rx="10" fill="#ffffff" stroke="#455565" stroke-dasharray="5 4"/>
-      <text x="396" y="274" font-size="13" font-weight="700" fill="#002c42">Groq (online AI model)</text>
-      <text x="396" y="293" font-size="11" fill="#455565">gpt-oss-120b · receives public text only</text>
-      <text x="396" y="309" font-size="11" fill="#455565">backups: OpenRouter or Ollama</text>
+      <line x1="530" y1="210" x2="530" y2="246" stroke="#555555" stroke-width="1.6" marker-end="url(#a)" marker-start="url(#a)"/>
+      <rect x="380" y="250" width="300" height="70" rx="10" fill="#ffffff" stroke="#555555" stroke-dasharray="5 4"/>
+      <text x="396" y="274" font-size="13" font-weight="700" fill="#000000">Groq (online AI model)</text>
+      <text x="396" y="293" font-size="11" fill="#555555">gpt-oss-120b · receives public text only</text>
+      <text x="396" y="309" font-size="11" fill="#555555">backups: OpenRouter or Ollama</text>
     </svg>
   </div>
   <div class="legend">
@@ -151,6 +151,7 @@
         <li><b>Checklist</b> is built by AI from the approved record. The current Z83, CV, certified ID and the reference number are always added by code.</li>
         <li><b>Plain language</b> in English or isiZulu, with the original wording beside it. Every number is checked against the record.</li>
         <li><b>Save a post</b> to get a reminder 3 days before it closes.</li>
+        <li><b>Delete my account</b> removes everything linked to the person: login, saved posts, CV summary, messages and history.</li>
         <li><b>What can I apply for?</b> Upload your CV. Your name, ID, contact details and address are removed in code, then AI reads it and picks the open posts that fit, with reasons and anything you may be missing. The file is not kept.</li>
       </ul>
       <p class="muted" style="font-size:9pt">AI results are saved per post version, so later visitors get them instantly.</p>
@@ -191,6 +192,7 @@
       <li>AI never scores, ranks or rejects applicants (POPIA s71).</li>
       <li>CVs are read only with consent, with personal details removed first; the file is never kept.</li>
       <li>The dashboard shows anonymous counts only, never names.</li>
+      <li>Anyone can delete their account and all their data in one step.</li>
     </ul>
   </div>
 
