@@ -76,6 +76,13 @@ export async function getOrCreateDraft(u: CurrentUser, opportunityId: string) {
   }
   const [profile] = await db.select().from(schema.applicantProfiles).where(eq(schema.applicantProfiles.userId, u.id));
   const cv = (profile?.cvProfile ?? {}) as { qualifications?: string[]; experience?: { role: string; years: number | null }[]; licences?: string[] };
+  // Reuse the answers from the person's last application, so they don't type them again.
+  const [last] = await db
+    .select({ z83: schema.applications.z83 })
+    .from(schema.applications)
+    .where(eq(schema.applications.userId, u.id))
+    .orderBy(desc(schema.applications.updatedAt))
+    .limit(1);
   const parts = u.name.trim().split(/\s+/);
   const prefill: Partial<Z83> = {
     fullNames: parts.length > 1 ? parts.slice(0, -1).join(" ") : parts[0],
@@ -87,9 +94,12 @@ export async function getOrCreateDraft(u: CurrentUser, opportunityId: string) {
     qualifications: (cv.qualifications ?? []).slice(0, 6).map((q) => ({ name: q, institution: "", year: "" })),
     experience: (cv.experience ?? []).slice(0, 6).map((e) => ({ employer: "", position: e.role, from: "", to: "" })),
   };
+  // Previous answers win over the account/CV guess; the declaration is always signed afresh.
+  const fromLast = (last?.z83 ?? {}) as Partial<Z83>;
+  const z83: Partial<Z83> = { ...prefill, ...Object.fromEntries(Object.entries(fromLast).filter(([, v]) => v !== "" && v !== undefined && !(Array.isArray(v) && v.length === 0))), declaration: false };
   const [created] = await db
     .insert(schema.applications)
-    .values({ opportunityId, userId: u.id, departmentId: opp.departmentId, status: "draft", z83: prefill })
+    .values({ opportunityId, userId: u.id, departmentId: opp.departmentId, status: "draft", z83 })
     .onConflictDoNothing()
     .returning();
   if (created) {

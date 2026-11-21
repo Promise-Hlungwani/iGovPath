@@ -57,6 +57,9 @@ test("apply inside iGovPath, officer updates the status, applicant sees it", asy
   await page.getByRole("button", { name: "Apply now →" }).click();
   await expect(page.getByText("✓ CV")).toBeVisible();
   await expect(page.getByText("✓ Certified copy of your ID")).toBeVisible();
+  // ...and the answers from the last application are filled in.
+  await expect(page.getByLabel("South African ID number")).toHaveValue("9506225123081");
+  await expect(page.getByLabel("Phone number")).toHaveValue("0824447788");
 
   // Officer of another department can't see it.
   await page.context().clearCookies();
@@ -89,4 +92,29 @@ test("apply inside iGovPath, officer updates the status, applicant sees it", asy
   await expect(page.getByTestId("application").first()).toContainText("Shortlisted");
   await page.goto("/notifications");
   await expect(page.getByTestId("notification").first()).toContainText("Interviews on 3 December.");
+});
+
+test("fill with sample data, then replace the CV with a newer one", async ({ page }) => {
+  test.setTimeout(180_000);
+  const [opp] = await sql<{ id: string }>(
+    `select id from opportunities where closing_date >= current_date and status <> 'withdrawn' order by closing_date desc limit 1`);
+  await signUp(page, "Sample Filler", email("filler"));
+  await page.goto(`/posts/${opp.id}`);
+  await page.getByRole("button", { name: "Apply now →" }).click();
+  await page.getByRole("button", { name: "Fill with sample data" }).click();
+  await expect(page.getByLabel("South African ID number")).toHaveValue("9506225123081");
+  await expect(page.getByLabel("Qualification", { exact: true })).toHaveValue("National Senior Certificate");
+  for (const t of ["✓ CV", "✓ Certified copy of your ID", "✓ Certified copies of qualifications"]) await expect(page.getByText(t)).toBeVisible();
+  const href = await page.getByRole("link", { name: /Sample CV/ }).first().getAttribute("href");
+  const pdf = await page.request.get(href as string);
+  expect((await pdf.body()).subarray(0, 5).toString()).toBe("%PDF-");
+
+  // Upload a newer CV: it replaces the old one in the application and in My documents.
+  await page.getByLabel("Upload CV").setInputFiles(path.join(process.env.HOME as string, "Downloads/iGovPath sample documents/1b - Sample CV (version 2, updated).pdf"));
+  await page.getByLabel("Upload CV").locator("xpath=following-sibling::button").click();
+  await expect(page.getByRole("link", { name: /version 2, updated/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Sample CV - / })).toHaveCount(0);
+  await page.goto("/account/documents");
+  await expect(page.getByTestId("my-document")).toHaveCount(3);
+  await expect(page.getByTestId("my-document").first()).toContainText("version 2, updated");
 });
