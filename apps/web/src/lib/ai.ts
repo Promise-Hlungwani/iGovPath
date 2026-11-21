@@ -4,12 +4,14 @@ import { env } from "@/lib/env";
 /** Thrown when the AI service is down or refuses a request; message is safe to show officers. */
 export class AiServiceError extends Error {}
 
+const keyHeader = (): Record<string, string> => (env.AI_SERVICE_KEY ? { "x-igovpath-key": env.AI_SERVICE_KEY } : {});
+
 async function call<T>(path: string, body: unknown, timeoutMs = 120_000): Promise<T> {
   let res: Response;
   try {
     res = await fetch(`${env.AI_SERVICE_URL}${path}`, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: { "content-type": "application/json", ...keyHeader() },
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(timeoutMs),
       cache: "no-store",
@@ -55,7 +57,7 @@ export async function intakePdf(bytes: Buffer, fileName: string, maxPages?: numb
   if (maxPages) fd.append("max_pages", String(maxPages));
   let res: Response;
   try {
-    res = await fetch(`${env.AI_SERVICE_URL}/intake`, { method: "POST", body: fd, signal: AbortSignal.timeout(120_000) });
+    res = await fetch(`${env.AI_SERVICE_URL}/intake`, { method: "POST", body: fd, headers: keyHeader(), signal: AbortSignal.timeout(120_000) });
   } catch {
     throw new AiServiceError("The AI service is not reachable. Start it with `pnpm ai` and try again.");
   }
@@ -77,7 +79,7 @@ export async function cvProfile(bytes: Buffer, fileName: string, consent: boolea
   fd.append("consent", consent ? "true" : "false");
   let res: Response;
   try {
-    res = await fetch(`${env.AI_SERVICE_URL}/cv/profile`, { method: "POST", body: fd, signal: AbortSignal.timeout(120_000) });
+    res = await fetch(`${env.AI_SERVICE_URL}/cv/profile`, { method: "POST", body: fd, headers: keyHeader(), signal: AbortSignal.timeout(120_000) });
   } catch {
     throw new AiServiceError("The AI service is not reachable. Please try again in a moment.");
   }

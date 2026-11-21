@@ -10,6 +10,9 @@ import { getCurrentUser } from "@/lib/session";
 import { displayTitle } from "@/lib/text";
 import { refreshMatches, removeCv, uploadCv } from "./actions";
 
+// AI steps can take up to a minute.
+export const maxDuration = 60;
+
 export default async function MatchPage({ searchParams }: { searchParams: Promise<{ error?: string; removed?: string }> }) {
   const { error, removed } = await searchParams;
   const u = await getCurrentUser();
@@ -43,7 +46,7 @@ export default async function MatchPage({ searchParams }: { searchParams: Promis
             <div>
               <label htmlFor="cv" className="block font-medium mb-2">{profile ? "Upload a newer CV" : "Your CV"}</label>
               <Input id="cv" name="cv" type="file" accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required />
-              <p className="text-xs text-muted mt-1">PDF or Word, up to 5 MB.</p>
+              <p className="text-xs text-muted mt-1">PDF or Word, up to 4 MB.</p>
             </div>
             <label className="flex items-start gap-2 text-sm">
               <input type="checkbox" name="consent" required className="mt-1" />

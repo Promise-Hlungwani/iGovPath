@@ -39,4 +39,7 @@ PROVIDERS: dict[str, dict[str, str | None]] = {
 }
 
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
-CACHE_DIR = ROOT / "data" / "cache"
+# On Vercel only /tmp is writable (and temporary); locally keep the cache in the repo's data folder.
+CACHE_DIR = Path("/tmp/igovpath-cache") if os.getenv("VERCEL") else ROOT / "data" / "cache"
+# Shared secret the website sends in the x-igovpath-key header. Empty = no check (local only).
+AI_SERVICE_KEY: str = os.getenv("AI_SERVICE_KEY", "").strip()

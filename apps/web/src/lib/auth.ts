@@ -11,6 +11,13 @@ const adminEmail = (env.ADMIN_EMAIL || "").trim().toLowerCase();
 export const auth = betterAuth({
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
+  // Accept sign-ins from the live address and from Vercel preview deployments of this project.
+  trustedOrigins: [
+    env.BETTER_AUTH_URL,
+    env.APP_URL,
+    ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL}`] : []),
+    ...(process.env.VERCEL_BRANCH_URL ? [`https://${process.env.VERCEL_BRANCH_URL}`] : []),
+  ],
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: { user: schema.user, session: schema.session, account: schema.account, verification: schema.verification },

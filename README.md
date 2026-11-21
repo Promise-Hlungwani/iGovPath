@@ -165,6 +165,10 @@ Sign up with the `ADMIN_EMAIL` address first to become admin. Officers sign up, 
 | `data/eval` | Accuracy test set to be labelled by people |
 | `docs/DEMO.md` | The pitch script with exact clicks |
 
+## Deploying
+
+See [`docs/DEPLOY.md`](docs/DEPLOY.md): two Vercel projects from this repo (the website in `apps/web`, the AI helper in `services/ai`) and which keys go where.
+
 ## Privacy and limits
 
 - Sample public data only during the hackathon; no ID numbers, no real applicant data.

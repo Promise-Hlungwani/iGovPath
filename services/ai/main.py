@@ -17,7 +17,19 @@ from schemas import (
 )
 from split_psvc import split_circular
 
-app = FastAPI(title="iGovPath AI service", version="0.2.0")
+app = FastAPI(title="iGovPath AI service", version="0.2.0", docs_url=None if config.AI_SERVICE_KEY else "/docs", redoc_url=None)
+
+
+@app.middleware("http")
+async def require_key(request: Request, call_next):
+    """Only the iGovPath website may use this service: it must send the shared key."""
+    import hmac
+
+    if config.AI_SERVICE_KEY and request.url.path != "/health":
+        given = request.headers.get("x-igovpath-key", "")
+        if not hmac.compare_digest(given, config.AI_SERVICE_KEY):
+            return JSONResponse(status_code=401, content={"error": "Not allowed."})
+    return await call_next(request)
 
 
 @app.exception_handler(llm.SampleDataViolation)

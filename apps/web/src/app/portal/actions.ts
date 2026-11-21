@@ -29,7 +29,7 @@ export async function uploadDocument(formData: FormData) {
   const p = parsed.data!;
   const f = file as File;
   if (SAMPLE_MODE && p.confirmPublic !== "on") fail("In sample mode you must confirm the document is public.");
-  if (f.size > 15 * 1024 * 1024) fail("The PDF must be smaller than 15 MB.");
+  if (f.size > 4 * 1024 * 1024) fail("The PDF must be smaller than 4 MB. For a whole circular, upload just your department\u2019s pages (its annexure).");
   const departmentId = u.role === "admin" ? p.departmentId ?? u.departmentId : u.departmentId;
   if (!departmentId) fail("Choose a department.");
 

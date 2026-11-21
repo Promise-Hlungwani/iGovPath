@@ -1,8 +1,7 @@
-import fs from "node:fs/promises";
-import path from "node:path";
 import { Card, Notice, PageTitle } from "@/components/ui";
 import { formatDateTime } from "@/lib/format";
-import { REPO_ROOT } from "@/lib/paths";
+// Bundled copy of the numbers (see scripts/sync_accuracy.py); the deployed site can't read data/.
+import accuracy from "@/generated/accuracy.json";
 
 type Results = {
   run_at: string; model: string | null; adverts_labelled: number; templates_total: number;
@@ -21,18 +20,10 @@ const LABELS: Record<string, string> = {
 };
 const pct = (x: number | null | undefined) => (x == null ? "—" : `${Math.round(x * 100)}%`);
 
-async function readJson<T>(rel: string): Promise<T | null> {
-  try {
-    return JSON.parse(await fs.readFile(path.join(REPO_ROOT, rel), "utf8")) as T;
-  } catch {
-    return null;
-  }
-}
-
-export default async function AccuracyPage() {
-  const r = await readJson<Results>("data/eval/results.json");
-  const samples = (await readJson<{ flags: { level: string }[]; record: Record<string, unknown> }[]>("data/sample/opportunities.json")) ?? [];
-  const sampleErrors = samples.reduce((n, s) => n + s.flags.filter((f) => f.level === "error").length, 0);
+export default function AccuracyPage() {
+  const r = accuracy.results as Results | null;
+  const sampleCount = accuracy.sample.adverts;
+  const sampleErrors = accuracy.sample.guardrail_errors;
 
   return (
     <div className="max-w-4xl space-y-6">
@@ -70,7 +61,7 @@ export default async function AccuracyPage() {
       <Card className="space-y-2">
         <h2 className="font-semibold">Guardrail self-check on the listed adverts (not an accuracy score)</h2>
         <p className="text-sm">
-          {samples.length} listed adverts were extracted by the pipeline. Guardrail errors: <strong>{sampleErrors}</strong>. Every filled field
+          {sampleCount} listed adverts were extracted by the pipeline. Guardrail errors: <strong>{sampleErrors}</strong>. Every filled field
           carries an exact quote from the advert, and an officer approves each record before it is shown.
         </p>
         <p className="text-xs text-muted">This shows the safety checks ran. It does not show the answers are right; only the labelled test set above can.</p>

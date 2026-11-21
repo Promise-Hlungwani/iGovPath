@@ -6,6 +6,9 @@ import { requireOfficer } from "@/lib/session";
 import { SAMPLE_MODE } from "@/lib/flags";
 import { uploadDocument } from "../actions";
 
+// AI steps can take up to a minute.
+export const maxDuration = 60;
+
 export default async function UploadPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const u = await requireOfficer();
   const { error } = await searchParams;
@@ -18,6 +21,7 @@ export default async function UploadPage({ searchParams }: { searchParams: Promi
           <div>
             <Label htmlFor="file">PDF file</Label>
             <Input id="file" name="file" type="file" accept="application/pdf" required />
+            <p className="text-xs text-muted mt-1">PDF up to 4 MB. For a whole vacancy circular, upload only your department&apos;s annexure pages.</p>
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
             <div>

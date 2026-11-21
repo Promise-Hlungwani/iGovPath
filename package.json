@@ -16,7 +16,7 @@
     "demo:reset": "pnpm --filter web demo:reset",
     "test:e2e": "pnpm --filter web test:e2e",
     "test:ai": "node scripts/python-ai.mjs run pytest -q",
-    "ai:setup": "node scripts/python-ai.mjs setup",
+    "ai:setup": "cd services/ai && (python3.12 -m venv .venv || python3 -m venv .venv) && .venv/bin/pip install -q -r requirements-dev.txt",
     "dev:web": "pnpm --filter web dev",
     "bootstrap": "pnpm ai:setup && pnpm db:migrate && pnpm db:seed",
     "prod": "pnpm build && concurrently -k -n ai,web -c blue,green \"cd services/ai && .venv/bin/uvicorn main:app --port 8000\" \"pnpm --filter web start\""

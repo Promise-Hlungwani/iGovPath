@@ -10,6 +10,9 @@ import { getCurrentUser } from "@/lib/session";
 import { displayTitle } from "@/lib/text";
 import { trackFunnel } from "@/lib/funnel";
 
+// AI steps can take up to a minute.
+export const maxDuration = 60;
+
 export default async function ChecklistPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const data = await getOpportunity(id);

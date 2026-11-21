@@ -1,13 +1,10 @@
 import "server-only";
 import crypto from "node:crypto";
-import fs from "node:fs/promises";
-import path from "node:path";
 import { and, eq } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { ai, intakePdf, type AdvertRecord, type Amendment, type Flag } from "@/lib/ai";
 import { logAudit } from "@/lib/audit";
 import { toActor, type CurrentUser } from "@/lib/session";
-import { UPLOAD_DIR } from "@/lib/paths";
 
 type DocKind = (typeof schema.docKindEnum.enumValues)[number];
 
@@ -20,8 +17,6 @@ export async function createDocument(
   if (existing) return { doc: existing, duplicate: true };
 
   const intake = await intakePdf(input.bytes, input.fileName);
-  await fs.mkdir(UPLOAD_DIR, { recursive: true });
-  await fs.writeFile(path.join(UPLOAD_DIR, `${sha}.pdf`), input.bytes);
   // Keep text for every page; keep block positions only for the first 40 pages (enough for review highlights).
   const pages = intake.pages.map((p, i) => ({ ...p, blocks: i < 40 ? p.blocks : [] }));
   const [doc] = await db
@@ -31,7 +26,7 @@ export async function createDocument(
       kind: input.kind,
       title: input.title,
       fileName: input.fileName,
-      filePath: `data/uploads/${sha}.pdf`,
+      filePath: `db:${sha}`,
       sha256: sha,
       pageCount: intake.page_count,
       pages,
@@ -40,6 +35,7 @@ export async function createDocument(
       uploadedBy: u.id,
     })
     .returning();
+  await db.insert(schema.documentFiles).values({ documentId: doc.id, data: input.bytes });
   await logAudit({
     actor: toActor(u), action: "document.upload", entity: "source_document", entityId: doc.id,
     after: { title: doc.title, kind: doc.kind, sha256: sha, pageCount: doc.pageCount },

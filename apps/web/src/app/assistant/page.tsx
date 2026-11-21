@@ -6,6 +6,9 @@ import { SubmitButton } from "@/components/submit-button";
 import { ai, AiServiceError } from "@/lib/ai";
 import { displayTitle } from "@/lib/text";
 
+// AI steps can take up to a minute.
+export const maxDuration = 60;
+
 const STOP = new Set(["what", "when", "where", "which", "does", "with", "from", "that", "this", "have", "need", "post", "posts", "close", "closes", "apply", "there", "about", "your", "they", "will", "into", "must"]);
 
 async function listings(question: string) {

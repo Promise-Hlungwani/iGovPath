@@ -1,8 +1,14 @@
 import { sql } from "drizzle-orm";
 import {
-  boolean, date, index, integer, jsonb, pgEnum, pgTable, primaryKey, serial,
+  boolean, customType, date, index, integer, jsonb, pgEnum, pgTable, primaryKey, serial,
   text, timestamp, uniqueIndex, uuid, vector,
 } from "drizzle-orm/pg-core";
+
+const bytea = customType<{ data: Buffer; driverData: Buffer }>({
+  dataType() {
+    return "bytea";
+  },
+});
 
 /* ───────────── Better Auth tables (names/columns follow Better Auth's schema) ───────────── */
 
@@ -114,6 +120,14 @@ export const sourceDocuments = pgTable("source_documents", {
   isSample: boolean("is_sample").notNull().default(true),
   uploadedBy: text("uploaded_by").references(() => user.id),
   uploadedAt: timestamp("uploaded_at").notNull().defaultNow(),
+});
+
+/** The PDF bytes, kept apart from source_documents so normal queries don't load them.
+ * Stored in the database because hosting platforms like Vercel don't keep files on disk. */
+export const documentFiles = pgTable("document_files", {
+  documentId: uuid("document_id").primaryKey().references(() => sourceDocuments.id, { onDelete: "cascade" }),
+  contentType: text("content_type").notNull().default("application/pdf"),
+  data: bytea("data").notNull(),
 });
 
 export type ExtractionFlag = { field: string; level: "error" | "warning"; message: string };

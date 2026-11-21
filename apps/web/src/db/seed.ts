@@ -146,6 +146,15 @@ export async function seed() {
     });
     created++;
   }
+  // Store the PDF bytes in the database (hosting platforms don't keep files on disk).
+  const docs = await db.select({ id: schema.sourceDocuments.id, filePath: schema.sourceDocuments.filePath }).from(schema.sourceDocuments);
+  const have = new Set((await db.select({ id: schema.documentFiles.documentId }).from(schema.documentFiles)).map((r) => r.id));
+  for (const d of docs) {
+    if (have.has(d.id) || d.filePath.startsWith("db:")) continue;
+    const file = path.join(ROOT, d.filePath);
+    if (!fs.existsSync(file)) continue;
+    await db.insert(schema.documentFiles).values({ documentId: d.id, data: fs.readFileSync(file) }).onConflictDoNothing();
+  }
   return { departments: Object.keys(deptIds).length, opportunities: created };
 }
 

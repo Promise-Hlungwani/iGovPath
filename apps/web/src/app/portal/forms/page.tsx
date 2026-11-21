@@ -8,6 +8,9 @@ import { formatDate } from "@/lib/format";
 import { canActOnDepartment, requireOfficer } from "@/lib/session";
 import { publishFormVersion } from "./actions";
 
+// AI steps can take up to a minute.
+export const maxDuration = 60;
+
 export default async function FormsPage({ searchParams }: { searchParams: Promise<{ doc?: string; error?: string; published?: string }> }) {
   const u = await requireOfficer();
   const sp = await searchParams;

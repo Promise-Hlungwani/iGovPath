@@ -29,3 +29,4 @@ data/cache/
 
 # Playwright output
 .e2e-results/
+.next-build/

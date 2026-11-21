@@ -10,6 +10,9 @@ import { canActOnDepartment, requireOfficer } from "@/lib/session";
 import { displayTitle } from "@/lib/text";
 import { extractChunkAction } from "../../actions";
 
+// AI steps can take up to a minute.
+export const maxDuration = 60;
+
 export default async function DocumentPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ error?: string; q?: string }> }) {
   const u = await requireOfficer();
   const { id } = await params;

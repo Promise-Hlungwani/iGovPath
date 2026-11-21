@@ -6,6 +6,8 @@ import { config } from "dotenv";
 config({ path: path.resolve(__dirname, "../../.env"), quiet: true });
 
 const nextConfig: NextConfig = {
+  // Lets a production build run next to `pnpm dev` without clashing (NEXT_DIST_DIR=.next-build).
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   devIndicators: false,
   serverExternalPackages: ["pg"],
   // Don't reload the dev server when test results, AI caches, uploads or the Python service change.

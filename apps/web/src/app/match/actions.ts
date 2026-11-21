@@ -38,7 +38,7 @@ export async function uploadCv(formData: FormData) {
   if (formData.get("consent") !== "on") fail("Please tick the box to agree to your CV being read by AI.");
   if (!(file instanceof File) || file.size === 0) fail("Choose your CV file (PDF or Word).");
   const f = file as File;
-  if (f.size > 5 * 1024 * 1024) fail("Your CV must be smaller than 5 MB.");
+  if (f.size > 4 * 1024 * 1024) fail("Your CV must be smaller than 4 MB.");
   if (!/\.(pdf|docx|txt)$/i.test(f.name)) fail("Upload your CV as a PDF or Word (.docx) file.");
   try {
     const { profile } = await cvProfile(Buffer.from(await f.arrayBuffer()), f.name, true);

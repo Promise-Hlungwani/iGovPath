@@ -11,6 +11,9 @@ import { canActOnDepartment, requireOfficer } from "@/lib/session";
 import { displayTitle } from "@/lib/text";
 import { approveAction, rejectAction } from "../../actions";
 
+// AI steps can take up to a minute.
+export const maxDuration = 60;
+
 export default async function ReviewPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ error?: string; approved?: string }> }) {
   const u = await requireOfficer();
   const { id } = await params;

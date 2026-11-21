@@ -104,6 +104,8 @@ def main() -> None:
         "per_advert": per_advert,
     }
     (ROOT / "data/eval/results.json").write_text(json.dumps(result, indent=1))
+    import subprocess, sys as _sys  # keep the website's copy in step
+    subprocess.run([_sys.executable, "-I", str(ROOT / "scripts/sync_accuracy.py")], check=False)
     print(json.dumps({k: result[k] for k in ("adverts_labelled", "overall_field_accuracy", "evidence_check_failures")}))
 
 

@@ -4,6 +4,9 @@ import { ai, AiServiceError } from "@/lib/ai";
 import { requireOfficer } from "@/lib/session";
 import { SAMPLE_MODE } from "@/lib/flags";
 
+// AI steps can take up to a minute.
+export const maxDuration = 60;
+
 export default async function DraftCheckPage({ searchParams }: { searchParams: Promise<{ text?: string }> }) {
   await requireOfficer();
   const { text } = await searchParams;

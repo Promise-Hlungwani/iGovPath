@@ -8,6 +8,9 @@ import { getOpportunity } from "@/lib/opportunities";
 import { displayTitle } from "@/lib/text";
 import { trackFunnel } from "@/lib/funnel";
 
+// AI steps can take up to a minute.
+export const maxDuration = 60;
+
 const SECTIONS: [string, string][] = [
   ["what_the_job_is", "What the job is"],
   ["what_you_must_have", "What you must have"],
