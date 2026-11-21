@@ -6,6 +6,7 @@ import { config } from "dotenv";
 config({ path: path.resolve(__dirname, "../../.env"), quiet: true });
 
 const nextConfig: NextConfig = {
+  devIndicators: false,
   serverExternalPackages: ["pg"],
   // Don't reload the dev server when test results, AI caches, uploads or the Python service change.
   webpack: (config) => {

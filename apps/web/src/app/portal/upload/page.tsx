@@ -51,7 +51,7 @@ export default async function UploadPage({ searchParams }: { searchParams: Promi
           {SAMPLE_MODE && (
             <label className="flex items-start gap-2 text-sm">
               <input type="checkbox" name="confirmPublic" required className="mt-1" />
-              <span>This is a <strong>public</strong> document (sample data). It contains no applicant personal information.</span>
+              <span>This is a <strong>public</strong> document. It contains no applicant personal information.</span>
             </label>
           )}
           {error && <Notice tone="danger">{error}</Notice>}

@@ -15,7 +15,7 @@ export const auth = betterAuth({
     provider: "pg",
     schema: { user: schema.user, session: schema.session, account: schema.account, verification: schema.verification },
   }),
-  // Email + password only; no email verification or reset for the hackathon (PLAN.md §2).
+  // Email + password only; no email verification or reset yet (PLAN.md §2).
   emailAndPassword: { enabled: true, minPasswordLength: 8, requireEmailVerification: false },
   databaseHooks: {
     user: {

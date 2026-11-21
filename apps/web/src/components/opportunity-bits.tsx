@@ -20,7 +20,7 @@ export function TypeBadge({ type }: { type: "post" | "internship" | "learnership
 }
 
 export function SampleTag() {
-  return <Badge tone="warn">Sample</Badge>;
+  return <Badge tone="neutral">From public circular</Badge>;
 }
 
 export function ClosingText({ date }: { date: string | null }) {

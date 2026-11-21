@@ -63,7 +63,7 @@ export default async function AssistantPage({ searchParams }: { searchParams: Pr
               <ul className="list-disc pl-5">{cited.map((l) => <li key={l.id}><Link className="text-brand underline" href={`/posts/${l.id}`}>{l.title}</Link> · {l.department}</li>)}</ul>
             </div>
           )}
-          <p className="text-xs text-muted">AI answer from approved sample listings ({answer.model}). It does not decide who is shortlisted. Check the original advert.</p>
+          <p className="text-xs text-muted">AI answer from approved listings ({answer.model}). It does not decide who is shortlisted. Check the original advert.</p>
         </Card>
       )}
     </div>

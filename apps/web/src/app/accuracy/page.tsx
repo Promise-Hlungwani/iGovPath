@@ -68,9 +68,9 @@ export default async function AccuracyPage() {
       )}
 
       <Card className="space-y-2">
-        <h2 className="font-semibold">Guardrail self-check on the demo sample (not an accuracy score)</h2>
+        <h2 className="font-semibold">Guardrail self-check on the listed adverts (not an accuracy score)</h2>
         <p className="text-sm">
-          {samples.length} sample adverts were extracted by the pipeline. Guardrail errors: <strong>{sampleErrors}</strong>. Every filled field
+          {samples.length} listed adverts were extracted by the pipeline. Guardrail errors: <strong>{sampleErrors}</strong>. Every filled field
           carries an exact quote from the advert, and an officer approves each record before it is shown.
         </p>
         <p className="text-xs text-muted">This shows the safety checks ran. It does not show the answers are right; only the labelled test set above can.</p>

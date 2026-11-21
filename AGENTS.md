@@ -22,7 +22,7 @@ Hackathon demo on **26–27 November 2026**. The full plan is in [`PLAN.md`](PLA
 ## Non-negotiable rules
 
 ### Privacy and data (POPIA)
-- **Sample public data only.** Never use real applicant data or ID numbers. Every record is labelled *sample* with its source document and date.
+- **Sample public data only.** Never use real applicant data or ID numbers. Every record shows its source document and date and is labelled as copied from a public circular (not yet confirmed by the department) while `SAMPLE_DATA_ONLY` is on. No "demo" or "hackathon" wording in the product UI.
 - **AI never ranks, scores, shortlists or rejects applicants** (POPIA s71). Matching says "looks like a fit" / "you may be missing X". Never "eligible", never a numeric score shown about a person.
 - Dashboards show aggregated, anonymised counts only: no names, emails or IDs.
 - Never send anything to an LLM that is not sample data.
@@ -60,6 +60,7 @@ Conventions:
 - Python: type hints, Pydantic models for every request, response and LLM output.
 - Keep it simple: no new library or service without a reason noted in the commit or `PLAN.md`. Hackathon scope: no microservices beyond the two above.
 - UI text in plain English (about grade 8); dates shown as `5 December 2026`.
+- Visual style uses SITA's public website colours (navy `#002c42`, green `#009673`, teal `#003e4f`, slate `#455565`, cyan `#28b8dc`) and Roboto, defined as tokens in `apps/web/src/app/globals.css`. Never use the SITA logo or present the site as SITA's own.
 
 ## LLM usage limits (free tier)
 

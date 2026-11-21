@@ -65,7 +65,7 @@ export default async function MatchPage({ searchParams }: { searchParams: Promis
           <Button type="submit">Show matches</Button>
         </form>
         <p className="text-xs text-muted mt-3">
-          {u ? "Saved to your account as sample data." : "Not saved. Sign in to keep your answers."} No ID number or other personal details are asked for.
+          {u ? "Saved to your account." : "Not saved. Sign in to keep your answers."} No ID number or other personal details are asked for.
         </p>
       </Card>
 

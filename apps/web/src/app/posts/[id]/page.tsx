@@ -117,7 +117,7 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
               <li key={v.id} className="text-sm border-l-2 border-border pl-3">
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge tone={v.version === opp.currentVersion ? "brand" : "neutral"}>Version {v.version}</Badge>
-                  <span className="text-muted">{formatDateTime(v.approvedAt)} · approved by {approver ?? "seed script (sample)"}</span>
+                  <span className="text-muted">{formatDateTime(v.approvedAt)} · approved by {approver ?? "imported from the circular"}</span>
                 </div>
                 <p className="mt-1">{v.note}{vdoc && <span className="text-muted"> · {vdoc}</span>}</p>
                 {v.changedFields.length > 0 && <VersionDiff record={v.record} prev={versions.find((x) => x.v.version === v.version - 1)?.v.record} fields={v.changedFields} />}

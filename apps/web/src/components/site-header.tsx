@@ -10,32 +10,32 @@ export async function SiteHeader() {
     unread = await unreadCount(u.id);
   }
   return (
-    <header className="border-b border-border bg-surface">
-      <div className="max-w-6xl mx-auto px-4 min-h-14 py-2 flex flex-wrap items-center gap-x-6 gap-y-2">
-        <Link href="/" className="font-semibold text-lg tracking-tight">
-          <span className="text-brand">iGov</span>Path
+    <header className="bg-navy text-navy-ink">
+      <div className="max-w-6xl mx-auto px-4 min-h-16 py-3 flex flex-wrap items-center gap-x-6 gap-y-2">
+        <Link href="/" className="font-bold text-xl tracking-tight text-white">
+          <span className="text-accent">iGov</span>Path
         </Link>
-        <nav className="flex flex-wrap items-center gap-4 text-sm flex-1">
-          <Link href="/search" className="hover:text-brand">Find opportunities</Link>
-          <Link href="/match" className="hover:text-brand">What can I apply for?</Link>
-          <Link href="/assistant" className="hover:text-brand">Ask</Link>
-          {u && <Link href="/saved" className="hover:text-brand">Saved</Link>}
-          {isActiveOfficer(u) && <Link href="/portal" className="hover:text-brand">Officer portal</Link>}
-          {isAdmin(u) && <Link href="/admin/users" className="hover:text-brand">Users</Link>}
+        <nav className="flex flex-wrap items-center gap-5 text-sm flex-1 text-white/85">
+          <Link href="/search" className="hover:text-accent">Find opportunities</Link>
+          <Link href="/match" className="hover:text-accent">What can I apply for?</Link>
+          <Link href="/assistant" className="hover:text-accent">Ask</Link>
+          {u && <Link href="/saved" className="hover:text-accent">Saved</Link>}
+          {isActiveOfficer(u) && <Link href="/portal" className="hover:text-accent">Officer portal</Link>}
+          {isAdmin(u) && <Link href="/admin/users" className="hover:text-accent">Users</Link>}
         </nav>
-        <div className="flex items-center gap-3 text-sm">
+        <div className="flex items-center gap-4 text-sm text-white/85">
           {u ? (
             <>
-              <Link href="/notifications" className="hover:text-brand relative" aria-label={`Notifications${unread ? `, ${unread} unread` : ""}`}>
+              <Link href="/notifications" className="hover:text-accent relative" aria-label={`Notifications${unread ? `, ${unread} unread` : ""}`}>
                 Notifications
                 {unread > 0 && <span data-testid="unread" className="ml-1 inline-flex min-w-5 justify-center rounded-full bg-danger text-white text-xs px-1.5">{unread}</span>}
               </Link>
-              <Link href="/account" className="hover:text-brand">{u.name}</Link>
+              <Link href="/account" className="hover:text-accent">{u.name}</Link>
             </>
           ) : (
             <>
-              <Link href="/sign-in" className="hover:text-brand">Sign in</Link>
-              <Link href="/sign-up" className="rounded-md bg-brand text-brand-ink px-3 py-1.5">Sign up</Link>
+              <Link href="/sign-in" className="hover:text-accent">Sign in</Link>
+              <Link href="/sign-up" className="rounded-md bg-brand text-white font-medium px-4 py-2 hover:opacity-90">Sign up</Link>
             </>
           )}
         </div>
