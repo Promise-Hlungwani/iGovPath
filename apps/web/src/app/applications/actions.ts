@@ -13,6 +13,8 @@ import {
 import { todayIso } from "@/lib/opportunities";
 import { safely, UserFacingError } from "@/lib/safe-action";
 import { requireUser, toActor } from "@/lib/session";
+import { env } from "@/lib/env";
+import { makeSimplePdf, SAMPLE_Z83, sampleDocText } from "@/lib/sample-application";
 
 const uuid = z.string().uuid();
 const str = (v: FormDataEntryValue | null, max = 200) => String(v ?? "").trim().slice(0, max);
@@ -123,6 +125,27 @@ async function attachSavedDocumentImpl(formData: FormData) {
   redirect(`/applications/${id}#documents`);
 }
 
+/** Testing aid (only while SAMPLE_DATA_ONLY is on): fill the form with a fictional applicant
+ * and attach sample documents where none are attached yet. Documents are also kept in My documents. */
+async function fillWithSampleDataImpl(formData: FormData) {
+  if (!env.SAMPLE_DATA_ONLY) throw new UserFacingError("Sample data is turned off.");
+  const u = await requireUser("/applications");
+  const id = uuid.parse(formData.get("applicationId"));
+  const app = await ownDraft(u.id, id);
+  await db.update(schema.applications).set({ z83: { ...app.z83, ...SAMPLE_Z83, declaration: false }, updatedAt: new Date() }).where(eq(schema.applications.id, id));
+  const have = (await db.select({ kind: schema.applicationFiles.kind }).from(schema.applicationFiles).where(eq(schema.applicationFiles.applicationId, id))).map((r) => r.kind);
+  for (const kind of ["cv", "id_copy", "qualification"] as FileKind[]) {
+    if (have.includes(kind)) continue;
+    const t = sampleDocText(kind);
+    const data = makeSimplePdf(t.title, t.lines);
+    const f = { fileName: t.fileName, contentType: "application/pdf", size: data.length, data };
+    const stored = await storeUserDocument(u.id, kind, f);
+    await db.insert(schema.applicationFiles).values({ applicationId: id, kind, ...f, fromUserDocumentId: stored.id, uploadedAt: stored.updatedAt });
+  }
+  revalidatePath(`/applications/${id}`);
+  redirect(`/applications/${id}?sample=1`);
+}
+
 async function deleteApplicationFileImpl(formData: FormData) {
   const u = await requireUser("/applications");
   const id = uuid.parse(formData.get("applicationId"));
@@ -169,4 +192,7 @@ export async function withdrawApplication(formData?: FormData) {
 }
 export async function attachSavedDocument(formData?: FormData) {
   return safely(() => attachSavedDocumentImpl(formData as FormData), `/applications/${formData?.get("applicationId") ?? ""}`);
+}
+export async function fillWithSampleData(formData?: FormData) {
+  return safely(() => fillWithSampleDataImpl(formData as FormData), `/applications/${formData?.get("applicationId") ?? ""}`);
 }

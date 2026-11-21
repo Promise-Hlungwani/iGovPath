@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { and, eq, ne } from "drizzle-orm";
+import { db, schema } from "@/db";
 import type { Z83 } from "@/db/schema";
 import { Input, Label, Notice, Select } from "@/components/ui";
 import { SubmitButton } from "@/components/submit-button";
@@ -11,12 +13,13 @@ import {
 } from "@/lib/applications";
 import { formatDateTime } from "@/lib/format";
 import { requireUser } from "@/lib/session";
+import { env } from "@/lib/env";
 import { displayTitle } from "@/lib/text";
-import { attachSavedDocument, deleteApplicationFile, saveApplication, uploadApplicationFile, withdrawApplication } from "../actions";
+import { attachSavedDocument, deleteApplicationFile, fillWithSampleData, saveApplication, uploadApplicationFile, withdrawApplication } from "../actions";
 
-export default async function ApplicationPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ saved?: string }> }) {
+export default async function ApplicationPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ saved?: string; sample?: string }> }) {
   const { id } = await params;
-  const { saved } = await searchParams;
+  const { saved, sample } = await searchParams;
   const u = await requireUser(`/applications/${id}`);
   const app = await getApplicationFor(u, id);
   if (!app || !app.isOwner) notFound();
@@ -27,6 +30,11 @@ export default async function ApplicationPage({ params, searchParams }: { params
 
   const kinds = app.files.map((f) => f.kind);
   const savedDocs = await myDocuments(u.id);
+  // The Z83 is filled in below. Any other form the department asks for is downloaded, filled in and uploaded.
+  const [extraForm] = app.o.formId
+    ? await db.select().from(schema.forms).where(and(eq(schema.forms.id, app.o.formId), ne(schema.forms.code, "Z83")))
+    : [];
+  const extraFormUrl = extraForm ? extraForm.officialUrl ?? (extraForm.sourceDocumentId ? `/api/documents/${extraForm.sourceDocumentId}` : null) : null;
   const missing = missingForSubmit(z, kinds);
   const quals = [...(z.qualifications ?? []), ...Array(6).fill({})].slice(0, Math.max(3, (z.qualifications ?? []).length + 1));
   const exps = [...(z.experience ?? []), ...Array(6).fill({})].slice(0, Math.max(2, (z.experience ?? []).length + 1));
@@ -40,8 +48,16 @@ export default async function ApplicationPage({ params, searchParams }: { params
       </header>
       <Suspense fallback={null}><UrlError /></Suspense>
       {saved && <Notice tone="brand">Saved. You can come back and finish later.</Notice>}
+      {sample && <Notice tone="brand">Filled in with a sample applicant and sample documents. Tick the declaration, then send.</Notice>}
+      {env.SAMPLE_DATA_ONLY && (
+        <form action={fillWithSampleData} className="flex flex-wrap items-center gap-3 rounded-2xl border border-dashed border-black/25 px-5 py-4">
+          <input type="hidden" name="applicationId" value={app.a.id} />
+          <p className="text-sm flex-1 min-w-60">Testing? Fill every field with a sample applicant and attach sample documents. They&apos;re saved to My documents, so you can see them reused next time.</p>
+          <SubmitButton variant="secondary" pendingText="Filling in…">Fill with sample data</SubmitButton>
+        </form>
+      )}
       <Notice tone="info">
-        This is the Z83 application, filled in here. We filled in what we could from your account and CV; please check everything.
+        We filled this in from your account, your CV and your last application. Please check it, then send.
         Only you and the officers of {app.dept} can see it.
       </Notice>
 
@@ -53,6 +69,14 @@ export default async function ApplicationPage({ params, searchParams }: { params
             We attach the documents you saved before. Anything you upload here is also kept in <Link href="/account/documents" className="underline">My documents</Link> for your next application.
           </p>
         </div>
+        {extraForm && (
+          <div className="rounded-xl border-2 border-black px-4 py-3 text-sm">
+            <p className="font-semibold">This job also needs the {extraForm.name}</p>
+            <p className="text-muted mt-1">
+              {extraFormUrl ? <><a className="underline font-semibold text-black" href={extraFormUrl} target="_blank" rel="noreferrer">Download the form</a>, fill it in, and upload it under “Other documents” below.</> : "Get it from the department, fill it in, and upload it under “Other documents” below."}
+            </p>
+          </div>
+        )}
         {(["cv", "id_copy", "qualification", "other"] as FileKind[]).map((k) => {
           const files = app.files.filter((f) => f.kind === k);
           const attachedFrom = new Set(files.map((f) => f.fromUserDocumentId));
@@ -97,7 +121,7 @@ export default async function ApplicationPage({ params, searchParams }: { params
         <p className="text-xs text-muted">PDF, Word or a clear photo, up to 4 MB each.</p>
       </section>
 
-      <form action={saveApplication} className="space-y-8">
+      <form key={app.a.updatedAt.getTime()} action={saveApplication} className="space-y-8">
         <input type="hidden" name="applicationId" value={app.a.id} />
 
         <section className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6 space-y-4">
