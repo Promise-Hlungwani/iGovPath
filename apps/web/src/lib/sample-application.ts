@@ -2,15 +2,22 @@ import "server-only";
 import type { Z83 } from "@/db/schema";
 import type { FileKind } from "@/lib/applications";
 
-/** A fictional applicant used to test applications. Nothing here is a real person. */
-export const SAMPLE_Z83: Partial<Z83> = {
-  surname: "Mokoena",
-  fullNames: "Lindiwe Thandeka",
+/** Sample answers for testing: the person's own name and email, everything else made up. */
+export function sampleZ83(name: string, email: string): Partial<Z83> {
+  const parts = name.trim().split(/\s+/);
+  return {
+    ...SAMPLE_REST,
+    fullNames: parts.length > 1 ? parts.slice(0, -1).join(" ") : parts[0],
+    surname: parts.length > 1 ? parts[parts.length - 1] : parts[0],
+    email,
+  };
+}
+
+const SAMPLE_REST: Partial<Z83> = {
   dateOfBirth: "1995-06-22",
   idNumber: "9506225123081",
   citizenship: "sa",
   phone: "0824447788",
-  email: "lindiwe.sample@example.com",
   preferredLanguage: "English",
   contactMethod: "email",
   driversLicence: true,
@@ -30,8 +37,8 @@ export const SAMPLE_Z83: Partial<Z83> = {
 };
 
 /** The text of each sample document (version lets us test "upload a newer one"). */
-export function sampleDocText(kind: FileKind, version = 1): { fileName: string; title: string; lines: string[] } {
-  const z = SAMPLE_Z83;
+export function sampleDocText(kind: FileKind, person: { name: string; email: string }, version = 1): { fileName: string; title: string; lines: string[] } {
+  const z = sampleZ83(person.name, person.email);
   const name = `${z.fullNames} ${z.surname}`;
   switch (kind) {
     case "cv":
@@ -39,7 +46,7 @@ export function sampleDocText(kind: FileKind, version = 1): { fileName: string; 
         fileName: version > 1 ? `Sample CV - ${name} (updated).pdf` : `Sample CV - ${name}.pdf`,
         title: `Curriculum Vitae: ${name}`,
         lines: [
-          "SAMPLE DOCUMENT - FICTIONAL PERSON - FOR TESTING ONLY",
+          "SAMPLE DOCUMENT - FOR TESTING ONLY",
           version > 1 ? "Version 2 (updated)" : "Version 1",
           "",
           `Email: ${z.email}   Phone: ${z.phone}`,
@@ -62,7 +69,7 @@ export function sampleDocText(kind: FileKind, version = 1): { fileName: string; 
         fileName: `Sample certified ID copy - ${name}.pdf`,
         title: "Certified copy of identity document",
         lines: [
-          "SAMPLE DOCUMENT - FICTIONAL PERSON - FOR TESTING ONLY",
+          "SAMPLE DOCUMENT - FOR TESTING ONLY",
           "",
           "REPUBLIC OF SOUTH AFRICA - IDENTITY DOCUMENT (SAMPLE)",
           `Surname: ${z.surname}`,
@@ -80,7 +87,7 @@ export function sampleDocText(kind: FileKind, version = 1): { fileName: string; 
         fileName: `Sample certified qualification - ${name}.pdf`,
         title: "Certified copy of qualification",
         lines: [
-          "SAMPLE DOCUMENT - FICTIONAL PERSON - FOR TESTING ONLY",
+          "SAMPLE DOCUMENT - FOR TESTING ONLY",
           "",
           "Tshwane University of Technology (SAMPLE)",
           "This is to certify that",
@@ -98,13 +105,13 @@ export function sampleDocText(kind: FileKind, version = 1): { fileName: string; 
         fileName: `Sample supplementary form - ${name}.pdf`,
         title: "Supplementary application form",
         lines: [
-          "SAMPLE DOCUMENT - FICTIONAL PERSON - FOR TESTING ONLY",
+          "SAMPLE DOCUMENT - FOR TESTING ONLY",
           "",
           `Applicant: ${name}`,
           `ID number: ${z.idNumber}`,
           "Why I am applying: I want to grow my career in public service IT support.",
           "Available to start: 1 January 2027",
-          "Signed: L.T. Mokoena (sample)",
+          `Signed: ${name} (sample)`,
         ],
       };
   }
