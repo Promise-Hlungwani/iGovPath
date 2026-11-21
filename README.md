@@ -127,6 +127,8 @@ First time (needs Node 20+, pnpm and Python 3.12):
 pnpm install && pnpm bootstrap   # dependencies, Python venv, database tables and sample data
 ```
 
+On Windows, install Python 3.12 and reopen your terminal before running `pnpm bootstrap`.
+
 Every time, one command starts everything (AI service + web app; Ctrl+C stops both):
 
 ```bash
