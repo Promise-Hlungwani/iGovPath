@@ -73,8 +73,7 @@ Groq's free tier is roughly 30 requests a minute, 1,000 a day and 6–12K tokens
 
 ```bash
 cp .env.example .env              # first time only, then fill in the values
-pnpm install && pnpm ai:setup     # first time only
-pnpm db:migrate && pnpm db:seed   # create tables, load sample data
+pnpm install && pnpm bootstrap    # first time only: Python venv, tables, sample data
 pnpm dev                          # AI service (:8000) + web app (:3000) together
 pnpm dev:web / pnpm ai            # just one of them
 pnpm lint && pnpm typecheck

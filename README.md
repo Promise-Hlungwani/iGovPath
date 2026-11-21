@@ -124,10 +124,7 @@ curl -s http://localhost:11434/api/tags
 First time (needs Node 20+, pnpm and Python 3.12):
 
 ```bash
-pnpm install                 # web app dependencies
-pnpm ai:setup                # Python venv + AI service dependencies
-pnpm db:migrate              # create tables in Neon (uses DATABASE_URL, direct)
-pnpm db:seed                 # departments, Z83 form and 18 sample opportunities
+pnpm install && pnpm bootstrap   # dependencies, Python venv, database tables and sample data
 ```
 
 Every time, one command starts everything (AI service + web app; Ctrl+C stops both):
