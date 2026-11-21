@@ -371,7 +371,7 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
   - Tasks: save / unsave; list of saved posts with closing countdown; in-app reminder 3 days before closing; notification when a saved post is amended, extended or withdrawn, or its form is superseded.
   - Done when: saving a post that closes in 2 days shows a reminder; publishing an amendment to it creates a notification for that applicant.
 
-- [ ] **G13. "What can I apply for?" matching** 🤖
+- [x] **G13. "What can I apply for?" matching** 🤖
   - Tasks: small profile form (qualifications, licences, province); filters + rule match against minimum requirements; text search ranking (embeddings optional); output "looks like a fit" / "you may be missing X" with links to the source text; never says "eligible", never shows a score.
   - Done when: the proposal's example (matric + driver's licence, Limpopo) returns the expected sample posts with reasons; no screen contains the word "eligible" or a numeric score.
 
