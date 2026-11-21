@@ -36,7 +36,7 @@ export default async function DocumentPage({ params, searchParams }: { params: P
           {exts.map((e) => {
             const r = e.record as { post_title?: string; reference_number?: string; summary?: string; status_change?: string };
             return (
-              <Card key={e.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
+              <Card key={e.id} className="flex flex-wrap items-center justify-between gap-3 py-3" data-testid={`amendment-${r.reference_number ?? "none"}`}>
                 <div>
                   <p className="font-medium">{displayTitle(r.post_title) || "Untitled"} <span className="text-muted font-normal">· Ref {r.reference_number ?? "not stated"}</span></p>
                   <p className="text-sm text-muted">{r.summary}</p>

@@ -367,7 +367,7 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
   - Done when: explanations keep every date and number from the record (automatic check); the banner appears on non-English; the native speaker has signed off or listed fixes.
   - Status (21 Nov): ✅ 🤖 English + isiZulu built; automatic fact check passed on 5 posts × 2 languages; banner shows on isiZulu. ⏳ 👤 Native-speaker review still needed (default language isiZulu; change `LANGUAGES` in `apps/web/src/lib/generated.ts` if the team picks another).
 
-- [ ] **G12. Saved posts, reminders and notifications** 🤖
+- [x] **G12. Saved posts, reminders and notifications** 🤖
   - Tasks: save / unsave; list of saved posts with closing countdown; in-app reminder 3 days before closing; notification when a saved post is amended, extended or withdrawn, or its form is superseded.
   - Done when: saving a post that closes in 2 days shows a reminder; publishing an amendment to it creates a notification for that applicant.
 
@@ -377,7 +377,7 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
 
 ### Phase 4: Amendments
 
-- [ ] **G14. Amendment flow (the demo story)** 🤖
+- [x] **G14. Amendment flow (the demo story)** 🤖
   - Tasks: upload an amendment notice → "amendment mode" extraction finds the target post (reference number or title + department) and only the changed fields, with evidence; officer confirms the match and the diff; new version; status becomes amended / extended / withdrawn; notifications sent (G12); post page shows "Amended" with a before/after diff and version history.
   - Done when: the real PSVC 42 amendment to the circular 39 post (Eastern Cape Social Development) updates that sample post end to end, and an applicant who saved it sees the notification and the new requirements.
 

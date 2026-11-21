@@ -6,7 +6,9 @@ import json
 from pydantic import ValidationError
 
 import llm
-from rules import check_record, norm, quote_in_source
+import re
+
+from rules import _dates_in, check_record, norm, quote_in_source
 from schemas import (
     AdvertRecord, Amendment, AmendmentResponse, AmendmentResult, ExtractResponse, Flag,
 )
@@ -49,8 +51,18 @@ def extract_advert(text: str, *, is_sample: bool, document_date: str | None = No
 def extract_amendments(text: str, *, is_sample: bool) -> AmendmentResponse:
     raw = llm.chat_json(llm.load_prompt("amendment"), f"<notice>{text}</notice>", is_sample=is_sample, task="amendment")
     src = norm(text)
-    results: list[AmendmentResult] = []
+    source_dates = _dates_in(text)
+    items: list = []
     for item in raw.get("amendments") or []:
+        # Code fallback: split "REF A; REF B" into one amendment per reference number.
+        refs = [r.strip() for r in re.split(r"[;,]| and ", str((item or {}).get("reference_number") or "")) if r.strip()]
+        if len(refs) > 1:
+            for r in refs:
+                items.append({**item, "reference_number": r})
+        else:
+            items.append(item)
+    results: list[AmendmentResult] = []
+    for item in items:
         try:
             a = Amendment.model_validate(item)
         except ValidationError as e:
@@ -63,6 +75,8 @@ def extract_amendments(text: str, *, is_sample: bool) -> AmendmentResponse:
             if value in (None, [], {}):
                 continue
             ev = a.evidence.get(field) or a.evidence.get(f"changes.{field}")
+            if field == "closing_date" and value in source_dates:
+                continue  # the exact date is written in the notice
             if not ev or not quote_in_source(ev, src):
                 flags.append(Flag(field=field, level="error", message="No exact quote in the notice supports this change; removed."))
                 setattr(a.changes, field, None)

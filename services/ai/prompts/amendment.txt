@@ -21,6 +21,7 @@ Return valid JSON only:
    "summary": str,
    "evidence": {"<field>": "<exact quote>"}}
 ]}
+If one notice covers several posts, return ONE amendment per post, each with exactly one reference number.
 Only put a field in "changes" when the notice says it changed; otherwise null.
 "minimum_requirements" must be the full NEW requirement wording from the notice.
 Use "extended" when only the closing date moves later, "withdrawn" when the post is cancelled, otherwise "amended".
