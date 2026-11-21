@@ -28,6 +28,7 @@ export async function SiteHeader() {
           <Link href="/match" className="hover:text-black hover:underline">What can I apply for?</Link>
           <Link href="/assistant" className="hover:text-black hover:underline">Ask</Link>
           {u && <Link href="/saved" className="hover:text-black hover:underline">Saved</Link>}
+          {u && <Link href="/applications" className="hover:text-black hover:underline">My applications</Link>}
           {isActiveOfficer(u) && <Link href="/portal" className="hover:text-black hover:underline inline-flex items-center" aria-label={`Officer portal${queue ? `, ${queue} waiting for review` : ""}`}>Officer portal<CountBadge n={queue} testId="queue-count" /></Link>}
           {isAdmin(u) && <Link href="/admin/users" className="hover:text-black hover:underline inline-flex items-center" aria-label={`Users${officerRequests ? `, ${officerRequests} officer requests` : ""}`}>Users<CountBadge n={officerRequests} testId="officer-requests-count" /></Link>}
         </nav>

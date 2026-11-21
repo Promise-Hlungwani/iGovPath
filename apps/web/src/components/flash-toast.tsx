@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const MESSAGES: Record<string, (p: URLSearchParams) => string> = {
   deleted: () => "Your account and all your data have been deleted.",
+  applied: () => "Application sent. You can follow its status here.",
   approved: (p) => {
     const n = Number(p.get("n") ?? 0);
     return n === 0 ? "Nothing was approved." : `${n} record${n === 1 ? "" : "s"} approved and published.`;

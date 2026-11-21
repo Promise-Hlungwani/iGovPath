@@ -6,7 +6,7 @@ import { formatDateTime } from "@/lib/format";
 import { ensureClosingReminders } from "@/lib/notify";
 import { requireUser } from "@/lib/session";
 
-const LABEL = { amended: "Amended", extended: "Extended", withdrawn: "Withdrawn", closing_soon: "Closing soon", form_superseded: "New form version" } as const;
+const LABEL = { amended: "Amended", extended: "Extended", withdrawn: "Withdrawn", closing_soon: "Closing soon", form_superseded: "New form version", application_status: "Application update" } as const;
 
 export default async function NotificationsPage() {
   const u = await requireUser("/notifications");

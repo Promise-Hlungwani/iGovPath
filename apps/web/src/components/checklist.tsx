@@ -6,7 +6,7 @@ import { setChecklistItem } from "@/app/posts/actions";
 
 type Item = { group: string; item: string; source: string; key: string };
 
-export function Checklist({ opportunityId, items, initial, signedIn }: { opportunityId: string; items: Item[]; initial: Record<string, boolean>; signedIn: boolean }) {
+export function Checklist({ opportunityId, items, initial, signedIn, showSource = true }: { opportunityId: string; items: Item[]; initial: Record<string, boolean>; signedIn: boolean; showSource?: boolean }) {
   const [state, setState] = useState(initial);
   const [, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -53,7 +53,7 @@ export function Checklist({ opportunityId, items, initial, signedIn }: { opportu
                 <div className="flex-1">
                   <p className="text-sm">{i.item}</p>
                 </div>
-                <Badge tone={i.source === "standard rule" ? "neutral" : "info"}>{i.source}</Badge>
+                {showSource && <Badge tone={i.source === "standard rule" ? "neutral" : "info"}>{i.source}</Badge>}
               </li>
             ))}
           </ul>

@@ -70,8 +70,12 @@ export const oppTypeEnum = pgEnum("opp_type", ["post", "learnership", "internshi
 export const oppStatusEnum = pgEnum("opp_status", ["open", "amended", "extended", "withdrawn", "closed"]);
 export const formStatusEnum = pgEnum("form_status", ["current", "superseded"]);
 export const notificationKindEnum = pgEnum("notification_kind", [
-  "amended", "extended", "withdrawn", "closing_soon", "form_superseded",
+  "amended", "extended", "withdrawn", "closing_soon", "form_superseded", "application_status",
 ]);
+export const applicationStatusEnum = pgEnum("application_status", [
+  "draft", "submitted", "under_review", "shortlisted", "not_successful", "appointed", "withdrawn",
+]);
+export const applicationFileKindEnum = pgEnum("application_file_kind", ["cv", "id_copy", "qualification", "other"]);
 export const funnelStepEnum = pgEnum("funnel_step", [
   "viewed", "saved", "checklist_started", "checklist_complete", "explained",
 ]);
@@ -334,3 +338,60 @@ export const funnelEvents = pgTable(
   },
   (t) => [uniqueIndex("funnel_once").on(t.sessionHash, t.opportunityId, t.step)],
 );
+
+
+/* ───────────── Applications (applying inside iGovPath) ───────────── */
+
+/** Z83-style answers. Personal information: visible only to the applicant and the department's officers; never sent to AI. */
+export type Z83 = {
+  surname: string; fullNames: string; dateOfBirth: string; idNumber: string; passportNumber?: string;
+  citizenship: "sa" | "permanent_resident" | "other"; nationality?: string;
+  phone: string; email: string; preferredLanguage?: string; contactMethod: "email" | "phone" | "post";
+  driversLicence: boolean; disability?: boolean; gender?: string; race?: string;
+  criminalRecord: boolean; criminalRecordDetails?: string;
+  pendingCase: boolean; dismissed: boolean; businessWithState: boolean; businessDetails?: string;
+  qualifications: { name: string; institution: string; year: string }[];
+  experience: { employer: string; position: string; from: string; to: string; reason?: string }[];
+  declaration: boolean;
+};
+
+export const applications = pgTable(
+  "applications",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    opportunityId: uuid("opportunity_id").notNull().references(() => opportunities.id, { onDelete: "cascade" }),
+    userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+    departmentId: integer("department_id").notNull().references(() => departments.id),
+    status: applicationStatusEnum("status").notNull().default("draft"),
+    z83: jsonb("z83").$type<Partial<Z83>>().notNull().default({}),
+    submittedAt: timestamp("submitted_at"),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("applications_one_per_post").on(t.userId, t.opportunityId),
+    index("applications_dept_status").on(t.departmentId, t.status),
+  ],
+);
+
+export const applicationFiles = pgTable("application_files", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  applicationId: uuid("application_id").notNull().references(() => applications.id, { onDelete: "cascade" }),
+  kind: applicationFileKindEnum("kind").notNull(),
+  fileName: text("file_name").notNull(),
+  contentType: text("content_type").notNull(),
+  size: integer("size").notNull(),
+  data: bytea("data").notNull(),
+  uploadedAt: timestamp("uploaded_at").notNull().defaultNow(),
+});
+
+/** Status history shown to the applicant as a timeline. */
+export const applicationEvents = pgTable("application_events", {
+  id: serial("id").primaryKey(),
+  applicationId: uuid("application_id").notNull().references(() => applications.id, { onDelete: "cascade" }),
+  status: applicationStatusEnum("status").notNull(),
+  note: text("note"),
+  actorUserId: text("actor_user_id").references(() => user.id, { onDelete: "set null" }),
+  actorName: text("actor_name"),
+  at: timestamp("at").notNull().defaultNow(),
+});

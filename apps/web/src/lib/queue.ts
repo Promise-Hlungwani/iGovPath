@@ -22,3 +22,13 @@ export async function pendingOfficerCount(u: CurrentUser | null): Promise<number
     .where(and(eq(schema.userRoles.role, "officer"), eq(schema.userRoles.status, "pending")));
   return r?.n ?? 0;
 }
+
+/** Applications sent to this officer's department that nobody has looked at yet. */
+export async function newApplicationsCount(u: CurrentUser | null): Promise<number> {
+  if (!u || !isActiveOfficer(u)) return 0;
+  const where: SQL[] = [eq(schema.applications.status, "submitted")];
+  const scope = departmentScope(u);
+  if (scope !== null) where.push(eq(schema.applications.departmentId, scope));
+  const [r] = await db.select({ n: count() }).from(schema.applications).where(and(...where));
+  return r?.n ?? 0;
+}

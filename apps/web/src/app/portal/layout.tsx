@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { ButtonLink, Card, Notice } from "@/components/ui";
 import { isActiveOfficer, requireUser } from "@/lib/session";
-import { reviewQueueCount } from "@/lib/queue";
+import { newApplicationsCount, reviewQueueCount } from "@/lib/queue";
 import { CountBadge } from "@/components/count-badge";
 
 const nav = [
   { href: "/portal", label: "Review queue" },
+  { href: "/portal/applications", label: "Applications" },
   { href: "/portal/upload", label: "Upload" },
   { href: "/portal/opportunities", label: "Published" },
   { href: "/portal/forms", label: "Forms" },
@@ -31,7 +32,8 @@ export default async function PortalLayout({ children }: { children: React.React
       </Card>
     );
   }
-  const queue = await reviewQueueCount(u);
+  const queue = await reviewQueueCount(u).catch(() => 0);
+  const newApps = await newApplicationsCount(u).catch(() => 0);
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-3">
@@ -40,6 +42,7 @@ export default async function PortalLayout({ children }: { children: React.React
             <Link key={n.href} href={n.href} className="rounded-md px-3 py-1.5 hover:bg-brand-soft inline-flex items-center">
               {n.label}
               {n.href === "/portal" && <CountBadge n={queue} />}
+              {n.href === "/portal/applications" && <CountBadge n={newApps} />}
             </Link>
           ))}
         </nav>

@@ -15,5 +15,5 @@ export function middleware(req: NextRequest) {
 export const config = {
   // Node runtime: the auth library's cookie helper pulls in code the Edge runtime doesn't support.
   runtime: "nodejs",
-  matcher: ["/portal/:path*", "/admin/:path*", "/account/:path*", "/saved/:path*", "/notifications/:path*"],
+  matcher: ["/portal/:path*", "/admin/:path*", "/account/:path*", "/saved/:path*", "/notifications/:path*", "/applications/:path*"],
 };

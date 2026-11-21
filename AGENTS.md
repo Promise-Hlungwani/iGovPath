@@ -22,7 +22,7 @@ Hackathon demo on **26–27 November 2026**. The full plan is in [`PLAN.md`](PLA
 ## Non-negotiable rules
 
 ### Privacy and data (POPIA)
-- **Sample public data only.** Never use real applicant data or ID numbers. Every record shows its source document and date and is labelled as copied from a public circular. No notice bars, and no "demo" or "hackathon" wording in the product UI (team decision, 21 Nov 2026). `SAMPLE_DATA_ONLY` still blocks non-sample data from reaching the AI.
+- **Applications hold personal information** (Z83 answers including ID numbers, CVs, ID copies). Only the applicant and officers of that post's department (and admins) may see them; ID numbers are masked in lists; nothing from an application is ever sent to an AI model; deleting an account deletes its applications and documents. Listings and uploaded adverts remain public documents. Every record shows its source document and date and is labelled as copied from a public circular. No notice bars, and no "demo" or "hackathon" wording in the product UI (team decision, 21 Nov 2026). `SAMPLE_DATA_ONLY` still blocks non-sample data from reaching the AI.
 - **AI never ranks, scores, shortlists or rejects applicants** (POPIA s71). Matching says "looks like a fit" / "you may be missing X". Never "eligible", never a numeric score shown about a person.
 - Dashboards show aggregated, anonymised counts only: no names, emails or IDs.
 - Never send anything to an LLM that is not sample data, with one exception: a CV the person uploaded on "What can I apply for?", only after they tick consent and `services/ai/cv.py` has removed name, ID, contact details and address. CV files are never stored and CV calls are never cached.

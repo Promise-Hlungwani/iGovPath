@@ -49,6 +49,7 @@ test("G6-G8: upload, extract, review with evidence, edit, approve, publish, audi
   await expect(page.getByRole("heading", { name: /Revenue Management/i })).toBeVisible();
   await page.getByRole("heading", { name: /Revenue Management/i }).click();
   await expect(page.getByText("Midmar Dam (Howick), KwaZulu-Natal").first()).toBeVisible();
+  await page.getByText("More about this advert").click();
   await expect(page.getByText(/approved by Nomsa DWS Officer/)).toBeVisible();
 
   // Audit log has the officer's name, department and the edit.

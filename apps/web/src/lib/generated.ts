@@ -15,10 +15,15 @@ export async function getChecklist(opp: Opp, deptName: string) {
     .select()
     .from(schema.generatedChecklists)
     .where(and(eq(schema.generatedChecklists.opportunityId, opp.id), eq(schema.generatedChecklists.version, opp.currentVersion)));
-  if (cached) return cached.items;
+  if (cached) return cleanItems(cached.items);
   const r = await ai.checklist(toAiRecord(opp, deptName), opp.isSample, opp.sourceText);
   await db.insert(schema.generatedChecklists).values({ opportunityId: opp.id, version: opp.currentVersion, items: r.items }).onConflictDoNothing();
-  return r.items;
+  return cleanItems(r.items);
+}
+
+/** Remove placeholder items such as "None" or "N/A" that say nothing. */
+function cleanItems<T extends { item: string }>(items: T[]): T[] {
+  return items.filter((i) => !/^\s*(none|n\/?a|not applicable|nil|-)\s*\.?\s*$/i.test(i.item));
 }
 
 export type ExplanationContent = {
