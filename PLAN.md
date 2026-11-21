@@ -396,11 +396,11 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
   - Tasks: anonymised funnel per post (viewed → checklist started → checklist complete), aggregated only; flag conflicting records (same reference, different closing dates); searchable audit log.
   - Done when: the dashboard shows counts with no names or emails; the audit log lists every approval and role change from earlier goals.
 
-- [ ] **G18. Drafting check (optional)** 🤖
+- [x] **G18. Drafting check (optional)** 🤖
   - Tasks: Prompt 4; officer pastes a draft advert and gets a list of missing mandatory items and plainer wording; no values invented.
   - Done when: a draft without a closing date or reference number is flagged for both.
 
-- [ ] **G19. Assistant (optional)** 🤖
+- [x] **G19. Assistant (optional)** 🤖
   - Tasks: answers only from approved records; anything else → "I don't know, contact {department contact}".
   - Done when: asked about a post that isn't in the data, it says it doesn't know and gives the contact.
 
