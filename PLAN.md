@@ -320,7 +320,7 @@ How to use this section: work top to bottom. Each goal has an **owner**, the **t
   - Also: read `SAMPLE_DATA_ONLY` from env; while `true`, show the "SAMPLE DATA" banner on every page, label every record *sample*, and hide any ID-number or other real-personal-data fields.
   - Done when: `pnpm dev` serves a home page with the "SAMPLE DATA" banner; `GET localhost:8000/health` returns ok; `pnpm lint` and `pnpm typecheck` pass. With `SAMPLE_DATA_ONLY=true` no form asks for an ID number.
 
-- [ ] **G2. Database schema and migrations** 🤖
+- [x] **G2. Database schema and migrations** 🤖
   - Tasks: Drizzle schema for every table in §4; migrations run against Neon using `DATABASE_URL`; app uses `DATABASE_URL_POOLED`; pgvector enabled; Postgres full-text index on opportunities.
   - Done when: `pnpm db:migrate` creates all tables on a fresh Neon branch; running it twice changes nothing.
 
