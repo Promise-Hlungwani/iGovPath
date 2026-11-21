@@ -32,16 +32,17 @@ The proposal's build plan (section 7) fixes the demo scope. Everything below is 
                 └──────────────┬───────────────────────────────┬──────────────────────┘
                                │ server actions / route handlers│
                        ┌───────▼────────┐              ┌────────▼─────────┐
-                       │ Postgres 16    │◄────────────►│ ai-service       │
-                       │ + pgvector     │   records,   │ (Python FastAPI) │
-                       │ (Drizzle ORM)  │   embeddings │ PyMuPDF/Tesseract│
-                       └────────────────┘              │ Pydantic guards  │
-                                                       └────────┬─────────┘
-                                                                │ OpenAI-compatible API
+                       │ Neon (hosted)  │◄────────────►│ ai-service       │
+                       │ Postgres +     │   records    │ (Python FastAPI) │
+                       │ pgvector       │              │ PyMuPDF/Tesseract│
+                       │ + Better Auth  │              │ Pydantic guards  │
+                       │   users/roles  │              └────────┬─────────┘
+                       └────────────────┘                       │ OpenAI-compatible API
                                                        ┌────────▼─────────┐
-                                                       │ Ollama (local)   │
-                                                       │ Qwen 2.5 7B/14B  │
-                                                       │ bge-m3 embeddings│
+                                                       │ Groq (hosted)    │
+                                                       │ gpt-oss-120b     │
+                                                       │ fallback: Open-  │
+                                                       │ Router / Ollama  │
                                                        └──────────────────┘
 ```
 
@@ -50,14 +51,15 @@ The proposal's build plan (section 7) fixes the demo scope. Everything below is 
 | Layer | Choice | Why |
 |---|---|---|
 | Web | **Next.js 15 (App Router) + React + Tailwind + shadcn/ui** | Proposal names it; one app serves both applicant and officer sides |
-| DB | **Postgres 16 + pgvector**, Drizzle ORM | Proposal names it; vectors and records in one place |
+| DB | **Neon** (hosted Postgres + pgvector, free tier: 1 GB), Drizzle ORM | Proposal names Postgres; nothing to run locally |
 | Document intake | **PyMuPDF** (digital PDFs, keeps page + bbox), **Tesseract** fallback for scans | PSVC annexures are digital PDFs; OCR only as fallback |
-| LLM | **Qwen 2.5 (Apache 2.0) via Ollama**, 7B on a laptop, 14B if GPU available | Apache 2.0 is the safest licence for government (proposal 5a). Verify the exact model card before demo |
-| Embeddings | **bge-m3** via Ollama | Multilingual, proposal names it |
+| LLM | **Groq** free tier (gpt-oss-120b, Apache 2.0; ~1,000 req/day, ~6–12K tokens/min); backup **OpenRouter** `:free`; offline fallback **Qwen 2.5 7B via Ollama** | Hosted, no GPU needed; sample data only (proposal 5c). Alternative on Groq: qwen/qwen3.8-27b |
+| Search | Postgres full-text search + rule matching; **bge-m3** embeddings via Ollama only if time allows | Hugging Face free inference credits were removed in Oct 2026 |
 | Guardrails | **Pydantic** schemas + rule checks + evidence-substring check + human approval queue | Proposal section 5 |
-| Runtime | `docker compose` (postgres, ai-service, ollama) + `next dev` | One command to bring the demo up |
+| Accounts and login | **Better Auth** (open source, **email + password**; no email verification or password reset for the hackathon — add Resend later), users and sessions stored in Neon; roles: applicant / officer / admin | "A named official approves" and "who and when" in the audit log need real accounts, not a shared password |
+| Runtime | `pnpm dev` (web) + `uvicorn` (ai-service); database and LLM are hosted | Nothing heavy to install; works on any laptop |
 
-Using an OpenAI-compatible client against Ollama means we can swap to a hosted open model on demo day if the laptop is too slow — **sample data only** (proposal 5c).
+All three LLM options speak the same OpenAI-compatible API, so switching Groq → OpenRouter → Ollama is a change of `LLM_PROVIDER` in `.env`. Hosted models receive **sample data only** (proposal 5c).
 
 ---
 
@@ -66,13 +68,15 @@ Using an OpenAI-compatible client against Ollama means we can swap to a hosted o
 ```
 iGovPath/
 ├── PLAN.md                     ← this file
-├── docker-compose.yml          postgres+pgvector, ollama, ai-service
-├── .env.example
+├── .env.example                variable template (real values in git-ignored .env)
 ├── apps/
 │   └── web/                    Next.js app
 │       ├── app/(applicant)/    /, /search, /posts/[id], /saved, /explain/[id]
+│       ├── app/(auth)/         /sign-up, /sign-in, /request-officer-access
 │       ├── app/portal/         /portal, /portal/upload, /portal/review/[id],
 │       │                       /portal/forms, /portal/dashboard, /portal/audit
+│       ├── app/admin/          /admin/users (approve officers, assign departments)
+│       ├── lib/auth.ts         Better Auth config + role checks (middleware)
 │       ├── db/schema.ts        Drizzle schema
 │       ├── db/seed.ts          loads data/sample/*
 │       └── lib/                ai client, checklist, matching, audit helpers
@@ -101,16 +105,17 @@ iGovPath/
 | Table | Key fields | Notes |
 |---|---|---|
 | `departments` | id, name, sphere (national/provincial), province, contact | Seed SITA + departments appearing in sample adverts |
-| `officers` | id, name, department_id, role | Named official — shown on every approval |
+| `user`, `session`, `account`, `verification` | Better Auth's own tables (name, email, password hash, sessions) | Created by Better Auth's migration |
+| `user_roles` | user_id, role (applicant/officer/admin), department_id (officers only), status (active/pending/rejected/deactivated), approved_by, approved_at | Sign-up gives `applicant/active`; officer access starts `pending` until an admin approves. The `ADMIN_EMAIL` account becomes `admin` on first sign-up |
 | `source_documents` | id, department_id, kind (circular/advert/form/amendment), file_path, sha256, uploaded_by, uploaded_at, page_count | Originals are never altered |
 | `extractions` | id, source_document_id, chunk_ref, raw_json, validation_errors, evidence, status (draft/needs_fix/approved/rejected), reviewed_by, reviewed_at | AI output lives here until approved |
 | `opportunities` | id, type (post/learnership/internship), department_id, post_title, reference_number, closing_date, salary, location, province, minimum_requirements[], documents_required[], form_required, apply_route{}, contact{}, conditional_items[], status (open/amended/extended/withdrawn/closed), is_sample, current_version, embedding vector(1024) | Only approved records reach here |
 | `opportunity_versions` | opportunity_id, version, record_json, changed_fields[], amendment_source_id, approved_by, approved_at | Powers "Amended" badge + diff (D3) |
 | `forms` | id, name, version, effective_date, owner (department_id or `CENTRAL`), official_url, status (current/superseded), superseded_by | Z83 = owner CENTRAL, read-only link to DPSA |
-| `applicant_profiles` | id, qualifications[], licences[], province, languages[], is_sample | **No ID number** in the hackathon |
+| `applicant_profiles` | id, user_id, qualifications[], licences[], province, languages[], is_sample | **No ID number** in the hackathon |
 | `saved_opportunities` | profile_id, opportunity_id, checklist_state{}, reminder_at, status | Tracking + checklist ticks |
 | `notifications` | profile_id, opportunity_id, kind (amended/closing_soon/form_superseded), created_at, read | In-app only for the demo |
-| `audit_log` | id, actor, action, entity, entity_id, before, after, at | Every change, who and when |
+| `audit_log` | id, actor_user_id, actor_department_id, action, entity, entity_id, before, after, at | Every change, who and when, including role approvals |
 | `funnel_events` | anonymised session hash, opportunity_id, step, at | Dashboard drop-off (aggregated only) |
 
 ---
@@ -157,6 +162,17 @@ iGovPath/
 
 ## 6. Screens
 
+**Access rules**
+- Anyone can search and read posts without an account.
+- Saving posts, checklists, reminders and notifications need an applicant account.
+- `/portal/*` needs an **active officer** account, and an officer only sees and approves records for their own department.
+- `/admin/*` needs an admin account.
+
+**Accounts**
+1. Sign up / sign in (email + password).
+2. Request officer access: choose department, give job title; status shows "pending" until approved.
+3. Admin → Users: list of pending officer requests (approve / reject), all users with role and department, deactivate.
+
 **Applicant**
 1. Home/search — keyword, province, type filters; "SAMPLE DATA" banner on every page.
 2. Post detail — key facts, apply route, status badge (Open / Amended / Extended / Withdrawn), version history, source link + date.
@@ -168,7 +184,7 @@ iGovPath/
 **Officer portal**
 1. Upload — drag PDF, choose kind, department.
 2. Review queue — drafts with validation flags.
-3. Review screen — PDF on the left with evidence highlights, editable fields on the right, Approve / Reject with officer name.
+3. Review screen — PDF on the left with evidence highlights, editable fields on the right, Approve / Reject; the signed-in officer's name and department are recorded automatically.
 4. Forms library — versioned forms; Z83 shown as central/read-only.
 5. Dashboard — aggregated funnel (viewed → checklist started → checklist complete) per post, flagged conflicting records.
 6. Audit log.
@@ -177,20 +193,22 @@ iGovPath/
 
 ## 7. Timeline
 
-Today is **Sat 21 Nov**; the event is **Thu 26 – Fri 27 Nov**. ⚠️ Whether code may be written before the event depends on the hackathon rules (see §9). The plan below assumes prep (data, prompts, eval set) is allowed beforehand and coding happens at the event; if pre-building is allowed, Phases 1–3 move earlier.
+Today is **Sat 21 Nov**; the event is **Thu 26 – Fri 27 Nov**. ✅ The rules allow building before the event, so the whole product is built **21–25 Nov** and the event days are for hardening, rehearsal and the pitch.
 
 | When | Phase | Output |
 |---|---|---|
-| 21–23 Nov | **0. Prep** | Download PSVC 41/42 + annexures + Z83 into `data/sources`; pick 10–20 adverts/learnerships; hand-label 15 for the eval set; pull Qwen 2.5 + bge-m3 in Ollama and test Prompt 1 on 3 adverts |
-| 24–25 Nov | **0b. Dry run** (if allowed) | Scaffold repo, docker-compose, schema, seed; confirm laptop can run the model at acceptable speed, else arrange hosted fallback |
-| Day 1 AM | **1. Foundations** | Next.js app, Postgres schema, seed sample records, search + post detail |
-| Day 1 PM | **2. AI extraction + officer review** | intake → extract → guardrails → review screen → approve → publish (D2) |
-| Day 1 eve | **3. Checklist + explain** | Prompt 3 + standard rules; Prompt 2 English + 1 language (D1, D4) |
-| Day 2 AM | **4. Amendment story** | Amendment upload, diff, version history, notification on saved post (D3) |
-| Day 2 midday | **5. Eval + polish** | Run `eval_extraction.py`, build the accuracy page (D5); matching with reasons; dashboard + audit log |
-| Day 2 PM | **6. Pitch** | Freeze code, rehearse 5-min flow ×3, record a backup demo video |
+| Sat 21 Nov | **0. Setup** ✅ | Plan, README, env template; Groq + Neon accounts created and tested |
+| Sat 21 – Sun 22 Nov | **1. Foundations** | Next.js app, database tables, Better Auth sign-up/sign-in, roles, officer request + admin approval page, seed sample records, search + post detail |
+| Sun 22 – Mon 23 Nov | **2. AI extraction + officer review** | intake → extract → guardrails → review screen with evidence → approve → publish (D2); pre-extract the sample adverts through Groq and save them |
+| Mon 23 – Tue 24 Nov | **3. Checklist + explain** | Prompt 3 + standard rules; Prompt 2 English + 1 language (D1, D4); saved posts + reminders |
+| Tue 24 Nov | **4. Amendment story** | Amendment upload, diff, version history, notification on saved post (D3) |
+| Wed 25 Nov | **5. Eval + extras** | Run `eval_extraction.py`, accuracy page (D5); matching with reasons; dashboard + audit log; forms library |
+| Thu 26 Nov (event day 1) | **6. Harden** | Bug fixes, full demo run-throughs, create demo accounts, native-speaker check of the second language |
+| Fri 27 Nov (event day 2) | **7. Pitch** | Freeze code, rehearse the 5-min flow ×3, record a backup demo video, pitch |
 
-Cut order if time runs short: assistant → drafting check → dashboard → matching (keep search) → second language (keep English). **Never cut**: officer approval, evidence quotes, amendment story, accuracy page.
+Human prep runs in parallel from today: source PDFs, sample adverts and the hand-labelled eval set are needed by **Mon 23 Nov** (phase 2) and **Wed 25 Nov** (phase 5).
+
+Cut order if time runs short: assistant → drafting check → dashboard → matching (keep search) → second language (keep English). **Never cut**: officer approval, evidence quotes, amendment story, accuracy page, sign-in with roles (the admin users page can shrink to a plain approve/reject list).
 
 ---
 
@@ -198,7 +216,7 @@ Cut order if time runs short: assistant → drafting check → dashboard → mat
 
 1. **30 s – problem:** the real PSVC 42 amendment to a circular 39 post — "if you read circular 39 alone, you apply with the wrong requirements."
 2. **2 min – live demo:**
-   officer uploads the amendment PDF → AI extracts the changed fields with evidence quotes → officer (named) approves →
+   signed-in officer (pre-made, already approved account) uploads the amendment PDF → AI extracts the changed fields with evidence quotes → officer approves, and their name appears in the audit log →
    switch to applicant who saved that post → "Amended" notification → updated checklist → plain-language explanation in English and the second language.
 3. **1 min – AI + human:** show a field the AI left null ("not stated in the advert"), and a guardrail catching a bad date.
 4. **1 min – privacy & limits:** no real data, self-hosted model, no ranking/scoring (POPIA s71), accuracy page with honest numbers, language quality caveat.
@@ -212,12 +230,14 @@ Cut order if time runs short: assistant → drafting check → dashboard → mat
 
 | # | Decision | Default if no answer |
 |---|---|---|
-| H1 | **Product name:** README says *Mzansi Connect*, proposal says *iGovPath*. Which one goes on screen? | iGovPath |
-| H2 | **Hackathon rules:** may we write code before 26 Nov, or only prep data/prompts? | Prep only; code at event |
+| H1 | ~~Product name~~ | ✅ Decided: iGovPath |
+| H2 | ~~Hackathon rules~~ | ✅ Decided: building before the event is allowed |
 | H3 | **Second demo language** (needs at least one native speaker to sanity-check output on the day) | isiZulu |
-| H4 | **Hardware:** which laptop runs the demo? GPU / RAM? Or approve a hosted open-model endpoint (sample data only) | Qwen 2.5 7B on laptop, hosted fallback |
+| H4 | ~~Hardware / LLM hosting~~ | ✅ Decided: hosted Groq (gpt-oss-120b) + Neon; any laptop works |
 | H5 | **Team split:** who owns frontend, AI service, data/eval, pitch | — |
 | H6 | Confirm Next.js + Python FastAPI + Postgres stack (vs. all-TypeScript) | As in §2 |
+| H7 | ~~Login method~~ | ✅ Decided: email + password via Better Auth, no email verification for now |
+| H8 | **Optional $10 OpenRouter credit** as LLM backup (1,000 req/day instead of 50) | No; Ollama on a laptop as offline backup |
 
 ### 9.2 Tasks only a human can do
 
@@ -225,9 +245,11 @@ Cut order if time runs short: assistant → drafting check → dashboard → mat
 - [ ] **Choose the 10–20 sample opportunities**, covering: national + provincial, one learnership with matric + driver's licence in Limpopo (for the proposal's example), one with a SAQA condition, one with hand-delivery route, the amended post.
 - [ ] **Hand-label the eval set:** for ~15 adverts, fill in the correct JSON per Prompt 1's schema (template will be provided in `data/eval/`). This is the ground truth for the accuracy page — it must be done by a person, not the model.
 - [ ] **Native-speaker review** of the second-language explanations (at least 3 posts) before the pitch.
-- [ ] **Verify model licences** on the exact model card being demoed (Qwen 2.5 size chosen; bge-m3) — proposal 5a flags this as not re-verified.
+- [ ] **Verify model licences** on the exact model card being demoed (gpt-oss-120b on Groq; Qwen if used) — proposal 5a flags this as not re-verified.
 - [ ] **Re-check learnership details** the day before the pitch (proposal: they change often).
-- [ ] **Play the "officer"** in the demo and approve records — and the review screen should show their real name.
+- [ ] **Set `ADMIN_EMAIL`** in `.env` and sign up with it first, so that account becomes admin.
+- [ ] **Create the demo accounts** before the pitch: one officer (sign up, request access for the demo department, approve it as admin) and one applicant with a saved post. Use real team names, not "test".
+- [ ] **Play the "officer"** in the demo and approve records; the audit log shows their real name.
 - [ ] **Pitch prep:** slides, rehearsal, a recorded backup video in case Wi-Fi/laptop fails.
 
 ### 9.3 Open items to raise with SITA / after the hackathon (proposal §8)
@@ -242,8 +264,10 @@ Cut order if time runs short: assistant → drafting check → dashboard → mat
 
 ### 9.4 Accounts / access
 
-- None required for the core demo (everything runs locally).
-- Optional: GitHub repo access for all team members; a hosted GPU/open-model endpoint if H4 needs a fallback.
+- ✅ **Groq** (LLM) and ✅ **Neon** (database): created and tested 21 Nov 2026.
+- **GitHub** repo access for every team member.
+- Optional: **OpenRouter** (backup LLM), **Ollama** installed on one laptop (offline backup), **Resend** (only if email verification is added later).
+- Keys are shared privately (password manager), never committed; the repo is public. Turn on GitHub secret scanning + push protection.
 
 ---
 
@@ -251,21 +275,143 @@ Cut order if time runs short: assistant → drafting check → dashboard → mat
 
 | Risk | Mitigation |
 |---|---|
-| Local model too slow / poor JSON | Pre-extract the seed set offline; live-extract only the one amendment in the demo; hosted open-model fallback |
+| Groq rate limit hit or model removed | Pre-extract the seed set; live-extract only the one amendment; switch `LLM_PROVIDER` to OpenRouter or Ollama; keep `qwen/qwen3.8-27b` as second Groq model |
+| No internet at the venue | Phone hotspot; Ollama offline fallback; recorded backup video |
 | PSVC layout varies, splitting fails | Manually cut the 10–20 chunks in prep; splitter is a nice-to-have |
 | Model hallucinates a field | Evidence-substring check blanks it; officer review; demo shows this happening |
 | Weak isiZulu/other-language output | Banner + native-speaker review; keep English as the guaranteed path |
 | Stale learnership data | "Sample — as of <date>" on every record; re-check day before |
 | Demo failure on stage | Recorded backup video; seeded DB snapshot |
+| Login breaks or is slow on stage | Demo accounts created and signed in beforehand; seed script can also create them |
+| Someone signs up and claims to be an officer | Officer access is pending until an admin approves it; applicants can never reach `/portal` |
 
 ---
 
 ## 11. Definition of done for the hackathon
 
-- [ ] `docker compose up` + `pnpm dev` brings the whole demo up from a clean checkout.
+- [ ] From a clean checkout, `cp .env.example .env` + filling the keys + `pnpm dev` and `uvicorn` brings the whole demo up.
 - [ ] 10–20 sample opportunities searchable, each labelled "sample" with source + date.
+- [ ] Users can sign up; officer access is pending until an admin approves it; officers only act on their own department.
 - [ ] Officer can upload → review with evidence → approve → publish, and the approval is in the audit log with their name.
 - [ ] PSVC 42 amendment flows through to a saved post with notification and diff.
 - [ ] Checklist and plain-language explainer work in English + one language.
 - [ ] Accuracy page generated from the hand-labelled eval set.
 - [ ] No real personal data anywhere; no AI scoring/ranking of applicants.
+
+---
+
+## 12. Implementation backlog (goals to build, in order)
+
+How to use this section: work top to bottom. Each goal has an **owner**, the **tasks**, and a **done when** test. A goal is finished only when every "done when" line is true and checked by running it, not by reading the code. Tick the box when done.
+
+**Owners:** 🤖 = Claude builds it · 👤 = a person on the team · 🤝 = Claude prepares, a person checks or decides.
+
+**Ground rules for every goal**
+- Sample public data only; never real applicant data or ID numbers.
+- AI never ranks, scores or rejects applicants. Every AI output goes through validation and officer approval.
+- Secrets only in `.env`; never commit it. Update `.env.example` when a variable is added.
+- Every change to a record writes an `audit_log` row (who, what, when).
+- Small commits per goal; the app must still start after each commit.
+
+### Phase 1: Foundations
+
+- [ ] **G1. Project scaffold** 🤖
+  - Tasks: Next.js (App Router, TypeScript) in `apps/web` with Tailwind + shadcn/ui; pnpm workspace; Python FastAPI skeleton in `services/ai` with `requirements.txt`; shared env loading; `pnpm dev` and `uvicorn` scripts; lint + typecheck.
+  - Done when: `pnpm dev` serves a home page with the "SAMPLE DATA" banner; `GET localhost:8000/health` returns ok; `pnpm lint` and `pnpm typecheck` pass.
+
+- [ ] **G2. Database schema and migrations** 🤖
+  - Tasks: Drizzle schema for every table in §4; migrations run against Neon using `DATABASE_URL`; app uses `DATABASE_URL_POOLED`; pgvector enabled; Postgres full-text index on opportunities.
+  - Done when: `pnpm db:migrate` creates all tables on a fresh Neon branch; running it twice changes nothing.
+
+- [ ] **G3. Accounts, roles and user management** 🤖
+  - Tasks: Better Auth email + password (no verification); `user_roles` table; sign-up → applicant/active; "request officer access" (department + job title) → officer/pending; first sign-up with `ADMIN_EMAIL` → admin; `/admin/users` approve / reject / deactivate / assign department; middleware guarding `/portal/*` (active officer) and `/admin/*` (admin); officers limited to their own department's records; role changes written to `audit_log`.
+  - Done when: an applicant cannot open `/portal` (redirected); a pending officer sees "awaiting approval"; after admin approval the officer can open `/portal`; an officer from department A cannot see or approve department B's records; the admin's approval appears in the audit log with names.
+
+- [ ] **G4. Seed data and search** 🤝
+  - Tasks: 🤖 `pnpm db:seed` loads departments (SITA + those in the sample), the central Z83 form record, and approved sample opportunities from `data/sample/*.json`; search page (keyword, province, type, open only); post detail page (facts, apply route, status badge, source link + date, "sample" label). 👤 supplies or approves the sample list (see §9.2).
+  - Done when: seeding a fresh database gives 10–20 searchable opportunities; searching "clerk" + a province returns the expected posts; every post shows its source document and date.
+
+### Phase 2: AI extraction and officer review
+
+- [ ] **G5. LLM client with provider switch** 🤖
+  - Tasks: one OpenAI-compatible client in `services/ai` reading `LLM_PROVIDER` (groq / openrouter / ollama); retries with backoff on rate limits (HTTP 429); logs token usage; never sends anything not marked sample.
+  - Done when: the same test prompt succeeds with `LLM_PROVIDER=groq`; changing the variable switches provider with no code change; a forced 429 is retried and then reported clearly.
+
+- [ ] **G6. Document intake** 🤖
+  - Tasks: upload endpoint stores the PDF, records sha256 and page count; PyMuPDF text blocks with page + position; Tesseract fallback for pages with no text; `split_psvc.py` splits a circular into per-post chunks.
+  - Done when: uploading PSVC 42 produces text blocks with page numbers; the splitter finds the posts in at least one annexure, matched against a manual count.
+
+- [ ] **G7. Extraction with guardrails** 🤖
+  - Tasks: Prompt 1 verbatim; Pydantic schema; evidence check (each quote must exist in the source text, otherwise the field is blanked and flagged); rule checks (ISO dates, closing date after circular date, reference format, URLs/emails, Z83 mapped to the central form); one retry with errors fed back; result stored as an `extractions` row with status.
+  - Done when: on 3 real adverts every non-null field has a quote that exists in the source; a deliberately wrong quote is caught and blanked; a missing salary comes back null ("not stated in the advert").
+
+- [ ] **G8. Officer review and publish** 🤖
+  - Tasks: review queue (drafts with flags); review screen with the PDF page on the left, evidence highlighted, editable fields on the right; Approve / Reject recorded with the signed-in officer; approval creates or updates the `opportunities` row and an `opportunity_versions` row; audit log entry.
+  - Done when: an officer uploads an advert, edits one field, approves it, and it appears in applicant search within seconds; the audit log shows the officer's name, department and the change.
+
+- [ ] **G9. Pre-extract the sample set** 🤝
+  - Tasks: 🤖 batch script runs G7 over all sample adverts, paced under Groq's tokens-per-minute limit, saves results to `data/sample/`; 👤 reviews and approves them in the portal like a real officer.
+  - Done when: all sample adverts exist as approved records extracted by the pipeline, not typed by hand.
+
+### Phase 3: Applicant features
+
+- [ ] **G10. Checklist per post** 🤖
+  - Tasks: Prompt 3 from the approved record only; standard rules added in code (current Z83, CV, certified ID copy, quote the reference number); SAQA wording "at application" / "only if shortlisted" / "check the advert"; each item tagged "from advert" or "standard rule"; tickable and saved for signed-in applicants.
+  - Done when: every checklist contains the 4 standard items; the SAQA sample post shows the right timing; ticks persist after sign-out and sign-in.
+
+- [ ] **G11. Plain-language explainer** 🤝
+  - Tasks: 🤖 Prompt 2 in English and one other language; original wording beside it; "machine translation, needs native-speaker review" banner on non-English; facts, numbers and dates checked unchanged against the record. 👤 chooses the language (default isiZulu) and a native speaker reviews 3 posts.
+  - Done when: explanations keep every date and number from the record (automatic check); the banner appears on non-English; the native speaker has signed off or listed fixes.
+
+- [ ] **G12. Saved posts, reminders and notifications** 🤖
+  - Tasks: save / unsave; list of saved posts with closing countdown; in-app reminder 3 days before closing; notification when a saved post is amended, extended or withdrawn, or its form is superseded.
+  - Done when: saving a post that closes in 2 days shows a reminder; publishing an amendment to it creates a notification for that applicant.
+
+- [ ] **G13. "What can I apply for?" matching** 🤖
+  - Tasks: small profile form (qualifications, licences, province); filters + rule match against minimum requirements; text search ranking (embeddings optional); output "looks like a fit" / "you may be missing X" with links to the source text; never says "eligible", never shows a score.
+  - Done when: the proposal's example (matric + driver's licence, Limpopo) returns the expected sample posts with reasons; no screen contains the word "eligible" or a numeric score.
+
+### Phase 4: Amendments
+
+- [ ] **G14. Amendment flow (the demo story)** 🤖
+  - Tasks: upload an amendment notice → "amendment mode" extraction finds the target post (reference number or title + department) and only the changed fields, with evidence; officer confirms the match and the diff; new version; status becomes amended / extended / withdrawn; notifications sent (G12); post page shows "Amended" with a before/after diff and version history.
+  - Done when: the real PSVC 42 amendment to the circular 39 post (Eastern Cape Social Development) updates that sample post end to end, and an applicant who saved it sees the notification and the new requirements.
+
+### Phase 5: Evaluation and extras
+
+- [ ] **G15. Accuracy page** 🤝
+  - Tasks: 👤 hand-labels ~15 adverts in `data/eval/` (template provided by 🤖); 🤖 `scripts/eval_extraction.py` compares pipeline output with the labels per field and writes a one-page result shown at `/accuracy`.
+  - Done when: the page shows per-field accuracy, how many fields were left null correctly, and how many evidence quotes failed, with the date of the run. Numbers are reported as they are, not adjusted.
+
+- [ ] **G16. Forms library** 🤖
+  - Tasks: versioned forms; officers upload new versions of forms their department owns; Z83 shown as central and read-only, linking to the DPSA source; superseded versions archived, and applicants who saved one are warned.
+  - Done when: an officer cannot edit the Z83; uploading a new version of a department form archives the old one and notifies affected applicants.
+
+- [ ] **G17. Dashboard and audit log screens** 🤖
+  - Tasks: anonymised funnel per post (viewed → checklist started → checklist complete), aggregated only; flag conflicting records (same reference, different closing dates); searchable audit log.
+  - Done when: the dashboard shows counts with no names or emails; the audit log lists every approval and role change from earlier goals.
+
+- [ ] **G18. Drafting check (optional)** 🤖
+  - Tasks: Prompt 4; officer pastes a draft advert and gets a list of missing mandatory items and plainer wording; no values invented.
+  - Done when: a draft without a closing date or reference number is flagged for both.
+
+- [ ] **G19. Assistant (optional)** 🤖
+  - Tasks: answers only from approved records; anything else → "I don't know, contact {department contact}".
+  - Done when: asked about a post that isn't in the data, it says it doesn't know and gives the contact.
+
+### Phase 6: Harden and pitch
+
+- [ ] **G20. Demo readiness** 🤝
+  - Tasks: 🤖 one command that resets the database to a clean demo state (seed + demo accounts); demo checklist in `docs/DEMO.md`; full end-to-end run with no errors in the browser console or server logs. 👤 creates the demo officer and applicant accounts with real team names, records the backup video and rehearses the pitch three times.
+  - Done when: from a clean checkout, someone new on the team can follow the README and run the full demo script in §8 without help.
+
+### Human inputs the build depends on
+
+| Needed for | Input | Owner | Needed by |
+|---|---|---|---|
+| G3 | `ADMIN_EMAIL` in `.env` | 👤 | Before G3 |
+| G4, G9 | Source PDFs + list of 10–20 sample opportunities (§9.2). 🤖 can download the public PSVC files; 👤 confirms the selection | 🤝 | Sun 22 Nov |
+| G11 | Second language + native-speaker reviewer | 👤 | Tue 24 Nov |
+| G14 | Confirm the PSVC 42 amendment and the circular 39 post to use | 👤 | Tue 24 Nov |
+| G15 | ~15 hand-labelled adverts | 👤 | Wed 25 Nov |
+| G20 | Demo accounts, backup video, rehearsal | 👤 | Thu 26 Nov |

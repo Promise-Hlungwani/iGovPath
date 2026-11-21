@@ -1,0 +1,16 @@
+---
+description: iGovPath project rules (full version in AGENTS.md)
+alwaysApply: true
+---
+
+Follow `AGENTS.md` at the repo root; it wins over this file. Work through the goals in `PLAN.md` §12 in order, and tick a goal only after running its "done when" checks.
+
+Non-negotiable rules:
+- Sample public data only; no real applicant data or ID numbers; never send non-sample data to an LLM.
+- AI never ranks, scores, shortlists or rejects applicants (POPIA s71); never show "eligible" or a score about a person.
+- AI proposes, an officer approves; nothing AI-made reaches applicants unapproved.
+- Never invent dates, offices, salaries, reference numbers or documents; use null and "not stated in the advert". Every extracted field has an evidence quote checked against the source.
+- Validate every LLM output with Pydantic (Python) or Zod (TypeScript).
+- Public repo: secrets only in `.env`; update `.env.example` for new variables.
+- Server-side role checks; officers only act on their own department; `/admin` is admin only.
+- Every change writes an `audit_log` row.

@@ -1,0 +1,93 @@
+# AGENTS.md: rules for AI coding assistants working on iGovPath
+
+This is the single source of rules for every AI assistant on this repo (Claude Code, Codex, Cursor, Copilot, Gemini and others). Tool-specific files (`CLAUDE.md`, `GEMINI.md`, `.github/copilot-instructions.md`, `.cursor/rules/igovpath.mdc`) point here. **If they disagree, this file wins.** Change rules here first.
+
+## What we are building
+
+iGovPath: one place for South African government job and learnership applications.
+- **Applicant app:** search posts and learnerships, a checklist per application, plain-language explanations, saved posts and reminders.
+- **Government portal:** officers upload circulars, adverts, forms and amendments; AI extracts a structured record; **a named officer approves it** before it goes live.
+
+Hackathon demo on **26–27 November 2026**. The full plan is in [`PLAN.md`](PLAN.md); setup is in [`README.md`](README.md).
+
+## How to work
+
+1. **The backlog is the source of truth:** `PLAN.md` §12 lists goals G1–G20 in build order. Work on the first goal whose box is not ticked, unless a person asks for something else.
+2. **Finish a goal properly:** implement the tasks, then **run** every "done when" check (start the app, call the endpoint, click through the flow). Reading the code is not verification.
+3. **Tick the box** in `PLAN.md` only when every "done when" line passed. If something could not be checked, say so and leave it unticked.
+4. **Commit per goal** (or smaller), with the goal id in the message: `G3: officer access requests and admin approval`. The app must still start after every commit.
+5. **Ask a person** when a goal depends on a 👤 input (see the "Human inputs" table in §12) or when a decision isn't covered by `PLAN.md`. Don't invent sample data, labels or translations a person is meant to supply.
+6. Keep `PLAN.md`, `README.md` and `.env.example` up to date when a decision, command or variable changes.
+
+## Non-negotiable rules
+
+### Privacy and data (POPIA)
+- **Sample public data only.** Never use real applicant data or ID numbers. Every record is labelled *sample* with its source document and date.
+- **AI never ranks, scores, shortlists or rejects applicants** (POPIA s71). Matching says "looks like a fit" / "you may be missing X". Never "eligible", never a numeric score shown about a person.
+- Dashboards show aggregated, anonymised counts only: no names, emails or IDs.
+- Never send anything to an LLM that is not sample data.
+
+### AI behaviour
+- **AI proposes, an officer approves.** No AI output reaches applicants without officer approval.
+- **Never invent** a date, office, salary, reference number or document. If the source doesn't say it, the value is `null` and the UI says *"not stated in the advert"*.
+- Every extracted field carries an **evidence quote**, and code checks that the quote exists in the source text. Failed fields are blanked and flagged; they never pass silently.
+- Every LLM output is validated against a schema (Pydantic in `services/ai`, Zod in `apps/web`) before use.
+- Use the prompts in `PLAN.md` §5 and the proposal as written; store them in `services/ai/prompts/`. Change them deliberately and note why.
+- Standard checklist items (current Z83, CV, certified ID copy, quote the reference number) are added **in code**, not by the LLM.
+- Plain-language output keeps every fact, number and date unchanged. Non-English output shows a "machine translation, needs native-speaker review" banner.
+
+### Security and secrets
+- **This repo is public.** Secrets live only in `.env`, which is git-ignored. Never commit `.env`, keys, connection strings or passwords; never print them in logs, tests or error messages.
+- When adding a variable, add it to `.env.example` with a placeholder and a comment saying where to get it, and to the README variables table.
+- Before every commit, check the diff for keys (`gsk_`, `sk-or-`, `npg_`, `postgresql://user:password@`).
+- Role checks happen on the **server** (middleware and server actions), never only in the UI. Officers act only on their own department's records. `/admin/*` is admin only.
+
+### Audit
+- Every create, update, approve, reject and role change writes an `audit_log` row with who (user and department), what (before and after) and when.
+
+## Stack and conventions
+
+| Area | Choice |
+|---|---|
+| Web | Next.js (App Router, TypeScript strict) in `apps/web`, Tailwind, shadcn/ui, pnpm |
+| Database | Neon Postgres + pgvector, Drizzle ORM. Migrations use `DATABASE_URL` (direct); the app uses `DATABASE_URL_POOLED` |
+| Auth | Better Auth, email + password, no email verification for now. Roles in `user_roles`: applicant / officer (pending → active) / admin (`ADMIN_EMAIL`) |
+| AI service | Python FastAPI in `services/ai`: PyMuPDF (+ Tesseract), Pydantic |
+| LLM | OpenAI-compatible client; provider from `LLM_PROVIDER` (groq / openrouter / ollama). Default Groq `openai/gpt-oss-120b` |
+
+Conventions:
+- TypeScript: no `any` without a comment explaining why; server-only code stays out of client components.
+- Python: type hints, Pydantic models for every request, response and LLM output.
+- Keep it simple: no new library or service without a reason noted in the commit or `PLAN.md`. Hackathon scope: no microservices beyond the two above.
+- UI text in plain English (about grade 8); dates shown as `5 December 2026`.
+
+## LLM usage limits (free tier)
+
+Groq's free tier is roughly 30 requests a minute, 1,000 a day and 6–12K tokens a minute, shared by the whole team.
+- Don't call the LLM in loops during development without pacing; batch scripts must wait between calls.
+- Cache extraction results; never re-extract the same document hash twice.
+- Retry HTTP 429 with backoff, then fail with a clear message.
+- Tests use recorded fixtures and mocks, not live LLM calls, except a small marked smoke test.
+
+## Commands
+
+Commands for the parts that exist yet; update this list as goals land.
+
+```bash
+cp .env.example .env              # first time only, then fill in the values
+pnpm install
+pnpm db:migrate                   # create or update tables in Neon
+pnpm db:seed                      # load sample data
+pnpm dev                          # web app on http://localhost:3000
+pnpm lint && pnpm typecheck
+
+cd services/ai && source .venv/bin/activate
+uvicorn main:app --reload --port 8000
+pytest
+```
+
+## Git
+
+- Small commits per goal, message `G<n>: <what changed>`.
+- Never force-push to `main`. Never rewrite published history.
+- Never commit `.env`, uploaded documents in `data/uploads/`, or generated build output.
