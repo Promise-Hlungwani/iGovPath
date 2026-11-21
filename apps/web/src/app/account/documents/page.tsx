@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { DocViewer } from "@/components/doc-viewer";
 import { PageTitle } from "@/components/ui";
 import { SubmitButton } from "@/components/submit-button";
 import { UrlError } from "@/components/url-error";
@@ -25,7 +26,7 @@ export default async function MyDocumentsPage() {
                 {mine.map((d) => (
                   <li key={d.id} data-testid="my-document" className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-black/10 bg-white/60 px-4 py-3 text-sm">
                     <span aria-hidden>📄</span>
-                    <a className="underline font-medium break-all" href={`/api/my-documents/${d.id}`} target="_blank">{d.fileName}</a>
+                    <DocViewer href={`/api/my-documents/${d.id}`} fileName={d.fileName} />
                     <span className="text-muted">{Math.round(d.size / 1024)} KB · Last updated {formatDateTime(d.updatedAt)}</span>
                     <form action={deleteMyDocument} className="ml-auto">
                       <input type="hidden" name="id" value={d.id} />

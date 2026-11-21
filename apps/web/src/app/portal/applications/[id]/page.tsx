@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DocViewer } from "@/components/doc-viewer";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import type { Z83 } from "@/db/schema";
@@ -31,20 +32,26 @@ export default async function OfficerApplication({ params, searchParams }: { par
       <Suspense fallback={null}><UrlError /></Suspense>
       {updated && <Notice tone="brand">Status updated. The applicant has been told.</Notice>}
 
-      <section className="rounded-2xl border border-black/10 bg-white/70 backdrop-blur-sm shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-6 flex flex-col sm:flex-row gap-5 sm:items-end">
-        <div className="flex-1">
-          <p className="text-black/60 text-sm">Current status</p>
-          <p className="text-2xl font-bold !text-black" data-testid="officer-status">{STATUS_LABEL[app.a.status]}</p>
+      <section className="rounded-2xl border border-black/10 bg-white/70 backdrop-blur-sm shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-6 space-y-5">
+        <div className="flex flex-wrap items-center gap-3">
+          <p className="text-muted">Current status</p>
+          <span className="rounded-full bg-black/[0.06] px-4 py-1 text-lg font-bold" data-testid="officer-status">{STATUS_LABEL[app.a.status]}</span>
         </div>
         {app.a.status !== "withdrawn" && (
-          <form action={setApplicationStatus} className="flex-1 space-y-2">
+          <form action={setApplicationStatus} className="space-y-3 border-t border-black/10 pt-5 max-w-xl">
             <input type="hidden" name="applicationId" value={app.a.id} />
-            <label htmlFor="status" className="text-sm text-black/60">Change status</label>
-            <Select id="status" name="status" defaultValue={OFFICER_STATUSES.includes(app.a.status) ? app.a.status : "under_review"} className="!bg-white !text-black border-black/20">
-              {OFFICER_STATUSES.map((s) => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}
-            </Select>
-            <Textarea name="note" rows={2} placeholder="Optional note to the applicant" className="!bg-white !text-black border-black/20" />
-            <SubmitButton className="!bg-black !text-black hover:!bg-[#222]" pendingText="Saving…">Save status</SubmitButton>
+            <div>
+              <label htmlFor="status" className="block font-semibold mb-1.5">Change the status to</label>
+              <Select id="status" name="status" defaultValue={OFFICER_STATUSES.includes(app.a.status) ? app.a.status : "under_review"}>
+                {OFFICER_STATUSES.map((s) => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}
+              </Select>
+            </div>
+            <div>
+              <label htmlFor="note" className="block font-semibold mb-1.5">Note to the applicant <span className="font-normal text-muted">(optional)</span></label>
+              <Textarea id="note" name="note" rows={2} placeholder="Optional note to the applicant" />
+            </div>
+            <p className="text-sm text-muted">The applicant gets a message when you save.</p>
+            <SubmitButton pendingText="Saving…">Save status</SubmitButton>
           </form>
         )}
       </section>
@@ -76,7 +83,7 @@ export default async function OfficerApplication({ params, searchParams }: { par
         </Box>
         <Box title="Documents">
           {app.files.map((f) => (
-            <p key={f.id} className="text-sm"><a className="underline" href={`/api/applications/files/${f.id}`} target="_blank">{f.fileName}</a> <span className="text-muted">· {FILE_LABEL[f.kind]} · Last updated {formatDateTime(f.uploadedAt)}</span></p>
+            <p key={f.id} className="text-sm"><DocViewer className="underline text-left" href={`/api/applications/files/${f.id}`} fileName={f.fileName} /> <span className="text-muted">· {FILE_LABEL[f.kind]} · Last updated {formatDateTime(f.uploadedAt)}</span></p>
           ))}
         </Box>
       </div>

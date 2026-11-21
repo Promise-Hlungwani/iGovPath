@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DocViewer } from "@/components/doc-viewer";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { and, eq, ne } from "drizzle-orm";
@@ -42,20 +43,19 @@ export default async function ApplicationPage({ params, searchParams }: { params
   return (
     <div className="max-w-3xl space-y-8">
       <header>
+        {env.SAMPLE_DATA_ONLY && (
+          <form action={fillWithSampleData} className="float-right ml-4">
+            <input type="hidden" name="applicationId" value={app.a.id} />
+            <SubmitButton variant="secondary" className="!min-h-0 px-3 py-1.5 text-sm" pendingText="Filling in…">Fill with sample data</SubmitButton>
+          </form>
+        )}
         <p className="text-sm font-semibold uppercase tracking-wide text-muted">Application</p>
         <h1 className="mt-1 text-3xl font-bold tracking-tight">{title}</h1>
         <p className="mt-1 text-muted">{app.dept}{app.o.referenceNumber && ` · Ref ${app.o.referenceNumber}`} · <ClosingText date={app.o.closingDate} /></p>
       </header>
       <Suspense fallback={null}><UrlError /></Suspense>
       {saved && <Notice tone="brand">Saved. You can come back and finish later.</Notice>}
-      {sample && <Notice tone="brand">Filled in with a sample applicant and sample documents. Tick the declaration, then send.</Notice>}
-      {env.SAMPLE_DATA_ONLY && (
-        <form action={fillWithSampleData} className="flex flex-wrap items-center gap-3 rounded-2xl border border-dashed border-black/25 px-5 py-4">
-          <input type="hidden" name="applicationId" value={app.a.id} />
-          <p className="text-sm flex-1 min-w-60">Testing? Fill every field with a sample applicant and attach sample documents. They&apos;re saved to My documents, so you can see them reused next time.</p>
-          <SubmitButton variant="secondary" pendingText="Filling in…">Fill with sample data</SubmitButton>
-        </form>
-      )}
+      {sample && <Notice tone="brand">Filled in with sample answers (your name and email kept) and your documents. Tick the declaration, then send.</Notice>}
       <Notice tone="info">
         We filled this in from your account, your CV and your last application. Please check it, then send.
         Only you and the officers of {app.dept} can see it.
@@ -90,7 +90,7 @@ export default async function ApplicationPage({ params, searchParams }: { params
                 {files.map((f) => (
                   <li key={f.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-black/10 bg-white/60 px-4 py-3 text-sm">
                     <span aria-hidden>📄</span>
-                    <a className="underline font-medium break-all" href={`/api/applications/files/${f.id}`} target="_blank">{f.fileName}</a>
+                    <DocViewer href={`/api/applications/files/${f.id}`} fileName={f.fileName} />
                     <span className="text-muted">{Math.round(f.size / 1024)} KB · Last updated {formatDateTime(f.uploadedAt)}</span>
                     <form action={deleteApplicationFile} className="ml-auto">
                       <input type="hidden" name="applicationId" value={app.a.id} />
@@ -291,7 +291,7 @@ function StatusView({ app, title }: { app: App; title: string }) {
         <h2 className="font-bold mb-2">Documents you sent</h2>
         <ul className="space-y-1 text-sm">
           {app.files.map((f) => (
-            <li key={f.id}><a className="underline" href={`/api/applications/files/${f.id}`} target="_blank">{f.fileName}</a> <span className="text-muted">· {FILE_LABEL[f.kind]} · Last updated {formatDateTime(f.uploadedAt)}</span></li>
+            <li key={f.id}><DocViewer className="underline text-left" href={`/api/applications/files/${f.id}`} fileName={f.fileName} /> <span className="text-muted">· {FILE_LABEL[f.kind]} · Last updated {formatDateTime(f.uploadedAt)}</span></li>
           ))}
         </ul>
       </section>

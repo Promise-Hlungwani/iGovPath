@@ -5,6 +5,15 @@ import { cleanupTestUsers, email, makeOfficer, signIn, signUp, sql } from "./hel
 const CV = path.join(__dirname, "fixtures/sample-cv-fictional.pdf");
 test.afterAll(cleanupTestUsers);
 
+// Any page-structure or hydration error in the browser console fails the test.
+const pageErrors: string[] = [];
+test.beforeEach(({ page }) => {
+  pageErrors.length = 0;
+  page.on("console", (m) => { if (m.type() === "error" && /hydration|descendant of|cannot be a child|cannot contain/i.test(m.text())) pageErrors.push(m.text().slice(0, 200)); });
+  page.on("pageerror", (e) => pageErrors.push(e.message.slice(0, 200)));
+});
+test.afterEach(() => expect(pageErrors, "browser console errors").toEqual([]));
+
 test("apply inside iGovPath, officer updates the status, applicant sees it", async ({ page }) => {
   test.setTimeout(300_000);
   const [opp] = await sql<{ id: string; dept: string; title: string }>(
@@ -67,7 +76,7 @@ test("apply inside iGovPath, officer updates the status, applicant sees it", asy
   await signUp(page, "Other Dept Officer", outsider);
   await makeOfficer(outsider, other.name);
   await page.goto("/portal/applications");
-  await expect(page.getByTestId("officer-application")).toHaveCount(0);
+  await expect(page.getByTestId("officer-application").filter({ hasText: "Lindiwe Test Mokoena" })).toHaveCount(0);
 
   // Officer of the right department reviews and shortlists.
   await page.context().clearCookies();
@@ -79,9 +88,16 @@ test("apply inside iGovPath, officer updates the status, applicant sees it", asy
   await expect(row).toContainText("New");
   await row.click();
   await expect(page.getByText("•••••••••3081")).toBeVisible(); // ID masked
-  const pdf = await page.request.get(await page.getByRole("link", { name: "sample-cv-fictional.pdf" }).first().getAttribute("href") as string);
+  // Documents open in a pop-up on the same page, and close again.
+  await page.getByRole("button", { name: "sample-cv-fictional.pdf" }).first().click();
+  const viewer = page.getByRole("dialog", { name: "sample-cv-fictional.pdf" });
+  await expect(viewer.locator("iframe")).toBeVisible();
+  const pdf = await page.request.get(await viewer.getByRole("link", { name: "Download" }).getAttribute("href") as string);
   expect(pdf.status()).toBe(200);
-  await page.getByLabel("Change status").selectOption("shortlisted");
+  await viewer.getByRole("button", { name: "Close" }).click();
+  await expect(viewer).toBeHidden();
+  expect(page.url()).toContain("/portal/applications/");
+  await page.getByLabel("Change the status to").selectOption("shortlisted");
   await page.getByPlaceholder("Optional note to the applicant").fill("Interviews on 3 December.");
   await page.getByRole("button", { name: "Save status" }).click();
   await expect(page.getByTestId("officer-status")).toHaveText("Shortlisted");
@@ -103,17 +119,21 @@ test("fill with sample data, then replace the CV with a newer one", async ({ pag
   await page.getByRole("button", { name: "Apply now →" }).click();
   await page.getByRole("button", { name: "Fill with sample data" }).click();
   await expect(page.getByLabel("South African ID number")).toHaveValue("9506225123081");
+  await expect(page.getByLabel("Surname")).toHaveValue("Filler"); // own name kept
+  await expect(page.getByLabel("Email")).toHaveValue(/filler/);  // own email kept
   await expect(page.getByLabel("Qualification", { exact: true })).toHaveValue("National Senior Certificate");
   for (const t of ["✓ CV", "✓ Certified copy of your ID", "✓ Certified copies of qualifications"]) await expect(page.getByText(t)).toBeVisible();
-  const href = await page.getByRole("link", { name: /Sample CV/ }).first().getAttribute("href");
+  await page.getByRole("button", { name: /Sample CV/ }).first().click();
+  const href = await page.getByRole("dialog").getByRole("link", { name: "Download" }).getAttribute("href");
+  await page.getByRole("dialog").getByRole("button", { name: "Close" }).click();
   const pdf = await page.request.get(href as string);
   expect((await pdf.body()).subarray(0, 5).toString()).toBe("%PDF-");
 
   // Upload a newer CV: it replaces the old one in the application and in My documents.
   await page.getByLabel("Upload CV").setInputFiles(path.join(process.env.HOME as string, "Downloads/iGovPath sample documents/1b - Sample CV (version 2, updated).pdf"));
   await page.getByLabel("Upload CV").locator("xpath=following-sibling::button").click();
-  await expect(page.getByRole("link", { name: /version 2, updated/ })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Sample CV - / })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /version 2, updated/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Sample CV - / })).toHaveCount(0);
   await page.goto("/account/documents");
   await expect(page.getByTestId("my-document")).toHaveCount(3);
   await expect(page.getByTestId("my-document").first()).toContainText("version 2, updated");
