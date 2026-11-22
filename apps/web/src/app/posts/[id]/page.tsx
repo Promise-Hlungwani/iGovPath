@@ -69,7 +69,11 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
       <section className="rounded-2xl border border-black/10 bg-white/70 backdrop-blur-sm shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-6 sm:p-8" aria-labelledby="apply">
         <h2 id="apply" className="text-lg font-extrabold">Apply for this job</h2>
         {closed ? (
-          <p className="mt-3 text-muted">This post is {status === "withdrawn" ? "withdrawn" : "closed"}. Applications are no longer accepted.</p>
+          <>
+            <p className="mt-3 text-muted">This post is {status === "withdrawn" ? "withdrawn" : "closed"}. Applications are no longer accepted.</p>
+            {/* Still saveable: if the department extends it, people who saved it are told. */}
+            <div className="mt-4 sm:w-64 [&_a]:!min-h-12 [&_button]:!min-h-12"><SaveButton opportunityId={opp.id} saved={saved} signedIn={!!user} /></div>
+          </>
         ) : (
           <>
             <p className="mt-1 text-muted">We fill in your details and documents for you. Check them, then send. It goes straight to {dept.name}.</p>

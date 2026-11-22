@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal } from "@/components/modal";
 import { setAdmin } from "@/app/admin/users/actions";
 
@@ -8,6 +8,11 @@ import { setAdmin } from "@/app/admin/users/actions";
 export function AdminToggle({ userId, name, isAdmin }: { userId: string; name: string; isAdmin: boolean }) {
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
+  // When the change has gone through, the page refreshes with the new role: close the window.
+  useEffect(() => {
+    setOpen(false);
+    setBusy(false);
+  }, [isAdmin]);
   return (
     <>
       <button

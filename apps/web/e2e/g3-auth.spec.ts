@@ -24,7 +24,7 @@ test("G3: roles, officer approval, department isolation, audit", async ({ page }
   await page.context().clearCookies();
   await signUp(page, "Sipho Officer", officer);
   await page.getByRole("link", { name: /Government officer\?/ }).click();
-  await page.getByLabel("Department").selectOption({ label: LIMPOPO + " (Limpopo)" });
+  await page.getByLabel("Department", { exact: true }).selectOption({ label: LIMPOPO + " (Limpopo)" });
   await page.getByLabel("Job title").fill("HR Practitioner");
   await page.getByRole("button", { name: "Send request" }).click();
   await expect(page.getByText("awaiting approval")).toBeVisible();

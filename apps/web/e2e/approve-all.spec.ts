@@ -44,7 +44,7 @@ test("Approve all publishes only clean drafts, after a confirmation", async ({ p
   const dlg = page.getByRole("dialog", { name: "Approve 1 record?" });
   await expect(dlg).toContainText("1 record is not included");
   await dlg.getByRole("button", { name: "Approve all" }).click();
-  await expect(page.getByTestId("toast")).toContainText("1 record approved and published.");
+  await expect(page.getByRole("status").filter({ hasText: "Approved 1 record." })).toBeVisible();
 
   const rows = await sql<{ title: string; status: string; published: boolean }>(
     `select e.record->>'post_title' title, e.status, (e.target_opportunity_id is not null) published

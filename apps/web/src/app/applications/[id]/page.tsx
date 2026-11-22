@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import { CrumbLabel } from "@/components/breadcrumbs";
 import { DocViewer } from "@/components/doc-viewer";
 import { notFound } from "next/navigation";
@@ -260,6 +261,7 @@ function StatusView({ app, title }: { app: App; title: string }) {
   const canWithdraw = ["submitted", "under_review", "shortlisted"].includes(s);
   return (
     <div className="max-w-3xl space-y-6">
+      <ScrollToTop />
       <header>
         <p className="text-xs font-semibold uppercase tracking-wide text-muted">Your application</p>
         <h1 className="mt-1 text-2xl font-extrabold tracking-tight">{title}</h1>

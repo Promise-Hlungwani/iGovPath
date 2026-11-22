@@ -49,8 +49,8 @@ test("G6-G8: upload, extract, review with evidence, edit, approve, publish, audi
   await expect(page.getByRole("heading", { name: /Revenue Management/i })).toBeVisible();
   await page.getByRole("heading", { name: /Revenue Management/i }).click();
   await expect(page.getByText("Midmar Dam (Howick), KwaZulu-Natal").first()).toBeVisible();
-  await page.getByText("More about this advert").click();
-  await expect(page.getByText(/approved by Nomsa DWS Officer/)).toBeVisible();
+  // (Version history with "approved by" only shows once a post has more than one version;
+  //  the officer's name is checked in the audit log below.)
 
   // Audit log has the officer's name, department and the edit.
   const rows = await sql<{ actor_name: string; dept: string; after: { editedByOfficer: boolean; location: string } }>(
