@@ -59,7 +59,7 @@ export default function AccuracyPage() {
       )}
 
       <Card className="space-y-2">
-        <h2 className="font-semibold">Guardrail self-check on the listed adverts (not an accuracy score)</h2>
+        <h2 className="font-extrabold">Guardrail self-check on the listed adverts (not an accuracy score)</h2>
         <p className="text-sm">
           {sampleCount} listed adverts were extracted by the pipeline. Guardrail errors: <strong>{sampleErrors}</strong>. Every filled field
           carries an exact quote from the advert, and an officer approves each record before it is shown.

@@ -26,10 +26,10 @@ export function Checklist({ opportunityId, items, initial, signedIn, showSource 
       {error && <p role="alert" className="rounded-lg border border-danger/30 bg-danger-soft px-4 py-3 text-sm text-danger">{error}</p>}
       {groups.map((g) => (
         <section key={g}>
-          <h2 className="font-semibold mb-2">{g}</h2>
+          <h2 className="font-extrabold mb-2">{g}</h2>
           <ul className="space-y-2">
             {items.filter((i) => i.group === g).map((i) => (
-              <li key={i.key} className="flex items-start gap-3 rounded-md border border-border bg-surface p-3">
+              <li key={i.key} className="flex items-start gap-3 rounded-lg border border-border bg-surface p-3">
                 <input
                   type="checkbox"
                   className="mt-1 h-4 w-4 accent-[var(--brand)]"

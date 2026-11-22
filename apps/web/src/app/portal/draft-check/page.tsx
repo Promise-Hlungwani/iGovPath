@@ -37,7 +37,7 @@ export default async function DraftCheckPage({ searchParams }: { searchParams: P
         {result && (
           <>
             <Card data-testid="missing">
-              <h2 className="font-semibold mb-2">Missing mandatory items ({result.missing.length})</h2>
+              <h2 className="font-extrabold mb-2">Missing mandatory items ({result.missing.length})</h2>
               {result.missing.length === 0 ? <p className="text-sm text-muted">Nothing mandatory is missing.</p> : (
                 <ul className="space-y-2 text-sm">
                   {result.missing.map((m, i) => <li key={i}><strong>{m.item}</strong><div className="text-muted">{m.question_for_officer}</div></li>)}
@@ -45,7 +45,7 @@ export default async function DraftCheckPage({ searchParams }: { searchParams: P
               )}
             </Card>
             <Card>
-              <h2 className="font-semibold mb-2">Could be clearer ({result.unclear.length})</h2>
+              <h2 className="font-extrabold mb-2">Could be clearer ({result.unclear.length})</h2>
               <ul className="space-y-3 text-sm">
                 {result.unclear.map((u, i) => (
                   <li key={i}><p className="text-muted line-through decoration-1">{u.sentence}</p><p>{u.suggestion}</p></li>

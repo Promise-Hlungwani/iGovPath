@@ -27,7 +27,7 @@ export default async function OfficerApplication({ params, searchParams }: { par
     <div className="max-w-4xl space-y-6">
       <CrumbLabel path={`/portal/applications/${app.a.id}`} text={name} />
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">{name}</h1>
+        <h1 className="text-2xl font-extrabold tracking-tight">{name}</h1>
         <p className="text-muted">For <Link className="underline" href={`/posts/${app.o.id}`}>{displayTitle(app.o.postTitle)}</Link>{app.o.referenceNumber && ` · Ref ${app.o.referenceNumber}`} · sent {formatDateTime(app.a.submittedAt)}</p>
       </header>
       <Suspense fallback={null}><UrlError /></Suspense>
@@ -97,7 +97,7 @@ export default async function OfficerApplication({ params, searchParams }: { par
 }
 
 function Box({ title, children }: { title: string; children: React.ReactNode }) {
-  return <section className="rounded-2xl border border-black/10 bg-white p-5 space-y-1.5"><h2 className="font-semibold mb-2">{title}</h2>{children}</section>;
+  return <section className="rounded-2xl border border-black/10 bg-white p-5 space-y-1.5"><h2 className="font-extrabold mb-2">{title}</h2>{children}</section>;
 }
 function Row({ k, v, extra }: { k: string; v?: string; extra?: React.ReactNode }) {
   return <p className="text-sm flex gap-2"><span className="text-muted w-40 shrink-0">{k}</span><span className="font-medium">{v || "—"}</span>{extra}</p>;

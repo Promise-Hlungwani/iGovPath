@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { and, count, eq } from "drizzle-orm";
-import { db, schema } from "@/db";
+import { sql } from "drizzle-orm";
+import { db } from "@/db";
 import { Badge, Notice } from "@/components/ui";
 import { Avatar } from "@/components/account-menu";
 import { formatDate } from "@/lib/format";
 import { requireUser } from "@/lib/session";
-import { pendingOfficerCount, reviewQueueCount } from "@/lib/queue";
+import { headerCounts } from "@/lib/queue";
 import { CountBadge } from "@/components/count-badge";
 import { Suspense } from "react";
 import { UrlError } from "@/components/url-error";
@@ -15,23 +15,31 @@ const roleLabel = { applicant: "Applicant", officer: "Government officer", admin
 export default async function AccountPage({ searchParams }: { searchParams: Promise<{ deleteError?: string }> }) {
   const u = await requireUser("/account");
   const { deleteError } = await searchParams;
-  const [[saved], [unread], [profile], [me], [docs]] = await Promise.all([
-    db.select({ n: count() }).from(schema.savedOpportunities).where(eq(schema.savedOpportunities.userId, u.id)),
-    db.select({ n: count() }).from(schema.notifications).where(and(eq(schema.notifications.userId, u.id), eq(schema.notifications.read, false))),
-    db.select({ at: schema.applicantProfiles.cvUpdatedAt }).from(schema.applicantProfiles).where(eq(schema.applicantProfiles.userId, u.id)),
-    db.select({ created: schema.user.createdAt }).from(schema.user).where(eq(schema.user.id, u.id)),
-    db.select({ n: count() }).from(schema.userDocuments).where(eq(schema.userDocuments.userId, u.id)),
+  // Two round trips in total: the header's counts (shared, already fetched) and one for this page.
+  const [counts, mine] = await Promise.all([
+    headerCounts(),
+    db.execute<{ saved: number; docs: number; cv_at: string | null; created: string | null }>(sql`
+      select (select count(*) from saved_opportunities where user_id = ${u.id})::int as saved,
+             (select count(*) from user_documents where user_id = ${u.id})::int as docs,
+             (select cv_updated_at from applicant_profiles where user_id = ${u.id}) as cv_at,
+             (select created_at from "user" where id = ${u.id}) as created`),
   ]);
+  const m = mine.rows[0];
+  const saved = { n: m?.saved ?? 0 };
+  const docs = { n: m?.docs ?? 0 };
+  const unread = { n: counts.unread };
+  const profile = m?.cv_at ? { at: new Date(m.cv_at) } : null;
+  const me = m?.created ? { created: new Date(m.created) } : null;
   const officerActive = (u.role === "officer" || u.role === "admin") && u.status === "active";
-  const [queue, officerRequests] = await Promise.all([reviewQueueCount(u), pendingOfficerCount(u)]);
+  const { queue, officerRequests } = counts;
 
   return (
     <div className="max-w-4xl space-y-8">
       {/* Profile */}
-      <section className="rounded-3xl border border-black/10 bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgba(0,0,0,0.05)] flex flex-col sm:flex-row sm:items-center gap-6">
+      <section className="rounded-2xl border border-black/10 bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgba(0,0,0,0.05)] flex flex-col sm:flex-row sm:items-center gap-6">
         <Avatar name={u.name} size={76} />
         <div className="min-w-0 flex-1">
-          <h1 className="text-2xl font-semibold tracking-tight truncate">{u.name}</h1>
+          <h1 className="text-2xl font-extrabold tracking-tight truncate">{u.name}</h1>
           <p className="text-muted truncate">{u.email}</p>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <Badge tone="brand">{roleLabel[u.role]}</Badge>
@@ -56,7 +64,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
       {officerActive && (
         <section
           data-testid="queue-card"
-          className={`rounded-3xl p-6 sm:p-7 flex flex-col sm:flex-row sm:items-center gap-5 border border-black/10 bg-white/70 backdrop-blur-sm shadow-[0_8px_30px_rgba(0,0,0,0.06)]`}
+          className={`rounded-2xl p-6 sm:p-7 flex flex-col sm:flex-row sm:items-center gap-5 border border-black/10 bg-white/70 backdrop-blur-sm shadow-[0_8px_30px_rgba(0,0,0,0.06)]`}
         >
           <div className="flex-1">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted">Review queue</p>
@@ -69,19 +77,19 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
           </div>
           <Link
             href="/portal"
-            className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 font-semibold bg-black text-white hover:bg-[#222]`}
+            className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-6 font-semibold bg-black text-white hover:bg-[#222]`}
           >
             Go to review queue <span aria-hidden>→</span>
           </Link>
         </section>
       )}
       {officerRequests > 0 && (
-        <section className="rounded-3xl border border-black/10 bg-white p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+        <section className="rounded-2xl border border-black/10 bg-white p-6 flex flex-col sm:flex-row sm:items-center gap-4">
           <div className="flex-1">
             <p className="font-semibold inline-flex items-center">Officer requests<CountBadge n={officerRequests} /></p>
             <p className="text-sm text-muted mt-1">People asking for officer access without a code.</p>
           </div>
-          <Link href="/admin/users" className="inline-flex min-h-11 items-center justify-center rounded-full bg-black px-6 font-semibold text-white hover:bg-[#222]">Review requests</Link>
+          <Link href="/admin/users" className="inline-flex min-h-11 items-center justify-center rounded-lg bg-black px-6 font-semibold text-white hover:bg-[#222]">Review requests</Link>
         </section>
       )}
 
@@ -114,7 +122,7 @@ function Tile({ href, title, value, hint }: { href: string; title: string; value
   return (
     <Link
       href={href}
-      className="group rounded-2xl border border-black/10 bg-white p-5 shadow-[0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition"
+      className="group rounded-2xl border border-black/10 bg-white p-5 lift"
     >
       <div className="flex items-start justify-between gap-3">
         <p className="font-semibold">{title}</p>

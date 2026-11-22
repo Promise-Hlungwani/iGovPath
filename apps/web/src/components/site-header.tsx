@@ -2,26 +2,21 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { PROFILE_COOKIE } from "@/lib/profile";
 import { getCurrentUser, isActiveOfficer, isAdmin } from "@/lib/session";
-import { remindersAndUnread } from "@/lib/notify";
 import { AccountMenu } from "@/components/account-menu";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { NavLink } from "@/components/nav-link";
 import { CountBadge } from "@/components/count-badge";
 import { MobileNav } from "@/components/mobile-nav";
-import { pendingOfficerCount, reviewQueueCount } from "@/lib/queue";
+import { headerCounts } from "@/lib/queue";
 
 const ROLE_LABEL = { applicant: "Applicant", officer: "Government officer", admin: "Admin" } as const;
 
 export async function SiteHeader() {
-  const u = await getCurrentUser().catch(() => null);
+  // Who you are and the header's counts are fetched side by side (one database trip each).
+  const zero = { unread: 0, queue: 0, officerRequests: 0, newApps: 0 };
+  const [u, counts] = await Promise.all([getCurrentUser().catch(() => null), headerCounts().catch(() => zero)]);
   // Counts are nice-to-have: if the database hiccups, show the header without them.
-  const [unread, queue, officerRequests] = u
-    ? await Promise.all([
-        remindersAndUnread(u.id).catch(() => 0),
-        reviewQueueCount(u).catch(() => 0),
-        pendingOfficerCount(u).catch(() => 0),
-      ])
-    : [0, 0, 0];
+  const { unread, queue, officerRequests } = counts;
   // Officers switch between their personal profile and their officer profile (avatar menu).
   const canOfficer = isActiveOfficer(u) || isAdmin(u);
   const officerMode = canOfficer && (await cookies()).get(PROFILE_COOKIE)?.value === "officer";
@@ -80,7 +75,7 @@ export async function SiteHeader() {
         ) : (
           <div className="ml-auto hidden items-center gap-4 text-sm text-black/80 lg:flex">
             <Link href="/sign-in" className="hover:text-black hover:underline">Sign in</Link>
-            <Link href="/sign-up" className="rounded-md bg-black text-white font-semibold px-4 py-2 hover:bg-[#222]">Sign up</Link>
+            <Link href="/sign-up" className="rounded-lg bg-black text-white font-semibold px-4 py-2 hover:bg-[#222]">Sign up</Link>
           </div>
         )}
       </div>

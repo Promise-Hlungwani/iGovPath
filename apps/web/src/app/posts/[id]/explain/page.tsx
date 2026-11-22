@@ -45,7 +45,7 @@ export default async function ExplainPage({ params, searchParams }: { params: Pr
       <div className="flex flex-wrap gap-2 mb-4" role="tablist" aria-label="Language">
         {LANGUAGES.map((l) => (
           <Link key={l} role="tab" aria-selected={l === language} href={`/posts/${opp.id}/explain?lang=${l}`}
-            className={`rounded-full px-3 py-1 text-sm border ${l === language ? "bg-brand text-brand-ink border-brand" : "border-border bg-surface"}`}>
+            className={`rounded-full px-3 py-1 text-sm border ${l === language ? "bg-interactive text-white border-interactive" : "border-border bg-surface"}`}>
             {l}
           </Link>
         ))}
@@ -64,7 +64,7 @@ export default async function ExplainPage({ params, searchParams }: { params: Pr
             const v = content!.explanation[k];
             return (
               <section key={k}>
-                <h2 className="font-semibold text-sm">{label}</h2>
+                <h2 className="font-extrabold text-sm">{label}</h2>
                 {Array.isArray(v) ? (
                   <ul className="list-disc pl-5 text-sm space-y-1 mt-1">{v.map((x, i) => <li key={i}>{x}</li>)}</ul>
                 ) : (

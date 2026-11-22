@@ -35,7 +35,7 @@ export default async function DocumentPage({ params, searchParams }: { params: P
 
       {doc.kind === "amendment" && (
         <section className="space-y-3">
-          <h2 className="font-semibold">Amendments found ({exts.length})</h2>
+          <h2 className="font-extrabold">Amendments found ({exts.length})</h2>
           {exts.map((e) => {
             const r = e.record as { post_title?: string; reference_number?: string; summary?: string; status_change?: string };
             return (
@@ -62,9 +62,9 @@ export default async function DocumentPage({ params, searchParams }: { params: P
       {doc.kind === "circular" && (
         <section className="space-y-3">
           <div className="flex flex-wrap items-end justify-between gap-3">
-            <h2 className="font-semibold">Posts in this document ({chunks.length})</h2>
+            <h2 className="font-extrabold">Posts in this document ({chunks.length})</h2>
             <form className="flex gap-2">
-              <input name="q" defaultValue={q} placeholder="Filter by title or department" className="rounded-md border border-border bg-surface px-3 py-1.5 text-sm" />
+              <input name="q" defaultValue={q} placeholder="Filter by title or department" className="rounded-lg border border-border bg-surface px-3 py-1.5 text-sm" />
             </form>
           </div>
           <p className="text-sm text-muted">Choose the posts that belong to your department. Each one is read separately (about 5 seconds each).</p>

@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
-/* White background, black for text and buttons, greys for secondary text,
-   a few see-through surfaces. The logo keeps its colours ("iGov" cyan #28b8dc). */
+/* White background, black text and primary buttons, greys for secondary text.
+   The logo cyan is the interaction colour (links, active pills, focus, badges);
+   green / amber / red / grey show how close a closing date is. Nothing else. */
 :root {
   color-scheme: light;
   --background: #ffffff;
@@ -14,11 +15,16 @@
   --brand: #000000;
   --brand-ink: #ffffff;
   --brand-soft: rgba(0, 0, 0, 0.05);
-  --navy: rgba(255, 255, 255, 0.8);
+  --navy: rgba(255, 255, 255, 0.95);
   --navy-ink: #000000;
   --teal: #f4f4f4;
   --accent: #000000;
   --logo: #28b8dc;
+  --interactive: #0e7490;       /* logo cyan, darkened so text on white is readable */
+  --interactive-soft: #e3f5fa;
+  --ok: #15803d;      --ok-soft: #e8f6ed;      /* open */
+  --soon: #b45309;    --soon-soft: #fdf3e2;    /* under 7 days */
+  --urgent: #b42318;  --urgent-soft: #fdecea;  /* under 48 hours, withdrawn */
   --warn-bg: rgba(0, 0, 0, 0.04);
   --warn-ink: #111111;
   --danger: #000000;
@@ -41,6 +47,14 @@
   --color-navy-ink: var(--navy-ink);
   --color-teal: var(--teal);
   --color-logo: var(--logo);
+  --color-interactive: var(--interactive);
+  --color-interactive-soft: var(--interactive-soft);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-soon: var(--soon);
+  --color-soon-soft: var(--soon-soft);
+  --color-urgent: var(--urgent);
+  --color-urgent-soft: var(--urgent-soft);
   --color-field: var(--field);
   --color-accent: var(--accent);
   --color-warn-bg: var(--warn-bg);
@@ -87,3 +101,17 @@ mark.evidence {
 @media (prefers-reduced-motion: reduce) {
   [role="menu"], dialog[open] { animation: none !important; }
 }
+
+/* Text links in page content use the interaction colour. */
+main a.underline { color: var(--interactive); text-underline-offset: 2px; }
+main a.underline:hover { color: #0b5d73; }
+
+/* Clickable cards: soft elevation that lifts a little on hover. */
+.lift { transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 6px 18px rgba(0,0,0,.05); }
+.lift:hover { transform: translateY(-2px); border-color: rgba(0,0,0,.18);
+  box-shadow: 0 2px 4px rgba(0,0,0,.05), 0 14px 32px rgba(0,0,0,.09); }
+@media (prefers-reduced-motion: reduce) { .lift, .lift:hover { transform: none; } }
+
+/* Headings: weight, not size, makes the hierarchy. */
+h1, h2 { letter-spacing: -0.015em; }

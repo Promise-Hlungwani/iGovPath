@@ -6,7 +6,7 @@ export function cx(...c: (string | false | null | undefined)[]) {
 }
 
 const buttonBase =
-  "inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
+  "inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-interactive";
 const variants = {
   primary: "bg-black text-white font-semibold hover:bg-[#222] active:translate-y-px",
   secondary: "border border-black/25 text-foreground hover:bg-black/5",
@@ -32,15 +32,16 @@ export function ButtonLink({
 }
 
 export function Card({ className, ...props }: ComponentProps<"div">) {
-  return <div className={cx("rounded-xl border border-border bg-white p-5 shadow-[0_4px_16px_rgba(0,0,0,0.04)]", className)} {...props} />;
+  return <div className={cx("rounded-2xl border border-border bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)]", className)} {...props} />;
 }
 
 const badgeTones = {
   neutral: "bg-black/[0.04] text-muted border border-border",
-  brand: "bg-brand-soft text-brand",
-  warn: "bg-warn-bg text-warn-ink",
-  danger: "bg-danger-soft text-danger",
-  info: "bg-info-soft text-info-ink",
+  brand: "bg-interactive-soft text-interactive",
+  warn: "bg-soon-soft text-soon",
+  danger: "bg-urgent-soft text-urgent",
+  info: "bg-interactive-soft text-interactive",
+  ok: "bg-ok-soft text-ok",
 };
 export function Badge({
   tone = "neutral",
@@ -63,7 +64,7 @@ export function Label({ className, ...props }: ComponentProps<"label">) {
 }
 
 const field =
-  "w-full rounded-md border border-border bg-field text-foreground placeholder:text-muted/70 px-3 py-2 text-sm focus:outline-2 focus:outline-brand";
+  "w-full rounded-lg border border-border bg-field text-foreground placeholder:text-muted/70 px-3 py-2 text-sm focus:outline-2 focus:outline-interactive";
 export function Input({ className, ...props }: ComponentProps<"input">) {
   return <input className={cx(field, className)} {...props} />;
 }
@@ -80,7 +81,7 @@ export function PageTitle({ children, sub, eyebrow, actions }: { children: React
     <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
       <div className="min-w-0">
         {eyebrow && <p className="text-xs font-semibold uppercase tracking-wide text-muted">{eyebrow}</p>}
-        <h1 className="text-2xl font-semibold tracking-tight">{children}</h1>
+        <h1 className="text-2xl font-extrabold tracking-tight">{children}</h1>
         {sub && <p className="mt-1 text-[15px] text-muted max-w-3xl">{sub}</p>}
       </div>
       {actions && <div className="shrink-0">{actions}</div>}
@@ -89,7 +90,7 @@ export function PageTitle({ children, sub, eyebrow, actions }: { children: React
 }
 
 export function SectionTitle({ children, id, className = "" }: { children: ReactNode; id?: string; className?: string }) {
-  return <h2 id={id} className={`text-lg font-semibold ${className}`}>{children}</h2>;
+  return <h2 id={id} className={`text-lg font-extrabold ${className}`}>{children}</h2>;
 }
 
 export function EmptyState({ children, action }: { children: ReactNode; action?: ReactNode }) {

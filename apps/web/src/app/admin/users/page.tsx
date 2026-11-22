@@ -37,7 +37,7 @@ export default async function AdminUsersPage() {
       <PageTitle sub="Approve government officers before they can review and publish records.">Manage users</PageTitle>
 
       <section>
-        <h2 className="font-semibold mb-3">Officer access requests ({pending.length})</h2>
+        <h2 className="font-extrabold mb-3">Officer access requests ({pending.length})</h2>
         {pending.length === 0 ? (
           <EmptyState>No pending requests.</EmptyState>
         ) : (
@@ -70,7 +70,7 @@ export default async function AdminUsersPage() {
       </section>
 
       <section>
-        <h2 className="font-semibold mb-3">All users ({rows.length})</h2>
+        <h2 className="font-extrabold mb-3">All users ({rows.length})</h2>
         <div className="overflow-x-auto rounded-lg border border-border bg-surface">
           <table className="w-full text-sm">
             <thead className="text-left text-muted border-b border-border">

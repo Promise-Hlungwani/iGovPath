@@ -1,7 +1,8 @@
 import "server-only";
-import { and, count, eq, inArray, type SQL } from "drizzle-orm";
+import { cache } from "react";
+import { and, count, eq, inArray, sql, type SQL } from "drizzle-orm";
 import { db, schema } from "@/db";
-import { departmentScope, isActiveOfficer, isAdmin, type CurrentUser } from "@/lib/session";
+import { departmentScope, getSession, isActiveOfficer, isAdmin, type CurrentUser } from "@/lib/session";
 
 /** Drafts waiting for this officer (their department; admins see all). 0 for non-officers. */
 export async function reviewQueueCount(u: CurrentUser | null): Promise<number> {
@@ -32,3 +33,47 @@ export async function newApplicationsCount(u: CurrentUser | null): Promise<numbe
   const [r] = await db.select({ n: count() }).from(schema.applications).where(and(...where));
   return r?.n ?? 0;
 }
+
+/**
+ * Every number the header and portal tabs show, in ONE database round trip (the database is far
+ * away, so each extra query costs ~150 ms). The role rules are applied in SQL, so this doesn't wait
+ * for getCurrentUser and the two run side by side. Also creates due "closes soon" reminders, like
+ * remindersAndUnread. Cached per request, so the header, portal layout and account page share it.
+ * Rules match isActiveOfficer / isAdmin / departmentScope: active officers see their department,
+ * active admins see everything.
+ */
+export const headerCounts = cache(async () => {
+  const none = { unread: 0, queue: 0, officerRequests: 0, newApps: 0 };
+  const s = await getSession();
+  if (!s) return none;
+  const id = s.user.id;
+  const { rows } = await db.execute<{ unread: number; queue: number; requests: number; apps: number }>(sql`
+    with me as (
+      select role, status, department_id from user_roles where user_id = ${id}
+    ), due as (
+      select o.id, o.post_title, o.closing_date from saved_opportunities s
+      join opportunities o on o.id = s.opportunity_id
+      where s.user_id = ${id} and o.status <> 'withdrawn'
+        and o.closing_date between current_date and current_date + 3
+    ), ins as (
+      insert into notifications (user_id, opportunity_id, kind, message, dedupe_key)
+      select ${id}, id, 'closing_soon',
+        '"' || initcap(post_title) || '" closes on ' || trim(to_char(closing_date, 'FMDD Month YYYY')) || '. Finish your checklist and apply.',
+        'closing:' || to_char(closing_date, 'YYYY-MM-DD')
+      from due
+      on conflict (user_id, dedupe_key) do nothing
+      returning 1
+    )
+    select
+      ((select count(*) from notifications where user_id = ${id} and read = false) + (select count(*) from ins))::int as unread,
+      coalesce((select count(*) from extractions e, me
+        where me.status = 'active' and me.role in ('officer', 'admin') and e.status in ('draft', 'needs_fix')
+          and (me.role = 'admin' or e.department_id = me.department_id)), 0)::int as queue,
+      coalesce((select count(*) from user_roles r, me
+        where me.status = 'active' and me.role = 'admin' and r.role = 'officer' and r.status = 'pending'), 0)::int as requests,
+      coalesce((select count(*) from applications a, me
+        where me.status = 'active' and me.role in ('officer', 'admin') and a.status = 'submitted'
+          and (me.role = 'admin' or a.department_id = me.department_id)), 0)::int as apps`);
+  const r = rows[0];
+  return r ? { unread: r.unread, queue: r.queue, officerRequests: r.requests, newApps: r.apps } : none;
+});

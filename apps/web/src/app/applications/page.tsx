@@ -25,12 +25,12 @@ export default async function MyApplications() {
       <Suspense fallback={null}><UrlError /></Suspense>
       <div className="space-y-3">
         {rows.map(({ a, title, closing, dept }) => (
-          <Link key={a.id} href={`/applications/${a.id}`} data-testid="application" className="group flex items-center justify-between gap-4 rounded-2xl border border-black/10 bg-white p-5 hover:border-black/25 hover:shadow-[0_10px_30px_rgba(0,0,0,0.06)] transition">
+          <Link key={a.id} href={`/applications/${a.id}`} data-testid="application" className="group flex items-center justify-between gap-4 rounded-2xl border border-black/10 bg-white p-5 lift">
             <div className="min-w-0">
               <span className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${a.status === "draft" ? "bg-black/[0.06]" : a.status === "shortlisted" || a.status === "appointed" ? "bg-black text-white" : "bg-black/[0.06]"}`}>
                 {STATUS_LABEL[a.status]}
               </span>
-              <h2 className="mt-2 font-semibold truncate">{displayTitle(title)}</h2>
+              <h2 className="mt-2 font-bold truncate">{displayTitle(title)}</h2>
               <p className="text-sm text-muted">
                 {dept} · {a.status === "draft" ? <ClosingText date={closing} /> : `Sent ${formatDate(a.submittedAt)}`}
               </p>

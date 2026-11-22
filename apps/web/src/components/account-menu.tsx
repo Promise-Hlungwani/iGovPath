@@ -66,7 +66,7 @@ export function AccountMenu({ name, email, roleLabel, isOfficer, unread, queue =
           </span>
         )}
         {unread > 0 && (
-          <span data-testid="unread" className="absolute -right-1 -top-1 min-w-5 rounded-full bg-black px-1 text-center text-[11px] font-bold leading-5 text-white ring-2 ring-white">{unread}</span>
+          <span data-testid="unread" className="absolute -right-1 -top-1 min-w-5 rounded-full bg-interactive px-1 text-center text-[11px] font-bold leading-5 text-white ring-2 ring-white">{unread}</span>
         )}
       </button>
 
@@ -93,7 +93,7 @@ export function AccountMenu({ name, email, roleLabel, isOfficer, unread, queue =
                   <button role="menuitemradio" aria-checked={profiles.current === to} type="submit"
                     className={`${item} ${profiles.current === to ? "bg-black/[0.06] font-semibold" : ""}`}>
                     <span className="truncate">{label}</span>
-                    {profiles.current === to ? <span aria-hidden>✓</span> : to === "officer" && queue > 0 ? <span className="rounded-full bg-black px-2 text-xs font-bold leading-5 text-white">{queue}</span> : null}
+                    {profiles.current === to ? <span aria-hidden>✓</span> : to === "officer" && queue > 0 ? <span className="rounded-full bg-interactive px-2 text-xs font-bold leading-5 text-white">{queue}</span> : null}
                   </button>
                 </form>
               ))}
@@ -105,16 +105,16 @@ export function AccountMenu({ name, email, roleLabel, isOfficer, unread, queue =
           <Link role="menuitem" href="/account/documents" className={item} onClick={() => setOpen(false)}>My documents</Link>
           <Link role="menuitem" href="/saved" className={item} onClick={() => setOpen(false)}>My saved jobs</Link>
           <Link role="menuitem" href="/notifications" className={item} onClick={() => setOpen(false)}>
-            Messages {unread > 0 && <span className="rounded-full bg-black px-2 text-xs font-bold leading-5 text-white">{unread}</span>}
+            Messages {unread > 0 && <span className="rounded-full bg-interactive px-2 text-xs font-bold leading-5 text-white">{unread}</span>}
           </Link>
           {isOfficer && (
             <Link role="menuitem" href="/portal" className={item} onClick={() => setOpen(false)}>
-              Review queue {queue > 0 && <span className="rounded-full bg-black px-2 text-xs font-bold leading-5 text-white">{queue} waiting</span>}
+              Review queue {queue > 0 && <span className="rounded-full bg-interactive px-2 text-xs font-bold leading-5 text-white">{queue} waiting</span>}
             </Link>
           )}
           {officerRequests > 0 && (
             <Link role="menuitem" href="/admin/users" className={item} onClick={() => setOpen(false)}>
-              Officer requests <span className="rounded-full bg-black px-2 text-xs font-bold leading-5 text-white">{officerRequests}</span>
+              Officer requests <span className="rounded-full bg-interactive px-2 text-xs font-bold leading-5 text-white">{officerRequests}</span>
             </Link>
           )}
           <div className="my-1 h-px bg-black/10" />
@@ -138,7 +138,7 @@ function SignOutDialog({ open, onClose }: { open: boolean; onClose: () => void }
     <Modal open={open} onClose={onClose} title="Sign out of iGovPath?" labelledBy="signout-title">
       <p className="text-muted">You can sign in again at any time. Your saved jobs stay on your account.</p>
       <div className="mt-6 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
-        <button type="button" onClick={onClose} className="min-h-11 rounded-full border border-black/20 px-5 font-semibold hover:bg-black/5">Cancel</button>
+        <button type="button" onClick={onClose} className="min-h-11 rounded-lg border border-black/20 px-5 font-semibold hover:bg-black/5">Cancel</button>
         <button
           type="button"
           disabled={busy}
@@ -148,7 +148,7 @@ function SignOutDialog({ open, onClose }: { open: boolean; onClose: () => void }
             router.push("/");
             router.refresh();
           }}
-          className="min-h-11 rounded-full bg-black px-5 font-semibold text-white hover:bg-[#222] disabled:opacity-60"
+          className="min-h-11 rounded-lg bg-black px-5 font-semibold text-white hover:bg-[#222] disabled:opacity-60"
         >
           {busy ? "Signing out…" : "Sign out"}
         </button>
@@ -177,12 +177,12 @@ function DeleteDialog({ open, onClose, isOfficer }: { open: boolean; onClose: ()
             autoComplete="off"
             value={typed}
             onChange={(e) => setTyped(e.target.value)}
-            className="w-full rounded-xl border-2 border-black/15 px-4 py-2.5 focus:border-black outline-none"
+            className="w-full rounded-2xl border-2 border-black/15 px-4 py-2.5 focus:border-black outline-none"
           />
         </div>
         <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
-          <button type="button" onClick={() => { setTyped(""); onClose(); }} className="min-h-11 rounded-full border border-black/20 px-5 font-semibold hover:bg-black/5">Cancel</button>
-          <button type="submit" disabled={!ok || busy} className="min-h-11 rounded-full bg-[#b42318] px-5 font-semibold text-white hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed">
+          <button type="button" onClick={() => { setTyped(""); onClose(); }} className="min-h-11 rounded-lg border border-black/20 px-5 font-semibold hover:bg-black/5">Cancel</button>
+          <button type="submit" disabled={!ok || busy} className="min-h-11 rounded-lg bg-[#b42318] px-5 font-semibold text-white hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed">
             {busy ? "Deleting…" : "Delete my account permanently"}
           </button>
         </div>

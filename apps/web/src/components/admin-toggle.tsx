@@ -13,7 +13,7 @@ export function AdminToggle({ userId, name, isAdmin }: { userId: string; name: s
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className={isAdmin ? "min-h-9 rounded-full border border-black/20 px-4 text-sm font-semibold hover:bg-black/5" : "min-h-9 rounded-full bg-black px-4 text-sm font-semibold text-white hover:bg-[#222]"}
+        className={isAdmin ? "min-h-9 rounded-lg border border-black/20 px-4 text-sm font-semibold hover:bg-black/5" : "min-h-9 rounded-lg bg-black px-4 text-sm font-semibold text-white hover:bg-[#222]"}
       >
         {isAdmin ? "Remove admin" : "Make admin"}
       </button>
@@ -26,8 +26,8 @@ export function AdminToggle({ userId, name, isAdmin }: { userId: string; name: s
         <form action={setAdmin} onSubmit={() => setBusy(true)} className="mt-6 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
           <input type="hidden" name="userId" value={userId} />
           <input type="hidden" name="make" value={isAdmin ? "0" : "1"} />
-          <button type="button" onClick={() => setOpen(false)} className="min-h-11 rounded-full border border-black/20 px-5 font-semibold hover:bg-black/5">Cancel</button>
-          <button type="submit" disabled={busy} className="min-h-11 rounded-full bg-black px-5 font-semibold text-white hover:bg-[#222] disabled:opacity-60">
+          <button type="button" onClick={() => setOpen(false)} className="min-h-11 rounded-lg border border-black/20 px-5 font-semibold hover:bg-black/5">Cancel</button>
+          <button type="submit" disabled={busy} className="min-h-11 rounded-lg bg-black px-5 font-semibold text-white hover:bg-[#222] disabled:opacity-60">
             {busy ? "Saving…" : isAdmin ? "Remove admin" : "Make admin"}
           </button>
         </form>

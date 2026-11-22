@@ -20,7 +20,7 @@ export function CopyText({ value, label, dark = false }: { value: string; label:
             /* clipboard not allowed: the text is selectable instead */
           }
         }}
-        className={dark ? "rounded-full bg-white px-3 py-1 text-xs font-semibold text-black hover:bg-white/90" : "rounded-full border border-black/20 px-3 py-0.5 text-xs font-semibold hover:bg-black/5"}
+        className={dark ? "rounded-lg bg-white px-3 py-1 text-xs font-semibold text-black hover:bg-white/90" : "rounded-lg border border-black/20 px-3 py-0.5 text-xs font-semibold hover:bg-black/5"}
       >
         {copied ? "Copied ✓" : "Copy"}
       </button>

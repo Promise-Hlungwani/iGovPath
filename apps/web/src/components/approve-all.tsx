@@ -22,7 +22,7 @@ export function ApproveAllButton({ count, skipped }: { count: number; skipped: n
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="inline-flex min-h-11 items-center gap-2 rounded-full bg-black px-5 font-semibold text-white hover:bg-[#222]"
+          className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-black px-5 font-semibold text-white hover:bg-[#222]"
         >
           Approve all ({count})
         </button>
@@ -37,8 +37,8 @@ export function ApproveAllButton({ count, skipped }: { count: number; skipped: n
           </p>
         )}
         <form action={formAction} className="mt-6 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
-          <button type="button" onClick={() => setOpen(false)} className="min-h-11 rounded-full border border-black/20 px-5 font-semibold hover:bg-black/5">Cancel</button>
-          <button type="submit" disabled={busy} className="min-h-11 rounded-full bg-black px-5 font-semibold text-white hover:bg-[#222] disabled:opacity-60">
+          <button type="button" onClick={() => setOpen(false)} className="min-h-11 rounded-lg border border-black/20 px-5 font-semibold hover:bg-black/5">Cancel</button>
+          <button type="submit" disabled={busy} className="min-h-11 rounded-lg bg-black px-5 font-semibold text-white hover:bg-[#222] disabled:opacity-60">
             {busy ? "Approving…" : "Approve all"}
           </button>
         </form>

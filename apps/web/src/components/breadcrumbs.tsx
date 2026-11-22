@@ -28,6 +28,7 @@ const STATIC: Record<string, string | null> = {
   "/saved": "Saved jobs",
   "/notifications": "Messages",
   "/accuracy": "Accuracy",
+  "/privacy": "How we handle your information",
   "/applications": "My applications",
   "/account": "My account",
   "/account/documents": "My documents",

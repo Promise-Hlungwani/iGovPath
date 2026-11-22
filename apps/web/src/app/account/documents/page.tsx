@@ -21,10 +21,10 @@ export default async function MyDocumentsPage() {
           const single = SINGLE_KINDS.includes(k);
           return (
             <section key={k} className="rounded-2xl border border-black/10 bg-white/70 backdrop-blur-sm p-5 sm:p-6">
-              <h2 className="font-bold text-lg">{mine.length ? "✓ " : ""}{FILE_LABEL[k]}</h2>
+              <h2 className="font-extrabold text-lg">{mine.length ? "✓ " : ""}{FILE_LABEL[k]}</h2>
               <ul className="mt-3 space-y-2">
                 {mine.map((d) => (
-                  <li key={d.id} data-testid="my-document" className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-black/10 bg-white/60 px-4 py-3 text-sm">
+                  <li key={d.id} data-testid="my-document" className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-black/10 bg-white/60 px-4 py-3 text-sm">
                     <span aria-hidden>📄</span>
                     <DocViewer href={`/api/my-documents/${d.id}`} fileName={d.fileName} />
                     <span className="text-muted">{Math.round(d.size / 1024)} KB · Last updated {formatDateTime(d.updatedAt)}</span>
@@ -39,7 +39,7 @@ export default async function MyDocumentsPage() {
               <form action={uploadMyDocument} className="mt-3 flex flex-wrap items-center gap-2">
                 <input type="hidden" name="kind" value={k} />
                 <input name="file" type="file" required accept=".pdf,.docx,.jpg,.jpeg,.png" aria-label={`Upload ${FILE_LABEL[k]}`}
-                  className="text-sm max-w-full text-muted file:mr-3 file:rounded-full file:border file:border-black/15 file:bg-white file:px-4 file:py-1.5 file:font-semibold file:text-black hover:file:bg-black/5" />
+                  className="text-sm max-w-full text-muted file:mr-3 file:rounded-lg file:border file:border-black/15 file:bg-white file:px-4 file:py-1.5 file:font-semibold file:text-black hover:file:bg-black/5" />
                 <SubmitButton variant="secondary" pendingText="Uploading…">{mine.length && single ? "Replace with a newer one" : mine.length ? "Add another" : "Upload"}</SubmitButton>
               </form>
             </section>
