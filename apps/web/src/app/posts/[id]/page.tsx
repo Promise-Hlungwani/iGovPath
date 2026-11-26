@@ -15,6 +15,7 @@ import { STATUS_LABEL } from "@/lib/applications";
 import { SubmitButton } from "@/components/submit-button";
 import { startApplication } from "@/app/applications/actions";
 import { trackFunnel } from "@/lib/funnel";
+import { ApplicationTimeline } from "@/components/application-timeline";
 
 const FIELD_LABELS: Record<string, string> = {
   closingDate: "Closing date", minimumRequirements: "Requirements", applyRoute: "How to apply",
@@ -64,6 +65,19 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
         </Notice>
       )}
       {status === "withdrawn" && <Notice tone="danger">This post has been withdrawn. Do not apply.</Notice>}
+
+      <ApplicationTimeline
+        opportunityId={opp.id}
+        closingDate={opp.closingDate}
+        sourceDate={opp.sourceDate}
+        status={opp.status}
+        versions={versions.map(({ v }) => ({
+          version: v.version,
+          approvedAt: v.approvedAt,
+          changedFields: v.changedFields,
+          note: v.note,
+        }))}
+      />
 
       {/* 2. How to apply */}
       <section className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-sm shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-6 sm:p-8" aria-labelledby="apply">

@@ -17,7 +17,13 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     { value: "learnership", label: "Learnerships" },
   ];
   const selectedType = opportunityTypes.some((type) => type.value === sp.type) ? sp.type ?? "" : "";
-  const rows = await searchOpportunities({ q: sp.q, province: sp.province, type: sp.type, openOnly });
+  let rows: Awaited<ReturnType<typeof searchOpportunities>> = [];
+  let unavailable = false;
+  try {
+    rows = await searchOpportunities({ q: sp.q, province: sp.province, type: sp.type, openOnly });
+  } catch {
+    unavailable = true;
+  }
 
   function typeHref(type: string) {
     const params = new URLSearchParams();
@@ -67,7 +73,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           ))}
         </div>
       </nav>
-      <p className="text-sm text-muted mb-4">{rows.length} {rows.length === 1 ? "result" : "results"}</p>
+      <p className="text-sm text-muted mb-4">
+        {unavailable ? "Results are temporarily unavailable" : `${rows.length} ${rows.length === 1 ? "result" : "results"}`}
+      </p>
       <div className="space-y-3">
         {rows.map((r) => (
           <Card key={r.id} className="hover:border-brand transition-colors">
@@ -90,7 +98,10 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             </Link>
           </Card>
         ))}
-        {rows.length === 0 && (
+        {unavailable && (
+          <EmptyState>We could not load opportunities just now. Please try again in a moment.</EmptyState>
+        )}
+        {!unavailable && rows.length === 0 && (
           <EmptyState>Nothing found. Try fewer words, another province, or include closed posts.</EmptyState>
         )}
       </div>

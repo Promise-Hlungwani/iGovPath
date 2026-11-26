@@ -32,6 +32,10 @@ test("G10 + G12: checklist ticks persist; saving a post closing in 2 days shows 
   await expect(page.getByTestId("saved-item")).toHaveCount(1);
   await expect(page.getByText("(2 days left)")).toBeVisible();
   await expect(page.getByTestId("unread")).toHaveText("1");
+  await page.getByText("View application timeline").click();
+  await expect(page.getByText("Application timeline").last()).toBeVisible();
+  await expect(page.getByText("Application closes").last()).toBeVisible();
+  await expect(page.getByRole("link", { name: "Download calendar reminder" }).last()).toBeVisible();
   await page.goto("/notifications");
   await expect(page.getByTestId("notification").first()).toContainText("closes on");
   await expect(page.getByTestId("notification").first()).toContainText("Closing soon");

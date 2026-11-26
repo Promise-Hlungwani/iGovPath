@@ -7,6 +7,7 @@ import { effectiveStatus } from "@/lib/opportunities";
 import { ensureClosingReminders } from "@/lib/notify";
 import { requireUser } from "@/lib/session";
 import { displayTitle } from "@/lib/text";
+import { ApplicationTimeline } from "@/components/application-timeline";
 
 export default async function SavedPage() {
   const u = await requireUser("/saved");
@@ -51,6 +52,17 @@ export default async function SavedPage() {
                   Checklist{total ? `: ${Math.min(done, total)} of ${total} done` : ""}
                 </Link>
               </div>
+              <details className="border-t border-border pt-3">
+                <summary className="cursor-pointer text-sm font-semibold">View application timeline</summary>
+                <ApplicationTimeline
+                  opportunityId={o.id}
+                  closingDate={o.closingDate}
+                  sourceDate={o.sourceDate}
+                  status={o.status}
+                  versions={[]}
+                  compact
+                />
+              </details>
             </Card>
           );
         })}
