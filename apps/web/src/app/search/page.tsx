@@ -64,7 +64,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
               aria-current={selectedType === type.value ? "page" : undefined}
               className={`inline-flex min-h-10 items-center rounded-full border px-4 text-sm font-medium transition-colors ${
                 selectedType === type.value
-                  ? "border-black bg-black text-white"
+                  ? "border-interactive bg-interactive text-white"
                   : "border-border bg-white hover:bg-black/5"
               }`}
             >
@@ -78,13 +78,13 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       </p>
       <div className="space-y-3">
         {rows.map((r) => (
-          <Card key={r.id} className="hover:border-brand transition-colors">
+          <Card key={r.id} className="lift">
             <Link href={`/posts/${r.id}`} className="block">
               <div className="flex flex-wrap items-center gap-2 mb-1">
                 <StatusBadge status={effectiveStatus(r.status, r.closingDate)} />
                 <TypeBadge type={r.type} />
               </div>
-              <h2 className="font-semibold text-lg">{displayTitle(r.postTitle)}</h2>
+              <h2 className="font-bold text-lg">{displayTitle(r.postTitle)}</h2>
               <p className="text-sm text-muted">
                 {r.departmentName}
                 {r.location && ` · ${r.location}`}

@@ -38,8 +38,8 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
   }
 
   return (
-    <Card className="max-w-md mx-auto">
-      <h1 className="text-xl font-semibold">{mode === "sign-up" ? "Create an account" : "Sign in"}</h1>
+    <Card className="w-full max-w-md">
+      <h1 className="text-xl font-extrabold">{mode === "sign-up" ? "Create an account" : "Sign in"}</h1>
       <p className="text-sm text-muted mt-1">
         {mode === "sign-up"
           ? "Applicants can use the app straight away. Government officers can request portal access after signing up."
@@ -79,7 +79,7 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
           )}
         </div>
         {error && <Notice tone="danger">{error}</Notice>}
-        <Button type="submit" disabled={busy || !ready} className="w-full">
+        <Button type="submit" disabled={busy || !ready} className={`w-full ${!ready && !busy ? "disabled:opacity-100" : ""}`}>
           {busy ? "Please wait…" : mode === "sign-up" ? "Create account" : "Sign in"}
         </Button>
       </form>

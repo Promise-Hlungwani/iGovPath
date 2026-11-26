@@ -1,7 +1,7 @@
 import { NavLink } from "@/components/nav-link";
 import { ButtonLink, Card, Notice } from "@/components/ui";
 import { isActiveOfficer, requireUser } from "@/lib/session";
-import { newApplicationsCount, reviewQueueCount } from "@/lib/queue";
+import { headerCounts } from "@/lib/queue";
 import { CountBadge } from "@/components/count-badge";
 
 const nav = [
@@ -20,7 +20,7 @@ export default async function PortalLayout({ children }: { children: React.React
   if (!isActiveOfficer(u)) {
     return (
       <Card className="max-w-xl space-y-4">
-        <h1 className="text-xl font-semibold">Officer portal</h1>
+        <h1 className="text-xl font-extrabold">Officer portal</h1>
         {u.role === "officer" && u.status === "pending" ? (
           <Notice tone="warn">Your officer access is <strong>awaiting approval</strong> by an admin.</Notice>
         ) : u.role === "officer" && u.status === "rejected" ? (
@@ -32,8 +32,8 @@ export default async function PortalLayout({ children }: { children: React.React
       </Card>
     );
   }
-  const queue = await reviewQueueCount(u).catch(() => 0);
-  const newApps = await newApplicationsCount(u).catch(() => 0);
+  // Same single query as the header (cached for this request), not two more round trips.
+  const { queue, newApps } = await headerCounts().catch(() => ({ queue: 0, newApps: 0 }));
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-3">

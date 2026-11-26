@@ -6,7 +6,7 @@ export class AiServiceError extends Error {}
 
 const keyHeader = (): Record<string, string> => (env.AI_SERVICE_KEY ? { "x-igovpath-key": env.AI_SERVICE_KEY } : {});
 
-async function call<T>(path: string, body: unknown, timeoutMs = 120_000): Promise<T> {
+async function call<T>(path: string, body: unknown, timeoutMs = 50_000): Promise<T> {
   let res: Response;
   try {
     res = await fetch(`${env.AI_SERVICE_URL}${path}`, {

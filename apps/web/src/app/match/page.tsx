@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HowItWorks } from "@/components/how-it-works";
 import { eq, inArray } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { Badge, ButtonLink, Card, EmptyState, Input, Notice, PageTitle } from "@/components/ui";
@@ -56,9 +57,23 @@ export default async function MatchPage({ searchParams }: { searchParams: Promis
           </form>
         </Card>
       ) : null}
+      {!profile && (
+        <HowItWorks
+          steps={[
+            ["Upload your CV", "A PDF or Word file, up to 4 MB. Tick the box to agree that AI may read it."],
+            ["We remove your details", "Your name, ID number, contact details and address are taken out before the AI sees anything."],
+            ["See what fits", "Open posts that look like a fit, why, and what you may be missing."],
+          ]}
+          faq={[
+            ["Is my CV kept?", "No. The file is read and then thrown away. We keep only a short summary of your skills on your account, which you can remove at any time."],
+            ["Does the AI decide if I get the job?", "No. It only suggests posts that look like a fit. Departments decide every application, and nothing is ever ranked or scored."],
+            ["What if nothing fits?", "Check again when new circulars come out, or search all posts on Find opportunities."],
+          ]}
+        />
+      )}
       {profile && (
         <section className="space-y-4">
-          <h2 className="text-lg font-semibold">Jobs for you ({matches.length})</h2>
+          <h2 className="text-lg font-extrabold">Jobs for you ({matches.length})</h2>
           <p className="text-muted -mt-1">Tap a job to see the details and how to apply.</p>
           {matches.length === 0 && <EmptyState>No open posts fit your CV right now. Check again when new circulars come out.</EmptyState>}
           {matches.map((m) => {
@@ -69,7 +84,7 @@ export default async function MatchPage({ searchParams }: { searchParams: Promis
                 key={m.id}
                 href={`/posts/${x.o.id}`}
                 data-testid="match"
-                className="group block rounded-2xl border border-black/10 bg-white p-5 sm:p-6 shadow-[0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.08)] hover:border-black/25 transition"
+                className="group block rounded-2xl border border-black/10 bg-white p-5 sm:p-6 lift"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
@@ -97,7 +112,7 @@ export default async function MatchPage({ searchParams }: { searchParams: Promis
       {profile && (
         <Card className="space-y-2" data-testid="cv-summary">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 className="font-semibold">Your CV</h2>
+            <h2 className="font-extrabold">Your CV</h2>
             <span className="text-xs text-muted">Updated {formatDateTime(p!.cvUpdatedAt)}</span>
           </div>
           <div className="flex flex-wrap gap-1.5">

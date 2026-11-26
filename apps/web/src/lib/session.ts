@@ -18,9 +18,12 @@ export type CurrentUser = {
   jobTitle: string | null;
 };
 
+/** The session from the signed cookie (no database trip while the cookie cache is fresh). Cached per request. */
+export const getSession = cache(async () => auth.api.getSession({ headers: await headers() }));
+
 /** The signed-in user with role, or null. Cached per request. */
 export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
-  const s = await auth.api.getSession({ headers: await headers() });
+  const s = await getSession();
   if (!s) return null;
   const [r] = await db
     .select({

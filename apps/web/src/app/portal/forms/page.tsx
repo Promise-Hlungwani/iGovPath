@@ -43,7 +43,7 @@ export default async function FormsPage({ searchParams }: { searchParams: Promis
 
       {doc && (
         <Card className="space-y-4">
-          <h2 className="font-semibold">Check the details AI read from “{doc.title}”</h2>
+          <h2 className="font-extrabold">Check the details AI read from “{doc.title}”</h2>
           {draftError && <Notice tone="danger">{draftError}</Notice>}
           {draft?.flags.map((f, i) => <p key={i} className="text-sm text-danger">{f.field}: {f.message}</p>)}
           <form action={publishFormVersion} className="grid sm:grid-cols-2 gap-4">

@@ -21,7 +21,7 @@ export function SelectFilter({ param, label, options }: { param: string; label: 
           else next.delete(param);
           start(() => router.push(next.size ? `${pathname}?${next}` : pathname));
         }}
-        className="min-h-9 rounded-full border border-black/15 bg-white px-3 pr-8 outline-none focus-visible:ring-2 focus-visible:ring-black/40"
+        className="min-h-9 rounded-lg border border-black/15 bg-white px-3 pr-8 outline-none focus-visible:ring-2 focus-visible:ring-interactive/50"
       >
         {options.map(([v, t]) => <option key={v} value={v}>{t}</option>)}
       </select>

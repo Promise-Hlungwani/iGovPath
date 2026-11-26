@@ -15,7 +15,7 @@ export function NavLink({ href, children, exact = false, also = [], className = 
     <Link
       href={href}
       aria-current={active ? "page" : undefined}
-      className={`inline-flex items-center rounded-full px-3 py-1.5 outline-none focus-visible:ring-2 focus-visible:ring-black/40 transition ${active ? "bg-black text-white font-semibold" : "hover:bg-black/[0.06] hover:text-black"} ${className}`}
+      className={`inline-flex items-center rounded-full px-3 py-1.5 outline-none focus-visible:ring-2 focus-visible:ring-interactive/50 transition ${active ? "bg-interactive text-white font-semibold" : "hover:bg-interactive-soft hover:text-interactive"} ${className}`}
       {...rest}
     >
       {children}

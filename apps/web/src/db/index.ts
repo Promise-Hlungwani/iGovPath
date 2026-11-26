@@ -14,8 +14,9 @@ function createPool() {
   const p = new Pool({
     connectionString: withSsl(env.DATABASE_URL_POOLED || env.DATABASE_URL),
     max: 5,
-    // Neon closes idle connections; recycle ours first and keep them alive.
-    idleTimeoutMillis: 20_000,
+    // Opening a connection to Neon costs over a second, so keep idle ones for 5 minutes
+    // (Neon's pooler keeps them longer) instead of reopening after every short pause.
+    idleTimeoutMillis: 5 * 60_000,
     connectionTimeoutMillis: 15_000,
     keepAlive: true,
   });
@@ -25,6 +26,8 @@ function createPool() {
   p.on("error", (err) => {
     console.error("[db] idle connection error (recovered, app keeps running):", err.message);
   });
+  // Warm two connections in the background so the first clicks don't pay the connection cost.
+  for (let i = 0; i < 2; i++) p.connect().then((c) => c.release(), () => {});
   return p;
 }
 

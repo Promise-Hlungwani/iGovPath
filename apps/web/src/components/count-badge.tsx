@@ -7,7 +7,7 @@ export function CountBadge({ n, testId }: { n: number; testId?: string }) {
         <span className="absolute inline-flex h-full w-full rounded-full bg-[#b42318] opacity-75 motion-safe:animate-ping" />
         <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#b42318]" />
       </span>
-      <span className="inline-flex min-w-5 justify-center rounded-full bg-black px-1.5 text-xs font-bold leading-5 text-white" aria-label={`${n} waiting`}>
+      <span className="inline-flex min-w-5 justify-center rounded-full bg-interactive px-1.5 text-xs font-bold leading-5 text-white" aria-label={`${n} waiting`}>
         {n}
       </span>
     </span>

@@ -10,7 +10,7 @@ test.afterAll(cleanupTestUsers);
 
 async function enterCode(page: Page, code: string) {
   await page.goto("/account/request-officer-access");
-  await page.getByLabel("Department").selectOption({ index: 1 });
+  await page.getByLabel("Department", { exact: true }).selectOption({ index: 1 });
   await page.getByLabel("Job title").fill("Manager");
   await page.getByLabel(/code/i).fill(code);
   await page.getByRole("button", { name: "Send request" }).click();

@@ -48,7 +48,7 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
           <StatusBadge status={status} />
           <TypeBadge type={opp.type} />
         </div>
-        <h1 className="text-2xl font-semibold tracking-tight">{displayTitle(opp.postTitle)}</h1>
+        <h1 className="text-2xl font-extrabold tracking-tight">{displayTitle(opp.postTitle)}</h1>
         <p className="mt-1 text-[15px] text-muted">
           {dept.name}{opp.location && ` · ${opp.location}`}{opp.salary && ` · ${opp.salary}`}
         </p>
@@ -80,10 +80,14 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
       />
 
       {/* 2. How to apply */}
-      <section className="rounded-3xl border border-black/10 bg-white/70 backdrop-blur-sm shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-6 sm:p-8" aria-labelledby="apply">
-        <h2 id="apply" className="text-lg font-semibold">Apply for this job</h2>
+      <section className="rounded-2xl border border-black/10 bg-white/70 backdrop-blur-sm shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-6 sm:p-8" aria-labelledby="apply">
+        <h2 id="apply" className="text-lg font-extrabold">Apply for this job</h2>
         {closed ? (
-          <p className="mt-3 text-muted">This post is {status === "withdrawn" ? "withdrawn" : "closed"}. Applications are no longer accepted.</p>
+          <>
+            <p className="mt-3 text-muted">This post is {status === "withdrawn" ? "withdrawn" : "closed"}. Applications are no longer accepted.</p>
+            {/* Still saveable: if the department extends it, people who saved it are told. */}
+            <div className="mt-4 sm:w-64 [&_a]:!min-h-12 [&_button]:!min-h-12"><SaveButton opportunityId={opp.id} saved={saved} signedIn={!!user} /></div>
+          </>
         ) : (
           <>
             <p className="mt-1 text-muted">We fill in your details and documents for you. Check them, then send. It goes straight to {dept.name}.</p>
@@ -91,18 +95,18 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
             {/* One clear action, with Save beside it */}
             <div className="mt-5 flex flex-col sm:flex-row sm:items-start gap-3">
               {myApp ? (
-                <a href={`/applications/${myApp.id}`} data-testid="my-application" className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-black bg-white/60 px-7 min-h-12 text-base font-semibold text-black hover:bg-black/5 transition">
+                <a href={`/applications/${myApp.id}`} data-testid="my-application" className="inline-flex items-center justify-center gap-2 rounded-lg bg-black px-7 min-h-12 text-base font-semibold text-white hover:bg-[#222] transition shadow-[0_6px_16px_rgba(0,0,0,0.18)]">
                   {myApp.status === "draft" ? "Continue your application" : "View your application"} <span aria-hidden>→</span>
                 </a>
               ) : user ? (
                 <form action={startApplication}>
                   <input type="hidden" name="opportunityId" value={opp.id} />
-                  <SubmitButton variant="secondary" className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-black bg-white/60 px-7 min-h-12 text-base font-semibold text-black hover:bg-black/5 transition w-full sm:w-auto" pendingText="Starting your application…">Apply now →</SubmitButton>
+                  <SubmitButton className="inline-flex items-center justify-center gap-2 rounded-lg bg-black px-7 min-h-12 text-base font-semibold text-white hover:bg-[#222] transition shadow-[0_6px_16px_rgba(0,0,0,0.18)] w-full sm:w-auto" pendingText="Starting your application…">Apply now →</SubmitButton>
                 </form>
               ) : (
-                <a href={`/sign-in?next=/posts/${opp.id}`} className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-black bg-white/60 px-7 min-h-12 text-base font-semibold text-black hover:bg-black/5 transition">Sign in to apply <span aria-hidden>→</span></a>
+                <a href={`/sign-in?next=/posts/${opp.id}`} className="inline-flex items-center justify-center gap-2 rounded-lg bg-black px-7 min-h-12 text-base font-semibold text-white hover:bg-[#222] transition shadow-[0_6px_16px_rgba(0,0,0,0.18)]">Sign in to apply <span aria-hidden>→</span></a>
               )}
-              <div className="sm:w-64 [&_a]:!rounded-full [&_button]:!rounded-full [&_a]:!min-h-12 [&_button]:!min-h-12"><SaveButton opportunityId={opp.id} saved={saved} signedIn={!!user} /></div>
+              <div className="sm:w-64 [&_a]:!min-h-12 [&_button]:!min-h-12"><SaveButton opportunityId={opp.id} saved={saved} signedIn={!!user} /></div>
             </div>
             {myApp && <p className="mt-2 text-sm text-muted">Status: <strong className="text-black">{STATUS_LABEL[myApp.status]}</strong></p>}
 
@@ -112,11 +116,9 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
 
       {/* 4. What you must have */}
       <section aria-labelledby="need" className="space-y-3">
-        <div className="flex flex-wrap items-end justify-between gap-2">
-          <h2 id="need" className="text-lg font-semibold">What you must have</h2>
-          <Link href={`/posts/${opp.id}/explain`} className="text-sm font-semibold underline">Explain this job in simple words</Link>
-        </div>
+        <h2 id="need" className="text-lg font-extrabold">What you must have</h2>
         <List items={opp.minimumRequirements} />
+        <p><Link href={`/posts/${opp.id}/explain`} className="text-sm font-semibold underline">Explain this job in simple words →</Link></p>
         {(opp.contact?.name || opp.contact?.phone) && (
           <p className="text-sm text-muted">Questions about this job? Ask {[opp.contact?.name, opp.contact?.phone].filter(Boolean).join(" on ")}.</p>
         )}
@@ -129,7 +131,7 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
           <div>
             {opp.sourceDate && <p className="mb-2 text-sm text-muted">Published {formatDate(opp.sourceDate)}</p>}
             {doc?.sourceUrl ? (
-              <a className="inline-flex min-h-11 items-center justify-center rounded-md bg-black px-4 py-2 text-sm font-semibold text-white hover:bg-[#222]" href={doc.sourceUrl} target="_blank" rel="noreferrer">
+              <a className="inline-flex min-h-11 items-center justify-center rounded-lg bg-black px-4 py-2 text-sm font-semibold text-white hover:bg-[#222]" href={doc.sourceUrl} target="_blank" rel="noreferrer">
                 View or download the official job advert (PDF)
               </a>
             ) : (
@@ -179,7 +181,7 @@ function VersionDiff({ record, prev, fields }: { record: Record<string, unknown>
   return (
     <div className="mt-2 space-y-2">
       {fields.map((f) => (
-        <div key={f} className="rounded-md border border-border overflow-hidden">
+        <div key={f} className="rounded-lg border border-border overflow-hidden">
           <p className="text-xs font-medium px-2 py-1 bg-background">{FIELD_LABELS[f] ?? f}</p>
           <p className="px-2 py-1 text-xs bg-danger-soft"><span className="font-medium">Before:</span> {show(prev?.[f])}</p>
           <p className="px-2 py-1 text-xs bg-brand-soft"><span className="font-medium">Now:</span> {show(record[f])}</p>

@@ -27,6 +27,9 @@ const nextConfig: NextConfig = {
       }),
   experimental: {
     serverActions: { bodySizeLimit: "15mb" },
+    // Keep pages you've just visited in the browser for 30 s, so going back is instant.
+    // Any save (server action) clears this cache, so people never see stale data after a change.
+    staleTimes: { dynamic: 30, static: 180 },
   },
 };
 

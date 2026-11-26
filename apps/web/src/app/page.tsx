@@ -9,7 +9,7 @@ const MINT = "#000000";
 
 export default function Home() {
   return (
-    <div className="relative -mx-4 -my-8 w-[calc(100%+2rem)] overflow-hidden bg-white text-black">
+    <div className="relative isolate z-0 -mx-4 -my-8 w-[calc(100%+2rem)] overflow-hidden bg-white text-black">
       <div className="max-w-6xl mx-auto px-4">
         <div className="border-t border-black/10" />
 
@@ -43,8 +43,8 @@ export default function Home() {
                 What can I apply for?
               </Link>
             </div>
-            <p className="mt-6 sm:mt-8 flex items-center gap-2 text-sm text-black/60">
-              <IconPath width={16} height={16} /> Innovated pathway to government employment
+            <p className="mt-6 sm:mt-8 flex items-center gap-2 text-base font-medium text-black/75">
+              <IconPath width={18} height={18} /> Innovated pathway to government employment
             </p>
           </div>
 
@@ -97,7 +97,7 @@ function Feature({ icon, step, title, href, children }: { icon: ReactNode; step:
       className="group block rounded-2xl border border-black/10 bg-white p-5 shadow-[0_8px_24px_rgba(0,0,0,0.06)] hover:border-black/25 transition sm:p-7"
     >
       <div className="flex items-center justify-between">
-        <span className="grid place-items-center h-12 w-12 rounded-xl border border-black/10 bg-black/[0.04]" style={{ color: MINT }}>{icon}</span>
+        <span className="grid place-items-center h-12 w-12 rounded-2xl border border-black/10 bg-black/[0.04]" style={{ color: MINT }}>{icon}</span>
         <span className="text-xs tracking-[0.18em] uppercase text-black/50">{step}</span>
       </div>
       <h3 className="mt-5 text-xl font-semibold !text-black sm:mt-6">{title}</h3>
@@ -108,7 +108,7 @@ function Feature({ icon, step, title, href, children }: { icon: ReactNode; step:
 
 function Chip({ icon, title, sub, className }: { icon: ReactNode; title: string; sub: string; className: string }) {
   return (
-    <div className={`absolute flex items-center gap-4 rounded-xl border border-black/10 bg-white/80 px-5 py-4 shadow-[0_18px_40px_rgba(0,0,0,0.12)] backdrop-blur-md ${className}`}>
+    <div className={`absolute flex items-center gap-4 rounded-2xl border border-black/10 bg-white/80 px-5 py-4 shadow-[0_18px_40px_rgba(0,0,0,0.12)] backdrop-blur-md ${className}`}>
       <span className="grid place-items-center h-11 w-11 rounded-lg bg-black/[0.04] border border-black/10" style={{ color: MINT }}>{icon}</span>
       <div>
         <p className="font-semibold text-sm">{title}</p>
@@ -124,7 +124,7 @@ function HeroVisual() {
       <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(0,0,0,0.05),transparent_60%)]" />
       {/* Floating cube */}
       <div
-        className="absolute -right-2 -top-6 z-20 h-14 w-14 rounded-xl rotate-12 shadow-[0_14px_30px_rgba(0,0,0,0.18)] motion-safe:animate-[float_6s_ease-in-out_infinite]"
+        className="absolute -right-2 -top-6 z-20 h-14 w-14 rounded-2xl rotate-12 shadow-[0_14px_30px_rgba(0,0,0,0.18)] motion-safe:animate-[float_6s_ease-in-out_infinite]"
         style={{ background: "linear-gradient(135deg, #4a4a4a, #000000 60%)" }}
       />
       {/* Card stack */}
@@ -139,7 +139,7 @@ function HeroVisual() {
           <ul className="mt-6 space-y-3 text-sm text-black/75">
             {["Opportunities in one place", "Forms and documents, sorted", "Closing dates kept in view"].map((t) => (
               <li key={t} className="flex items-center gap-3">
-                <span className="grid place-items-center h-6 w-6 rounded-md border border-black/15 bg-black/[0.04]" style={{ color: MINT }}>
+                <span className="grid place-items-center h-6 w-6 rounded-lg border border-black/15 bg-black/[0.04]" style={{ color: MINT }}>
                   <IconCheck width={14} height={14} strokeWidth={2.4} />
                 </span>
                 {t}
@@ -148,7 +148,7 @@ function HeroVisual() {
           </ul>
           <div className="mt-7 pt-4 border-t border-black/10 flex items-center justify-between text-xs text-black/55">
             <span>Less searching. More possibility.</span>
-            <span className="rounded-md border border-black/15 px-2 py-1 text-black/75">iGovPath</span>
+            <span className="rounded-lg border border-black/15 px-2 py-1 text-black/75">iGovPath</span>
           </div>
         </div>
       </div>

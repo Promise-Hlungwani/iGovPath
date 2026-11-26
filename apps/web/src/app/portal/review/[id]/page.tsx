@@ -204,7 +204,7 @@ async function AmendmentPanel({ e, done }: { e: typeof schema.extractions.$infer
       )}
       <div className="space-y-2">
         {rows.map((r) => (
-          <div key={r.label} className="rounded-md border border-border overflow-hidden text-sm">
+          <div key={r.label} className="rounded-lg border border-border overflow-hidden text-sm">
             <p className="px-3 py-1.5 bg-background font-medium">{r.label}</p>
             <p className="px-3 py-1.5 bg-danger-soft"><strong>Before:</strong> {r.before || "(not stated)"}</p>
             <p className="px-3 py-1.5 bg-brand-soft"><strong>After:</strong> {r.after}</p>

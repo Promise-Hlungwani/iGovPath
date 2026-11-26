@@ -39,7 +39,7 @@ export default async function OfficerApplications({ searchParams }: { searchPara
       {[...groups.entries()].map(([oppId, g]) => (
         <section key={oppId} className="rounded-2xl border border-black/10 bg-white">
           <div className="px-5 py-4 border-b border-black/10">
-            <h2 className="font-bold">{displayTitle(g.title)}</h2>
+            <h2 className="font-extrabold">{displayTitle(g.title)}</h2>
             <p className="text-sm text-muted">{g.dept}{g.ref && ` · Ref ${g.ref}`} · {g.rows.length} applicant{g.rows.length === 1 ? "" : "s"}</p>
           </div>
           <ul>

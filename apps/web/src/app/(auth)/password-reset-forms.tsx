@@ -40,7 +40,7 @@ export function ForgotPasswordForm() {
 
   return (
     <Card className="mx-auto max-w-md">
-      <h1 className="text-xl font-semibold">Forgot your password?</h1>
+      <h1 className="text-xl font-extrabold">Forgot your password?</h1>
       <p className="mt-1 text-sm text-muted">Enter the email address linked to your account.</p>
       {sent ? (
         <div className="mt-5 space-y-4" aria-live="polite">
@@ -100,7 +100,7 @@ export function ResetPasswordForm({ token, invalid }: { token: string | null; in
   if (!token || invalid) {
     return (
       <Card className="mx-auto max-w-md">
-        <h1 className="text-xl font-semibold">Reset link unavailable</h1>
+        <h1 className="text-xl font-extrabold">Reset link unavailable</h1>
         <p className="mt-2 text-sm text-muted">This link is missing, invalid or expired. Request a new one to continue.</p>
         <Link className="mt-5 inline-flex min-h-11 items-center text-sm font-medium text-brand underline" href="/forgot-password">Request a new reset link</Link>
       </Card>
@@ -109,7 +109,7 @@ export function ResetPasswordForm({ token, invalid }: { token: string | null; in
 
   return (
     <Card className="mx-auto max-w-md">
-      <h1 className="text-xl font-semibold">Choose a new password</h1>
+      <h1 className="text-xl font-extrabold">Choose a new password</h1>
       <p className="mt-1 text-sm text-muted">Use at least 8 characters.</p>
       <form onSubmit={onSubmit} method="post" action="" className="mt-5 space-y-4">
         <div>

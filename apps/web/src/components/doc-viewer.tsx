@@ -34,8 +34,8 @@ export function DocViewer({ href, fileName, className = "underline font-medium b
       >
         <div className="flex items-center gap-3 border-b border-black/10 px-5 py-3">
           <p className="font-semibold truncate flex-1" title={fileName}>{fileName}</p>
-          <a href={href} download={fileName} className="rounded-full border border-black/15 px-4 py-1.5 text-sm font-semibold hover:bg-black/5">Download</a>
-          <button type="button" onClick={() => setOpen(false)} className="rounded-full bg-black px-4 py-1.5 text-sm font-semibold text-white hover:bg-[#222]" autoFocus>
+          <a href={href} download={fileName} className="rounded-lg border border-black/15 px-4 py-1.5 text-sm font-semibold hover:bg-black/5">Download</a>
+          <button type="button" onClick={() => setOpen(false)} className="rounded-lg bg-black px-4 py-1.5 text-sm font-semibold text-white hover:bg-[#222]" autoFocus>
             Close
           </button>
         </div>
@@ -48,7 +48,7 @@ export function DocViewer({ href, fileName, className = "underline font-medium b
           ) : (
             <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center">
               <p>This Word document can&apos;t be shown here.</p>
-              <a href={href} download={fileName} className="rounded-full bg-black px-5 py-2 font-semibold text-white hover:bg-[#222]">Download it</a>
+              <a href={href} download={fileName} className="rounded-lg bg-black px-5 py-2 font-semibold text-white hover:bg-[#222]">Download it</a>
             </div>
           ))}
         </div>
